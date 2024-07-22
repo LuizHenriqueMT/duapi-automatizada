@@ -409,54 +409,71 @@ describe('Produto', () => {
             // cy.get('@setor').then(setor => {
             //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
             // })
-            cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:34:22').wait(850).type('{enter}')
-            inserirRandom(1, 9, 1, '#qt_entregar_setor', false).then((numString) => {
-                cy.wrap(numString).as('qtEntregarAntigo')
-                cy.get('#qt_entregar_setor').clear().type(numString);
-            })
-            inserirRandom(1, 9, 1, '#numero_dias_setor', false).then((numString) => {
-                cy.wrap(numString).as('diasAntigo')
-                cy.get('#numero_dias_setor').clear().type(numString);
-            });
-            inserirRandom(1, 7, 1, '#periodicidade_setor', false).then((numString) => {
-                cy.wrap(numString).as('periodicidadeAntigo')
-                cy.get('#periodicidade_setor').select(numString);
-            });
-
-            cy.get('#add-setor').click();
-            cy.get('.grade_desc').should('exist');
-            cy.get('#produto-setor-table tr:first .check-setor').check();
-            cy.get('#editar-produtos-setor').click();
-
-            cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
-                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarAntigo).then((numString) => {
-                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                    cy.wrap(numString).as('qtEntregarNovo')
+            cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:34:22').wait(850).type('{enter}').then(() => {
+                inserirRandom(1, 9, 1, '#qt_entregar_setor').then((numString) => {
+                    cy.get('#qt_entregar_setor').clear().type(numString);
                 });
-            });
-            cy.get('@diasAntigo').then((diasAntigo) => {
-                inserirRandom(1, 9, 1, '#numero_dias_update', diasAntigo).then((numString) => {
-                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                    cy.wrap(numString).as('diasNovo')
+                inserirRandom(1, 9, 1, '#numero_dias_setor').then((numString) => {
+                    cy.get('#numero_dias_setor').clear().type(numString);
                 });
-            });
-            cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
-                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeAntigo).then((numString) => {
-                    cy.get('#periodicidade_update').select(numString, { force: true });
-                    cy.wrap(numString).as('periodicidadeNovo')
+                inserirRandom(1, 7, 1, '#periodicidade_setor').then((numString) => {
+                    cy.get('#periodicidade_setor').select(numString);
                 });
-            });
 
-            cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
-                cy.get('@qtEntregarNovo').should('not.eq', qtEntregarAntigo);
-            });
+                cy.get('#add-setor').click();
+                cy.get('.grade_desc').should('exist');
+                
+                // Armazena os primeiros valores inseridos para comparação
+                cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarAntigo');
+                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasAntigo');
+                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeAntigo');
+    
+                cy.get('#produto-setor-table tr:first .check-setor').check();
+                cy.get('#editar-produtos-setor').click();
+    
+                cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
+                    inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarAntigo).then((numString) => {
+                        cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
+                        // Colocado novo alias para não perder o valor para comparação
+                        cy.wrap(qtEntregarAntigo).as('qtEntregarAntigoShould');
+                    });
+                });
 
-            cy.get('@diasAntigo').then((diasAntigo) => {
-                cy.get('@diasNovo').should('not.eq', diasAntigo);
-            });
+                cy.get('@diasAntigo').then((diasAntigo) => {
+                    inserirRandom(1, 9, 1, '#numero_dias_update', diasAntigo).then((numString) => {
+                        cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+                        // Colocado novo alias para não perder o valor para comparação
+                        cy.wrap(diasAntigo).as('diasAntigoShould');
+                    });
+                });
+    
+                cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
+                    inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeAntigo).then((numString) => {
+                        cy.get('#periodicidade_update').select(numString, { force: true });
+                        // Colocado novo alias para não perder o valor para comparação
+                        cy.wrap(periodicidadeAntigo).as('periodicidadeAntigoShould');
+                    });
+                });
 
-            cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
-                cy.get('@periodicidadeNovo').should('not.eq', periodicidadeAntigo);
+                cy.get('#salvar-alteracoes').click();
+
+                // Armazena os últimos valores inseridos para comparação
+                cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarNovo');
+                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasNovo');
+                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeNovo');
+    
+                // Assertions para verificar se foi feito alteração corretamente
+                cy.get('@qtEntregarAntigoShould').then((qtEntregarAntigo) => {
+                    cy.get('@qtEntregarNovo').should('not.eq', qtEntregarAntigo);
+                });
+    
+                cy.get('@diasAntigoShould').then((diasAntigo) => {
+                    cy.get('@diasNovo').should('not.eq', diasAntigo);
+                });
+    
+                cy.get('@periodicidadeAntigoShould').then((periodicidadeAntigo) => {
+                    cy.get('@periodicidadeNovo').should('not.eq', periodicidadeAntigo);
+                });
             });
 
             // cy.get('.actions a').contains('Próxima').click();
