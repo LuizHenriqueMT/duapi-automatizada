@@ -1,5 +1,4 @@
 const token = Cypress.env('API_TOKEN');
-let authToken;
 let csrfToken;
 describe('Produto', () => {
 
@@ -16,11 +15,10 @@ describe('Produto', () => {
                     body: {
                         email: email,
                         password: senha,
-                        _token: token
                     }
                 }).then((loginResponse) => {
                     expect(loginResponse.status).to.eq(200);
-                    authToken = loginResponse.body.token;
+                    const authToken = loginResponse.body.token;
 
                     cy.visit(nextUrl);
 
@@ -36,7 +34,7 @@ describe('Produto', () => {
                             url: '/parametro',
                             body: parametrosAtualizados,
                             headers: {
-                                'Authorization': `Bearer ${csrfToken}`,
+                                'Authorization': `Bearer ${authToken}`,
                                 'Content-Type': 'application/json'
                             },
                             failOnStatusCode: false
@@ -44,7 +42,7 @@ describe('Produto', () => {
                             expect(response.status).to.eq(200);
                             cy.visit(nextUrl, {
                                 headers: {
-                                    'Authorization': `Bearer ${csrfToken}`
+                                    'Authorization': `Bearer ${authToken}`
                                 }
                             }).then(() => {
                                 nextStep();
