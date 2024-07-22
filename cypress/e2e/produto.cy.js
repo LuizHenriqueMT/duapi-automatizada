@@ -378,102 +378,411 @@ describe('Produto', () => {
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // // Adicionar setor e remover pelo checkbox
-            // cy.get('@setor').then(setor => {
-            //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
-            // })
+            // // ADICIONAR SETOR E REMOVER PELO CHECKBOX
+            // // cy.get('@setor').then(setor => {
+            // //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}');
+            // // })
+            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
             // cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
             // cy.get('#add-setor').click();
-            // cy.get('.grade_desc').should('exist');
+            // cy.get('.td-qtde-setor').should('exist');
             // cy.get('#produto-setor-table tr:first .check-setor').check();
             // cy.get('#remover-setor').click();
             // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            // cy.get('.grade_desc').should('not.exist');
+            // cy.get('.td-qtde-setor').should('not.exist');
 
-            // // Adicionar setor e remover pela ação excluir
-            // cy.get('@setor').then(setor => {
-            //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
-            // })
+            // // ADICIONAR SETOR E REMOVER PELA AÇÃO EXCLUIR
+            // // cy.get('@setor').then(setor => {
+            // //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
+            // // })
+            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
             // cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
             // cy.get('#add-setor').click();
-            // cy.get('.grade_desc').should('exist');
+            // cy.get('.td-qtde-setor').should('exist');
             // cy.get('.btn-action .fa-trash').click();
             // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            // cy.get('.grade_desc').should('not.exist');
+            // cy.get('.td-qtde-setor').should('not.exist');
 
-            // Adicionar setor e alterar quantidade e periodicidade
-            // cy.get('@setor').then(setor => {
-            //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
+            // // ADICIONAR SETOR E ALTERAR A QUANTIDADE E PERIODICIDADE
+            // // cy.get('@setor').then(setor => {
+            // //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
+            // // });
+            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // inserirRandom(1, 9, 1, '#qt_entregar_setor').then((numString) => {
+            //     cy.get('#qt_entregar_setor').clear().type(numString);
+            // });
+            // inserirRandom(1, 9, 1, '#numero_dias_setor').then((numString) => {
+            //     cy.get('#numero_dias_setor').clear().type(numString);
+            // });
+            // inserirRandom(1, 7, 1, '#periodicidade_setor').then((numString) => {
+            //     cy.get('#periodicidade_setor').select(numString);
+            // });
+
+            // cy.get('#add-setor').click();
+            // cy.get('.td-qtde-setor').should('exist');
+
+            // // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
+            // cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarSetorAntigo');
+            // cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasSetorAntigo');
+            // cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeSetorAntigo');
+
+            // cy.get('#produto-setor-table tr:first .check-setor').check();
+            // cy.get('#editar-produtos-setor').click();
+
+            // cy.get('@qtEntregarSetorAntigo').then((qtEntregarSetorAntigo) => {
+            //     inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarSetorAntigo).then((numString) => {
+            //         cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(qtEntregarSetorAntigo).as('qtEntregarSetorAntigoShould');
+            //     });
+            // });
+
+            // cy.get('@diasSetorAntigo').then((diasSetorAntigo) => {
+            //     inserirRandom(1, 9, 1, '#numero_dias_update', diasSetorAntigo).then((numString) => {
+            //         cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(diasSetorAntigo).as('diasSetorAntigoShould');
+            //     });
+            // });
+
+            // cy.get('@periodicidadeSetorAntigo').then((periodicidadeSetorAntigo) => {
+            //     inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeSetorAntigo).then((numString) => {
+            //         cy.get('#periodicidade_update').select(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(periodicidadeSetorAntigo).as('periodicidadeSetorAntigoShould');
+            //     });
+            // });
+
+            // cy.get('#salvar-alteracoes').click();
+
+            // cy.get('.alert-duapi-message').should('contain', 'Setor atualizado com sucesso.');
+
+            // // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
+            // cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarSetorNovo');
+            // cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasSetorNovo');
+            // cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeSetorNovo');
+
+            // // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
+            // cy.get('@qtEntregarSetorAntigoShould').then((qtEntregarAntigo) => {
+            //     cy.get('@qtEntregarSetorNovo').should('not.eq', qtEntregarAntigo);
+            // });
+
+            // cy.get('@diasSetorAntigoShould').then((diasSetorAntigo) => {
+            //     cy.get('@diasSetorNovo').should('not.eq', diasSetorAntigo);
+            // });
+
+            // cy.get('@periodicidadeSetorAntigoShould').then((periodicidadeSetorAntigo) => {
+            //     cy.get('@periodicidadeSetorNovo').should('not.eq', periodicidadeSetorAntigo);
+            // });
+
+            cy.get('.actions a').contains('Próxima').click();
+
+            // // ADICIONAR CARGO E REMOVER PELO CHECKBOX
+            // // cy.get('@cargo').then(cargo => {
+            // //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
+            // // })
+            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#numero_dias_cargo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#periodicidade_cargo').select(inserirRandom(1, 7, 1));
+            // cy.get('#add-cargo').click();
+            // cy.get('.td-qtde-cargo').should('exist');
+            // cy.get('#produto-cargo-table tr:first .check-cargo').check();
+            // cy.get('#remover-cargo').click();
+            // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
+            // cy.get('.td-qtde-cargo').should('not.exist');
+
+            // // ADICIONAR SETOR E REMOVER PELA AÇÃO EXCLUIR
+            // // cy.get('@cargo').then(cargo => {
+            // //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
+            // // })
+            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#numero_dias_cargo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#periodicidade_cargo').select(inserirRandom(1, 7, 1));
+            // cy.get('#add-cargo').click();
+            // cy.get('.td-qtde-cargo').should('exist');
+            // cy.get('.btn-action .fa-trash').click();
+            // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
+            // cy.get('.td-qtde-cargo').should('not.exist');
+
+            // // ADICIONAR CARGO E ALTERAR A QUANTIDADE E PERIODICIDADE
+            // // cy.get('@cargo').then(cargo => {
+            // //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}')
+            // // })
+            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // inserirRandom(1, 9, 1, '#qt_entregar_cargo').then((numString) => {
+            //     cy.get('#qt_entregar_cargo').clear().type(numString);
+            // });
+            // inserirRandom(1, 9, 1, '#numero_dias_cargo').then((numString) => {
+            //     cy.get('#numero_dias_cargo').clear().type(numString);
+            // });
+            // inserirRandom(1, 7, 1, '#periodicidade_cargo').then((numString) => {
+            //     cy.get('#periodicidade_cargo').select(numString);
+            // });
+
+            // cy.get('#add-cargo').click();
+            // cy.get('.td-qtde-cargo').should('exist');
+
+            // // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
+            // cy.get('#produto-cargo-table tr:first .td-qtde-cargo input[class="produto-cargo[qt_entregar]"]').invoke('val').as('qtEntregarCargoAntigo');
+            // cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodo]"]').invoke('val').as('diasCargoAntigo');
+            // cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodicidade_id]"]').invoke('val').as('periodicidadeCargoAntigo');
+
+            // cy.get('#produto-cargo-table tr:first .check-cargo').check();
+            // cy.get('#editar-produtos-cargo').click();
+
+            // cy.get('@qtEntregarCargoAntigo').then((qtEntregarCargoAntigo) => {
+            //     inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarCargoAntigo).then((numString) => {
+            //         cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(qtEntregarCargoAntigo).as('qtEntregarCargoAntigoShould');
+            //     });
+            // });
+
+            // cy.get('@diasCargoAntigo').then((diasCargoAntigo) => {
+            //     inserirRandom(1, 9, 1, '#numero_dias_update', diasCargoAntigo).then((numString) => {
+            //         cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(diasCargoAntigo).as('diasCargoAntigoShould');
+            //     });
+            // });
+
+            // cy.get('@periodicidadeCargoAntigo').then((periodicidadeCargoAntigo) => {
+            //     inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeCargoAntigo).then((numString) => {
+            //         cy.get('#periodicidade_update').select(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(periodicidadeCargoAntigo).as('periodicidadeCargoAntigoShould');
+            //     });
+            // });
+
+            // cy.get('#salvar-alteracoes').click();
+            // cy.get('.alert-duapi-message').should('contain', 'Cargo atualizado com sucesso.');
+
+            // // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
+            // cy.get('#produto-cargo-table tr:first .td-qtde-cargo input[class="produto-cargo[qt_entregar]"]').invoke('val').as('qtEntregarCargoNovo');
+            // cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodo]"]').invoke('val').as('diasCargoNovo');
+            // cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodicidade_id]"]').invoke('val').as('periodicidadeCargoNovo');
+
+            // // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
+            // cy.get('@qtEntregarCargoAntigoShould').then((qtEntregarAntigo) => {
+            //     cy.get('@qtEntregarCargoNovo').should('not.eq', qtEntregarAntigo);
+            // });
+
+            // cy.get('@diasCargoAntigoShould').then((diasAntigo) => {
+            //     cy.get('@diasCargoNovo').should('not.eq', diasAntigo);
+            // });
+
+            // cy.get('@periodicidadeCargoAntigoShould').then((periodicidadeAntigo) => {
+            //     cy.get('@periodicidadeCargoNovo').should('not.eq', periodicidadeAntigo);
+            // });
+
+            cy.get('.actions a').contains('Próxima').click();
+
+            // // ADICIONAR CENTRO DE CUSTO E REMOVER PELO CHECKBOX
+            // // cy.get('@cc').then(cc => {
+            // //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
+            // // })
+            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#numero_dias_centro_custo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#periodicidade_centro_custo').select(inserirRandom(1, 7, 1));
+            // cy.get('#add-centro-custo').click();
+            // cy.get('.td-qtde-centro_custo').should('exist');
+            // cy.get('#produto-centro_custo-table tr:first .check-centro_custo').check();
+            // cy.get('#remover-centro_custo').click();
+            // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
+            // cy.get('.td-qtde-centro_custo').should('not.exist');
+
+            // // ADICIONAR CENTRO DE CUSTO E REMOVER PELA AÇÃO EXCLUIR
+            // // cy.get('@cargo').then(cargo => {
+            // //     cy.get('#centro_custo input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
+            // // })
+            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#numero_dias_centro_custo').clear().type(inserirRandom(1, 9, 1));
+            // cy.get('#periodicidade_centro_custo').select(inserirRandom(1, 7, 1));
+            // cy.get('#add-centro-custo').click();
+            // cy.get('.td-qtde-centro_custo').should('exist');
+            // cy.get('.btn-action .fa-trash').click();
+            // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
+            // cy.get('.td-qtde-centro_custo').should('not.exist');
+
+            // // ADICIONAR CENTRO DE CUSTO E ALTERAR A QUANTIDADE E PERIODICIDADE
+            // // cy.get('@cargo').then(cargo => {
+            // //     cy.get('#centro_custo input[name="cargo_id"]').type(cargo).wait(850).type('{enter}')
+            // // })
+            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // inserirRandom(1, 9, 1, '#qt_entregar_centro_custo').then((numString) => {
+            //     cy.get('#qt_entregar_centro_custo').clear().type(numString);
+            // });
+            // inserirRandom(1, 9, 1, '#numero_dias_centro_custo').then((numString) => {
+            //     cy.get('#numero_dias_centro_custo').clear().type(numString);
+            // });
+            // inserirRandom(1, 7, 1, '#periodicidade_centro_custo').then((numString) => {
+            //     cy.get('#periodicidade_centro_custo').select(numString);
+            // });
+
+            // cy.get('#add-centro-custo').click();
+            // cy.get('.td-qtde-centro_custo').should('exist');
+
+            // // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
+            // cy.get('#produto-centro_custo-table tr:first .td-qtde-centro_custo input[class="produto-centro_custo[qt_entregar]"]').invoke('val').as('qtEntregarCCAntigo');
+            // cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodo]"]').invoke('val').as('diasCCAntigo');
+            // cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodicidade_id]"]').invoke('val').as('periodicidadeCCAntigo');
+
+            // cy.get('#produto-centro_custo-table tr:first .check-centro_custo').check();
+            // cy.get('#editar-produtos-centro_custo').click();
+
+            // cy.get('@qtEntregarCCAntigo').then((qtEntregarCCAntigo) => {
+            //     inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarCCAntigo).then((numString) => {
+            //         cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(qtEntregarCCAntigo).as('qtEntregarCCAntigoShould');
+            //     });
+            // });
+
+            // cy.get('@diasCCAntigo').then((diasCCAntigo) => {
+            //     inserirRandom(1, 9, 1, '#numero_dias_update', diasCCAntigo).then((numString) => {
+            //         cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(diasCCAntigo).as('diasCCAntigoShould');
+            //     });
+            // });
+
+            // cy.get('@periodicidadeCCAntigo').then((periodicidadeCCAntigo) => {
+            //     inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeCCAntigo).then((numString) => {
+            //         cy.get('#periodicidade_update').select(numString, { force: true });
+            //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+            //         cy.wrap(periodicidadeCCAntigo).as('periodicidadeCCAntigoShould');
+            //     });
+            // });
+
+            // cy.get('#salvar-alteracoes').click();
+            // cy.get('.alert-duapi-message').should('contain', 'Centro de Custo atualizado com sucesso.');
+
+            // // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
+            // cy.get('#produto-centro_custo-table tr:first .td-qtde-centro_custo input[class="produto-centro_custo[qt_entregar]"]').invoke('val').as('qtEntregarCCNovo');
+            // cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodo]"]').invoke('val').as('diasCCNovo');
+            // cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodicidade_id]"]').invoke('val').as('periodicidadeCCNovo');
+
+            // // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
+            // cy.get('@qtEntregarCCAntigoShould').then((qtEntregarAntigo) => {
+            //     cy.get('@qtEntregarCCNovo').should('not.eq', qtEntregarAntigo);
+            // });
+
+            // cy.get('@diasCCAntigoShould').then((diasAntigo) => {
+            //     cy.get('@diasCCNovo').should('not.eq', diasAntigo);
+            // });
+
+            // cy.get('@periodicidadeCCAntigoCShould').then((periodicidadeAntigo) => {
+            //     cy.get('@periodicidadeCCNovo').should('not.eq', periodicidadeAntigo);
+            // });
+
+            cy.get('.actions a').contains('Próxima').click();
+
+            // ADICIONAR RISCO E REMOVER PELO CHECKBOX
+            // cy.get('@cc').then(cc => {
+            //     cy.get('#risco input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
             // })
-            cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:34:22').wait(850).type('{enter}').then(() => {
-                inserirRandom(1, 9, 1, '#qt_entregar_setor').then((numString) => {
-                    cy.get('#qt_entregar_setor').clear().type(numString);
-                });
-                inserirRandom(1, 9, 1, '#numero_dias_setor').then((numString) => {
-                    cy.get('#numero_dias_setor').clear().type(numString);
-                });
-                inserirRandom(1, 7, 1, '#periodicidade_setor').then((numString) => {
-                    cy.get('#periodicidade_setor').select(numString);
-                });
+            cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
+            cy.get('#numero_dias_risco').clear().type(inserirRandom(1, 9, 1));
+            cy.get('#periodicidade_risco').select(inserirRandom(1, 7, 1));
+            cy.get('#add-risco').click();
+            cy.get('.td-qtde-risco').should('exist');
+            cy.get('#produto-risco-table tr:first .check-risco').check();
+            cy.get('#remover-risco').click();
+            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
+            cy.get('.td-qtde-risco').should('not.exist');
 
-                cy.get('#add-setor').click();
-                cy.get('.grade_desc').should('exist');
-                
-                // Armazena os primeiros valores inseridos para comparação
-                cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarAntigo');
-                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasAntigo');
-                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeAntigo');
-    
-                cy.get('#produto-setor-table tr:first .check-setor').check();
-                cy.get('#editar-produtos-setor').click();
-    
-                cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
-                    inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarAntigo).then((numString) => {
-                        cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                        // Colocado novo alias para não perder o valor para comparação
-                        cy.wrap(qtEntregarAntigo).as('qtEntregarAntigoShould');
-                    });
-                });
+            // ADICIONAR RISCO E REMOVER PELA AÇÃO EXCLUIR
+            // cy.get('@cargo').then(cargo => {
+            //     cy.get('#risco input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
+            // })
+            cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
+            cy.get('#numero_dias_risco').clear().type(inserirRandom(1, 9, 1));
+            cy.get('#periodicidade_risco').select(inserirRandom(1, 7, 1));
+            cy.get('#add-risco').click();
+            cy.get('.td-qtde-risco').should('exist');
+            cy.get('.btn-action .fa-trash').click();
+            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
+            cy.get('.td-qtde-risco').should('not.exist');
 
-                cy.get('@diasAntigo').then((diasAntigo) => {
-                    inserirRandom(1, 9, 1, '#numero_dias_update', diasAntigo).then((numString) => {
-                        cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                        // Colocado novo alias para não perder o valor para comparação
-                        cy.wrap(diasAntigo).as('diasAntigoShould');
-                    });
-                });
-    
-                cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
-                    inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeAntigo).then((numString) => {
-                        cy.get('#periodicidade_update').select(numString, { force: true });
-                        // Colocado novo alias para não perder o valor para comparação
-                        cy.wrap(periodicidadeAntigo).as('periodicidadeAntigoShould');
-                    });
-                });
+            // ADICIONAR RISCO E ALTERAR A QUANTIDADE E PERIODICIDADE
+            // cy.get('@cargo').then(cargo => {
+            //     cy.get('#risco input[name="cargo_id"]').type(cargo).wait(850).type('{enter}')
+            // })
+            cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            inserirRandom(1, 9, 1, '#qt_entregar_risco').then((numString) => {
+                cy.get('#qt_entregar_risco').clear().type(numString);
+            });
+            inserirRandom(1, 9, 1, '#numero_dias_risco').then((numString) => {
+                cy.get('#numero_dias_risco').clear().type(numString);
+            });
+            inserirRandom(1, 7, 1, '#periodicidade_risco').then((numString) => {
+                cy.get('#periodicidade_risco').select(numString);
+            });
 
-                cy.get('#salvar-alteracoes').click();
+            cy.get('#add-risco').click();
+            cy.get('.td-qtde-risco').should('exist');
 
-                // Armazena os últimos valores inseridos para comparação
-                cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarNovo');
-                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasNovo');
-                cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeNovo');
-    
-                // Assertions para verificar se foi feito alteração corretamente
-                cy.get('@qtEntregarAntigoShould').then((qtEntregarAntigo) => {
-                    cy.get('@qtEntregarNovo').should('not.eq', qtEntregarAntigo);
+            // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
+            cy.get('#produto-risco-table tr:first .td-qtde-risco input[class="produto-risco[qt_entregar]"]').invoke('val').as('qtEntregarRiscoAntigo');
+            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodo]"]').invoke('val').as('diasRiscoAntigo');
+            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodicidade_id]"]').invoke('val').as('periodicidadeRiscoAntigo');
+
+            cy.get('#produto-risco-table tr:first .check-risco').check();
+            cy.get('#editar-produtos-risco').click();
+
+            cy.get('@qtEntregarRiscoAntigo').then((qtEntregarRiscoAntigo) => {
+                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarRiscoAntigo).then((numString) => {
+                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
+                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+                    cy.wrap(qtEntregarRiscoAntigo).as('qtEntregarRiscoAntigoShould');
                 });
-    
-                cy.get('@diasAntigoShould').then((diasAntigo) => {
-                    cy.get('@diasNovo').should('not.eq', diasAntigo);
+            });
+
+            cy.get('@diasRiscoAntigo').then((diasRiscoAntigo) => {
+                inserirRandom(1, 9, 1, '#numero_dias_update', diasRiscoAntigo).then((numString) => {
+                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+                    cy.wrap(diasRiscoAntigo).as('diasRiscoAntigoShould');
                 });
-    
-                cy.get('@periodicidadeAntigoShould').then((periodicidadeAntigo) => {
-                    cy.get('@periodicidadeNovo').should('not.eq', periodicidadeAntigo);
+            });
+
+            cy.get('@periodicidadeRiscoAntigo').then((periodicidadeRiscoAntigo) => {
+                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeRiscoAntigo).then((numString) => {
+                    cy.get('#periodicidade_update').select(numString, { force: true });
+                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
+                    cy.wrap(periodicidadeRiscoAntigo).as('periodicidadeRiscoAntigoShould');
                 });
+            });
+
+            cy.get('#salvar-alteracoes').click();
+            cy.get('.alert-duapi-message').should('contain', 'Risco atualizado com sucesso.');
+
+            // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
+            cy.get('#produto-risco-table tr:first .td-qtde-risco input[class="produto-risco[qt_entregar]"]').invoke('val').as('qtEntregarRiscoNovo');
+            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodo]"]').invoke('val').as('diasRiscoNovo');
+            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodicidade_id]"]').invoke('val').as('periodicidadeRiscoNovo');
+
+            // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
+            cy.get('@qtEntregarRiscoAntigoShould').then((qtEntregarAntigo) => {
+                cy.get('@qtEntregarRiscoNovo').should('not.eq', qtEntregarAntigo);
+            });
+
+            cy.get('@diasRiscoAntigoShould').then((diasAntigo) => {
+                cy.get('@diasRiscoNovo').should('not.eq', diasAntigo);
+            });
+
+            cy.get('@periodicidadeRiscoAntigoShould').then((periodicidadeAntigo) => {
+                cy.get('@periodicidadeRiscoNovo').should('not.eq', periodicidadeAntigo);
             });
 
             // cy.get('.actions a').contains('Próxima').click();
