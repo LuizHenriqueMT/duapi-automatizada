@@ -431,17 +431,32 @@ describe('Produto', () => {
             cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
                 inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarAntigo).then((numString) => {
                     cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
+                    cy.wrap(numString).as('qtEntregarNovo')
                 });
             });
             cy.get('@diasAntigo').then((diasAntigo) => {
                 inserirRandom(1, 9, 1, '#numero_dias_update', diasAntigo).then((numString) => {
                     cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+                    cy.wrap(numString).as('diasNovo')
                 });
             });
             cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
                 inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeAntigo).then((numString) => {
                     cy.get('#periodicidade_update').select(numString, { force: true });
+                    cy.wrap(numString).as('periodicidadeNovo')
                 });
+            });
+
+            cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
+                cy.get('@qtEntregarNovo').should('not.eq', qtEntregarAntigo);
+            });
+
+            cy.get('@diasAntigo').then((diasAntigo) => {
+                cy.get('@diasNovo').should('not.eq', diasAntigo);
+            });
+
+            cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
+                cy.get('@periodicidadeNovo').should('not.eq', periodicidadeAntigo);
             });
 
             // cy.get('.actions a').contains('Próxima').click();
@@ -565,7 +580,7 @@ function inserirRandom(min, max, digit = 0, elemento = false, valModificado = fa
         });
     } if (digit !== 0 && elemento && valModificado) {
         return cy.get(elemento).invoke('val').then((elementoVal) => {
-            
+
             do {
                 let numRandom = [];
                 for (let i = 0; i < digit; i++) {
