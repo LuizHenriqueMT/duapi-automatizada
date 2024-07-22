@@ -379,10 +379,10 @@ describe('Produto', () => {
             cy.get('.actions a').contains('Próxima').click();
 
             // // ADICIONAR SETOR E REMOVER PELO CHECKBOX
-            // // cy.get('@setor').then(setor => {
-            // //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}');
-            // // })
-            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // cy.get('@setor').then(setor => {
+            //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}');
+            // })
             // cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
@@ -394,10 +394,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-setor').should('not.exist');
 
             // // ADICIONAR SETOR E REMOVER PELA AÇÃO EXCLUIR
-            // // cy.get('@setor').then(setor => {
-            // //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
-            // // })
-            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // cy.get('@setor').then(setor => {
+            //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
+            // })
             // cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
@@ -408,10 +408,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-setor').should('not.exist');
 
             // // ADICIONAR SETOR E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // // cy.get('@setor').then(setor => {
-            // //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
-            // // });
-            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
+            // cy.get('@setor').then(setor => {
+            //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
+            // });
             // inserirRandom(1, 9, 1, '#qt_entregar_setor').then((numString) => {
             //     cy.get('#qt_entregar_setor').clear().type(numString);
             // });
@@ -481,11 +481,11 @@ describe('Produto', () => {
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // // ADICIONAR CARGO E REMOVER PELO CHECKBOX
-            // // cy.get('@cargo').then(cargo => {
-            // //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
-            // // })
-            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // // // ADICIONAR CARGO E REMOVER PELO CHECKBOX
+            // // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('@cargo').then(cargo => {
+            //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
+            // })
             // cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_cargo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_cargo').select(inserirRandom(1, 7, 1));
@@ -496,11 +496,11 @@ describe('Produto', () => {
             // cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
             // cy.get('.td-qtde-cargo').should('not.exist');
 
-            // // ADICIONAR SETOR E REMOVER PELA AÇÃO EXCLUIR
-            // // cy.get('@cargo').then(cargo => {
-            // //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
-            // // })
-            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // // // ADICIONAR CARGO E REMOVER PELA AÇÃO EXCLUIR
+            // // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('@cargo').then(cargo => {
+            //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
+            // })
             // cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_cargo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_cargo').select(inserirRandom(1, 7, 1));
@@ -511,17 +511,17 @@ describe('Produto', () => {
             // cy.get('.td-qtde-cargo').should('not.exist');
 
             // // ADICIONAR CARGO E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // // cy.get('@cargo').then(cargo => {
-            // //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}')
-            // // })
-            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
-            // inserirRandom(1, 9, 1, '#qt_entregar_cargo').then((numString) => {
+            // // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('@cargo').then(cargo => {
+            //     cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}')
+            // })
+            // inserirRandom(1, 2, 1, '#qt_entregar_cargo').then((numString) => {
             //     cy.get('#qt_entregar_cargo').clear().type(numString);
             // });
-            // inserirRandom(1, 9, 1, '#numero_dias_cargo').then((numString) => {
+            // inserirRandom(1, 2, 1, '#numero_dias_cargo').then((numString) => {
             //     cy.get('#numero_dias_cargo').clear().type(numString);
             // });
-            // inserirRandom(1, 7, 1, '#periodicidade_cargo').then((numString) => {
+            // inserirRandom(1, 2, 1, '#periodicidade_cargo').then((numString) => {
             //     cy.get('#periodicidade_cargo').select(numString);
             // });
 
@@ -537,7 +537,7 @@ describe('Produto', () => {
             // cy.get('#editar-produtos-cargo').click();
 
             // cy.get('@qtEntregarCargoAntigo').then((qtEntregarCargoAntigo) => {
-            //     inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarCargoAntigo).then((numString) => {
+            //     inserirRandom(1, 2, 1, '#qt_entregar_update', qtEntregarCargoAntigo).then((numString) => {
             //         cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
             //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
             //         cy.wrap(qtEntregarCargoAntigo).as('qtEntregarCargoAntigoShould');
@@ -545,7 +545,7 @@ describe('Produto', () => {
             // });
 
             // cy.get('@diasCargoAntigo').then((diasCargoAntigo) => {
-            //     inserirRandom(1, 9, 1, '#numero_dias_update', diasCargoAntigo).then((numString) => {
+            //     inserirRandom(1, 2, 1, '#numero_dias_update', diasCargoAntigo).then((numString) => {
             //         cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
             //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
             //         cy.wrap(diasCargoAntigo).as('diasCargoAntigoShould');
@@ -553,7 +553,7 @@ describe('Produto', () => {
             // });
 
             // cy.get('@periodicidadeCargoAntigo').then((periodicidadeCargoAntigo) => {
-            //     inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeCargoAntigo).then((numString) => {
+            //     inserirRandom(1, 2, 1, '#periodicidade_update', periodicidadeCargoAntigo).then((numString) => {
             //         cy.get('#periodicidade_update').select(numString, { force: true });
             //         // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
             //         cy.wrap(periodicidadeCargoAntigo).as('periodicidadeCargoAntigoShould');
@@ -583,11 +583,11 @@ describe('Produto', () => {
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // // ADICIONAR CENTRO DE CUSTO E REMOVER PELO CHECKBOX
-            // // cy.get('@cc').then(cc => {
-            // //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
-            // // })
-            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // ADICIONAR CENTRO DE CUSTO E REMOVER PELO CHECKBOX
+            // // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('@cc').then(cc => {
+            //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
+            // })
             // cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_centro_custo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_centro_custo').select(inserirRandom(1, 7, 1));
@@ -599,10 +599,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-centro_custo').should('not.exist');
 
             // // ADICIONAR CENTRO DE CUSTO E REMOVER PELA AÇÃO EXCLUIR
-            // // cy.get('@cc').then(cc => {
-            // //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
-            // // })
-            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('@cc').then(cc => {
+            //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
+            // })
             // cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_centro_custo').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_centro_custo').select(inserirRandom(1, 7, 1));
@@ -613,10 +613,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-centro_custo').should('not.exist');
 
             // // ADICIONAR CENTRO DE CUSTO E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // // cy.get('@cc').then(cc => {
-            // //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}')
-            // // })
-            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
+            // cy.get('@cc').then(cc => {
+            //     cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}')
+            // })
             // inserirRandom(1, 9, 1, '#qt_entregar_centro_custo').then((numString) => {
             //     cy.get('#qt_entregar_centro_custo').clear().type(numString);
             // });
@@ -679,17 +679,17 @@ describe('Produto', () => {
             //     cy.get('@diasCCNovo').should('not.eq', diasAntigo);
             // });
 
-            // cy.get('@periodicidadeCCAntigoCShould').then((periodicidadeAntigo) => {
+            // cy.get('@periodicidadeCCAntigoShould').then((periodicidadeAntigo) => {
             //     cy.get('@periodicidadeCCNovo').should('not.eq', periodicidadeAntigo);
             // });
 
             cy.get('.actions a').contains('Próxima').click();
 
             // // ADICIONAR RISCO E REMOVER PELO CHECKBOX
-            // // cy.get('@risco').then(risco => {
-            // //     cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
-            // // })
-            // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            // // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            // cy.get('@risco').then(risco => {
+            //     cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
+            // })
             // cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_risco').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_risco').select(inserirRandom(1, 7, 1));
@@ -701,10 +701,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-risco').should('not.exist');
 
             // // ADICIONAR RISCO E REMOVER PELA AÇÃO EXCLUIR
-            // // cy.get('@risco').then(risco => {
-            // //     cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
-            // // })
             // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            // cy.get('@risco').then(risco => {
+            //     cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
+            // });
             // cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_risco').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_risco').select(inserirRandom(1, 7, 1));
@@ -715,10 +715,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-risco').should('not.exist');
 
             // // ADICIONAR RISCO E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // // cy.get('@risco').then(risco => {
-            // //     cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}')
-            // // })
-            // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            // // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
+            // cy.get('@risco').then(risco => {
+            //     cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}')
+            // });
             // inserirRandom(1, 9, 1, '#qt_entregar_risco').then((numString) => {
             //     cy.get('#qt_entregar_risco').clear().type(numString);
             // });
@@ -788,10 +788,10 @@ describe('Produto', () => {
             cy.get('.actions a').contains('Próxima').click();
 
             // // ADICIONAR GHE E REMOVER PELO CHECKBOX
-            // // cy.get('@ghe').then(ghe => {
-            // //     cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
-            // // })
-            // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
+            // // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
+            // cy.get('@ghe').then(ghe => {
+            //     cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
+            // });
             // cy.get('#qt_entregar_ghe').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_ghe').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_ghe').select(inserirRandom(1, 7, 1));
@@ -803,10 +803,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-ghe').should('not.exist');
 
             // // ADICIONAR GHE E REMOVER PELA AÇÃO EXCLUIR
-            // // cy.get('@ghe').then(ghe => {
-            // //     cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
-            // // })
-            // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
+            // // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
+            // cy.get('@ghe').then(ghe => {
+            //     cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
+            // });
             // cy.get('#qt_entregar_ghe').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#numero_dias_ghe').clear().type(inserirRandom(1, 9, 1));
             // cy.get('#periodicidade_ghe').select(inserirRandom(1, 7, 1));
@@ -817,10 +817,10 @@ describe('Produto', () => {
             // cy.get('.td-qtde-ghe').should('not.exist');
 
             // // ADICIONAR GHE E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // // cy.get('@ghe').then(ghe => {
-            // //     cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}')
-            // // })
-            // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
+            // // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
+            // cy.get('@ghe').then(ghe => {
+            //     cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}')
+            // });
             // inserirRandom(1, 9, 1, '#qt_entregar_ghe').then((numString) => {
             //     cy.get('#qt_entregar_ghe').clear().type(numString);
             // });
