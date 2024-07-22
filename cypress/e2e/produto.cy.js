@@ -410,25 +410,39 @@ describe('Produto', () => {
             //     cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
             // })
             cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:34:22').wait(850).type('{enter}')
-            // cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
-            // cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 2, 1));
-
-            inserirRandom(1, 2, 1, '#qt_entregar_setor', false).then((numString) => {
-                console.log('numString: ' + numString)
+            inserirRandom(1, 9, 1, '#qt_entregar_setor', false).then((numString) => {
+                cy.wrap(numString).as('qtEntregarAntigo')
                 cy.get('#qt_entregar_setor').clear().type(numString);
+            })
+            inserirRandom(1, 9, 1, '#numero_dias_setor', false).then((numString) => {
+                cy.wrap(numString).as('diasAntigo')
+                cy.get('#numero_dias_setor').clear().type(numString);
+            });
+            inserirRandom(1, 7, 1, '#periodicidade_setor', false).then((numString) => {
+                cy.wrap(numString).as('periodicidadeAntigo')
+                cy.get('#periodicidade_setor').select(numString);
+            });
 
-                cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
-                cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
-                cy.get('#add-setor').click();
-                cy.get('.grade_desc').should('exist');
-                cy.get('#produto-setor-table tr:first .check-setor').check();
-                // cy.get('#produto-setor-table tr:first .td-qtde-setor .produto-setor[qt_entregar]').clear().type(3);
-                cy.get('#editar-produtos-setor').click();
+            cy.get('#add-setor').click();
+            cy.get('.grade_desc').should('exist');
+            cy.get('#produto-setor-table tr:first .check-setor').check();
+            cy.get('#editar-produtos-setor').click();
 
-                inserirRandom(1, 2, 1, '#qt_entregar_update', numString).then((numString) => {
+            cy.get('@qtEntregarAntigo').then((qtEntregarAntigo) => {
+                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarAntigo).then((numString) => {
                     cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
                 });
-            })
+            });
+            cy.get('@diasAntigo').then((diasAntigo) => {
+                inserirRandom(1, 9, 1, '#numero_dias_update', diasAntigo).then((numString) => {
+                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
+                });
+            });
+            cy.get('@periodicidadeAntigo').then((periodicidadeAntigo) => {
+                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeAntigo).then((numString) => {
+                    cy.get('#periodicidade_update').select(numString, { force: true });
+                });
+            });
 
             // cy.get('.actions a').contains('Próxima').click();
 
@@ -539,7 +553,6 @@ function inserirRandom(min, max, digit = 0, elemento = false, valModificado = fa
 
     if (digit !== 0 && elemento && !valModificado) {
         return cy.get(elemento).invoke('val').then((elementoVal) => {
-            console.log('elementoVal: ' + elementoVal)
 
             let numRandom = [];
             for (let i = 0; i < digit; i++) {
@@ -552,8 +565,7 @@ function inserirRandom(min, max, digit = 0, elemento = false, valModificado = fa
         });
     } if (digit !== 0 && elemento && valModificado) {
         return cy.get(elemento).invoke('val').then((elementoVal) => {
-            console.log('elemento: ' + elementoVal)
-
+            
             do {
                 let numRandom = [];
                 for (let i = 0; i < digit; i++) {
@@ -561,11 +573,8 @@ function inserirRandom(min, max, digit = 0, elemento = false, valModificado = fa
                     numRandom.push(num);
                 }
 
-                numString = numRandom.join('');;
-                console.log('Número gerado:', numString);
+                numString = numRandom.join('');
             } while (numString == valModificado);
-
-            console.log('Número final gerado:', numString);
 
             return numString;
         });
