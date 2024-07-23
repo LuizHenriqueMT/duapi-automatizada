@@ -23,6 +23,9 @@ jobs:
       - name: Write the cypress.env.json file
         run: |
           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+      
+      - name: Clean Allure results directory
+        run: rm -rf allure-results || true
 
       - name: Run initial Cypress tests        
         uses: cypress-io/github-action@v6
