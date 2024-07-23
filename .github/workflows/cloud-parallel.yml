@@ -68,11 +68,11 @@ jobs:
           name: allure-report-1 
           path: allure-report-1
 
-      # - name: Download Allure Report Artifact
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: allure-report-2
-      #     path: allure-report-2
+      - name: Download Allure Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report-2
+          path: allure-report-2
 
       # - name: Download Allure Report Artifact
       #   uses: actions/download-artifact@v4
@@ -90,6 +90,7 @@ jobs:
         run: |
           mkdir -p merged-allure-results
           cp -r allure-report-1/* merged-allure-results/
+          cp -r allure-report-2/* merged-allure-results/
 
       # - name: Merge Allure Results
       #   run: |
@@ -108,7 +109,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-merged
-          path: allure-reports
+          path: merged-allure-results
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
