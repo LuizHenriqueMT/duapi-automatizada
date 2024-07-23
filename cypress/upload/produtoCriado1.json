@@ -1,5 +1,6 @@
 {
   "produto": {
+<<<<<<< HEAD
     "codigo": "P AUTO 19/07/2024 08:22:23",
     "descricao": "PRODUTO Automatizado 19/07/2024 08:22:23",
     "referencia": "2787",
@@ -31,6 +32,39 @@
     "gera_entrega_indevida": "S",
     "created_at": null,
     "updated_at": null,
+=======
+    "codigo": "P AUTO 22/07/2024 17:09:24",
+    "descricao": "PRODUTO Automatizado 22/07/2024 17:09:24",
+    "referencia": "8116",
+    "qt_entrega": "8",
+    "periodo": "5",
+    "periodicidade_id": "5",
+    "vl_custo": "974,66",
+    "percentual_ipi": "59,00",
+    "marca_id": "51",
+    "unidade_id": "54",
+    "localizacao_id": "48",
+    "tipo_produto_id": "3",
+    "familia_produtos_id": "56",
+    "sub_familia_id": "72",
+    "controla_troca": "N",
+    "ativo": "S",
+    "controle_epi": "S",
+    "grupo_produto_id": "59",
+    "nr_dias_bloqueio_entrega": null,
+    "updated_at": "2024-07-22T20:11:57.000000Z",
+    "created_at": "2024-07-22T20:11:57.000000Z",
+    "id": 54,
+    "url_foto_produto": "JTlaTTHuCk.png"
+  },
+  "tipoProduto": {
+    "id": 3,
+    "descricao": "Uniforme",
+    "informar_quantidade_na_entrega": "S",
+    "gera_entrega_indevida": "N",
+    "created_at": "2024-06-19T14:29:52.000000Z",
+    "updated_at": "2024-06-19T14:29:52.000000Z",
+>>>>>>> auto1.0
     "tipo_impressao": "EPI",
     "entrega_indevida_gera_novo_ciclo_prazo_entrega": "S",
     "controlar_devolucao_manualmente": "N",

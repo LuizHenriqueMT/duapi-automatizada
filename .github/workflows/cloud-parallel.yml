@@ -29,8 +29,14 @@ jobs:
           parallel: true
           group: "Initial Tests"
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+<<<<<<< HEAD
           spec: "cypress/e2e/!(e2e.cy.js|funcionario.cy.js|produto.cy.js|entregaProduto.cy.js|loginTentativa.cy.js|novoWorkspace.cy.js)"
           # spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)"
+=======
+          # spec: "cypress/e2e/!(e2e.cy.js|funcionario.cy.js|produto.cy.js|entregaProduto.cy.js|loginTentativa.cy.js|novoWorkspace.cy.js)"
+          # spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)"
+          spec: "cypress/e2e/(produto.cy.js|e2e.cy.js)"
+>>>>>>> auto1.0
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -72,11 +78,31 @@ jobs:
           name: allure-report-2
           path: allure-report-2
 
+<<<<<<< HEAD
+=======
+      - name: Download Allure Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report-3
+          path: allure-report-3
+
+      - name: Download Allure Report Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-report-4
+          path: allure-report-4
+
+>>>>>>> auto1.0
       - name: Merge Allure Results
         run: |
           mkdir -p merged-allure-results
           cp -r allure-report-1/* merged-allure-results/
           cp -r allure-report-2/* merged-allure-results/
+<<<<<<< HEAD
+=======
+          cp -r allure-report-3/* merged-allure-results/
+          cp -r allure-report-4/* merged-allure-results/
+>>>>>>> auto1.0
   
       - name: Generate Final Allure Report
         run: |
@@ -86,7 +112,11 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+<<<<<<< HEAD
           publish_dir: ./merged-allure-results
+=======
+          publish_dir: ./allure-reports
+>>>>>>> auto1.0
 
       - name: Send Email
         if: always()

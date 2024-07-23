@@ -1,11 +1,17 @@
 {
   "cargo": {
+<<<<<<< HEAD
     "id": 87,
     "descricao": "CARGO 19/07/2024 08:21:56",
+=======
+    "id": 107,
+    "descricao": "CARGO 22/07/2024 17:09:24",
+>>>>>>> auto1.0
     "created_at": null,
     "updated_at": null,
     "ativo": "S",
     "codigo": null
+<<<<<<< HEAD
   },
   "funcionario": {
     "id": 230,
@@ -55,5 +61,7 @@
     "has_anexo": 0,
     "qtd_anexo": 0,
     "imagem": ""
+=======
+>>>>>>> auto1.0
   }
 }
