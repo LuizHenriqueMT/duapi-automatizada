@@ -101,11 +101,18 @@ jobs:
         run: |
           allure generate merged-allure-results --clean -o allure-reports --lang br
 
+      - name: Upload Allure Merged
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-merged
+          path: allure-reports
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-reports
+          publish_dir: ./public
           publish_branch: gh-pages
           keep_files: true
 
