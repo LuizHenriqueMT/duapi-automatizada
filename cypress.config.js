@@ -181,11 +181,7 @@ module.exports = defineConfig({
         }
       
         await new Promise((resolve, reject) => {
-<<<<<<< HEAD
-          exec('npm run allure:reportSingle', function (error, stdout, stderr) {
-=======
           exec('npm run allure:report', function (error, stdout, stderr) {
->>>>>>> auto1.0
             console.log('Gerando relatório...');
       
             if (error !== null) {
