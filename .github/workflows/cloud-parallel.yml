@@ -109,7 +109,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-merged
-          path: merged-allure-results
+          path: allure-reports
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
