@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: [1]
+        container: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -109,7 +109,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-merged
-          path: allure-reports
+          path: merged-allure-results
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
