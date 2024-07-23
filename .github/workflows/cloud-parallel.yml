@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: [1, 2, 3, 4]
+        container: [1]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,9 +21,6 @@ jobs:
       - name: Write the cypress.env.json file
         run: |
           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
-      
-      - name: Clean Allure results directory
-        run: rm -rf allure-results || true
 
       - name: Run initial Cypress tests        
         uses: cypress-io/github-action@v6
@@ -71,31 +68,36 @@ jobs:
           name: allure-report-1 
           path: allure-report-1
 
-      - name: Download Allure Report Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-report-2
-          path: allure-report-2
+      # - name: Download Allure Report Artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-report-2
+      #     path: allure-report-2
 
-      - name: Download Allure Report Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-report-3
-          path: allure-report-3
+      # - name: Download Allure Report Artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-report-3
+      #     path: allure-report-3
 
-      - name: Download Allure Report Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-report-4
-          path: allure-report-4
+      # - name: Download Allure Report Artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-report-4
+      #     path: allure-report-4
 
       - name: Merge Allure Results
         run: |
           mkdir -p merged-allure-results
           cp -r allure-report-1/* merged-allure-results/
-          cp -r allure-report-2/* merged-allure-results/
-          cp -r allure-report-3/* merged-allure-results/
-          cp -r allure-report-4/* merged-allure-results/
+
+      # - name: Merge Allure Results
+      #   run: |
+      #     mkdir -p merged-allure-results
+      #     cp -r allure-report-1/* merged-allure-results/
+      #     cp -r allure-report-2/* merged-allure-results/
+      #     cp -r allure-report-3/* merged-allure-results/
+      #     cp -r allure-report-4/* merged-allure-results/
   
       - name: Generate Final Allure Report
         run: |
@@ -113,8 +115,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./merged-allure-results
-          publish_branch: gh-pages
-          keep_files: true
 
       - name: Send Email
         if: always()
