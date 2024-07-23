@@ -6,15 +6,6 @@ describe('Login 5 Tentativas', () => {
         Cypress.config('responseTimeout', 600000);
     });
 
-<<<<<<< HEAD
-    it('Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS', () => {
-        cy.clock();
-        cy.visit('/login');
-
-        var numerosRandom = inserirNumeroAleatorio();
-        var email = 'automacao' + numerosRandom + '@automacao.com';
-
-=======
     // NÃO MUDAR OS TESTES 1 E 2 DE POSIÇÃO. FACILITA E OTIMIZA A EXECUÇÃO DOS TESTES.
 
     it('Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA', () => {
@@ -27,15 +18,12 @@ describe('Login 5 Tentativas', () => {
         var senha = Cypress.env('tentativa_login').senha;
 
         // ERRA A SENHA 4 VEZES PARA FAZER O CONTADOR DE BLOQUEIO
->>>>>>> auto1.0
         for (var i = 0; i < 4; i++) {
             loginTentativa(email, 'inexistenteSenha');
             cy.get('#mensagem-retorno .alert').should('contain.text', 'Essas credenciais não correspondem aos nossos registros.');
 
         }
 
-<<<<<<< HEAD
-=======
         // ENTRA NO SISTEMA COM A SENHA CORRETA NA 5ª TENTATIVA DE INSERÇÃO DE SENHA
         loginTentativa(email, senha);
         cy.url().then((url) => {
@@ -72,40 +60,12 @@ describe('Login 5 Tentativas', () => {
         }
 
         // BLOQUEIO NA 5ª TENTATIVA UTILIZANDO SENHA INCORRETA
->>>>>>> auto1.0
         loginTentativa(email, 'inexistenteSenha');
         cy.get('#mensagem-retorno .alert').should('contain.text', 'Muitas tentativas de login. Tente novamente em 10 minutos.');
 
         cy.task('saveTimestamp', Date.now());
         cy.task('saveEmail', email);
 
-<<<<<<< HEAD
-        cy.wait(300000);
-
-        loginTentativa(email, 'inexistenteSenha');
-        cy.get('#mensagem-retorno').should('contain.text', 'Muitas tentativas de login. Tente novamente em 5 minutos.');
-
-        cy.wait(300000);
-
-        loginTentativa(email, 'inexistenteSenha');
-        cy.get('#mensagem-retorno .alert').should('contain.text', 'Essas credenciais não correspondem aos nossos registros.');
-
-        //         // cy.url().then((url) => {
-        //         //     if (url.includes('/define-acesso')) {
-        //         //         cy.get('.login-box-msg').should('contain.text', 'Selecione a workspace que deseja utilizar');
-        //         //         cy.contains('button[name="subdominio_id"]', 'TesteAutomatizado2').click();
-        //         //         cy.get('.sidebar-menu.tree').children('.header').should('contain.text', 'MENU')
-
-        //         //     } else if (url.includes('/home')) {
-        //         //         cy.get('.sidebar-menu.tree').children('.header').should('contain.text', 'MENU')
-
-        //         //     } else {
-        //         //         throw new Error('URL não encontrada');
-        //         //     }
-        //         // });
-
-        //     });
-=======
         // VERIFICAR APÓS 5 MINUTOS DE BLOQUEIO SE AINDA ESTÁ BLOQUEADO
         cy.wait(300000);
         loginTentativa(email, senha);
@@ -128,7 +88,6 @@ describe('Login 5 Tentativas', () => {
             }
         });
 
->>>>>>> auto1.0
     });
 
 });
