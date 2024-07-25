@@ -1,11 +1,11 @@
 [
   {
-    "uid": "8bc6cf1530f18be8",
+    "uid": "704f09f6dd7d626d",
     "name": "Login - FAZER LOGIN COM SUCESSO NO SISTEMA",
     "time": {
-      "start": 1721910791146,
-      "stop": 1721910798743,
-      "duration": 7597
+      "start": 1721915119272,
+      "stop": 1721915128696,
+      "duration": 9424
     },
     "status": "passed",
     "severity": "normal"
