@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "uid": "272f7b61977cf777",
+    "name": "Login - FAZER LOGIN COM SUCESSO NO SISTEMA",
+    "time": {
+      "start": 1721909000779,
+      "stop": 1721909007830,
+      "duration": 7051
+    },
+    "status": "passed",
+    "severity": "normal"
+  }
+]

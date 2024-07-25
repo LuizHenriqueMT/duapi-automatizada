@@ -1,1 +1,51 @@
-{"uid":"98d3104e051c652961429bf95fa0b5d6","children":[],"name":"suites"}
+[
+  {
+    "uid": "98d3104e051c652961429bf95fa0b5d6",
+    "children": [],
+    "name": "suites"
+  },
+  {
+    "uid": "98d3104e051c652961429bf95fa0b5d6",
+    "children": [],
+    "name": "suites"
+  },
+  {
+    "uid": "98d3104e051c652961429bf95fa0b5d6",
+    "children": [],
+    "name": "suites"
+  },
+  {
+    "uid": "98d3104e051c652961429bf95fa0b5d6",
+    "children": [
+      {
+        "name": "Login",
+        "children": [
+          {
+            "name": "Login - FAZER LOGIN COM SUCESSO NO SISTEMA",
+            "uid": "272f7b61977cf777",
+            "parentUid": "1a85855463aca3ea10b8fe0fcb3372b8",
+            "status": "passed",
+            "time": {
+              "start": 1721909000779,
+              "stop": 1721909007830,
+              "duration": 7051
+            },
+            "flaky": false,
+            "newFailed": false,
+            "newPassed": false,
+            "newBroken": false,
+            "retriesCount": 0,
+            "retriesStatusChange": false,
+            "parameters": [],
+            "tags": [
+              "Login",
+              "Autenticação"
+            ]
+          }
+        ],
+        "uid": "1a85855463aca3ea10b8fe0fcb3372b8"
+      }
+    ],
+    "name": "suites"
+  }
+]
