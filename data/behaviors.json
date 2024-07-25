@@ -1,5 +1,28 @@
 {
   "uid": "b1a8273437954620fa374b796ffaacdd",
-  "children": [],
+  "children": [
+    {
+      "name": "Login - FAZER LOGIN COM SUCESSO NO SISTEMA",
+      "uid": "e4cfcfdff923b9c4",
+      "parentUid": "b1a8273437954620fa374b796ffaacdd",
+      "status": "passed",
+      "time": {
+        "start": 1721926412531,
+        "stop": 1721926419692,
+        "duration": 7161
+      },
+      "flaky": false,
+      "newFailed": false,
+      "newPassed": false,
+      "newBroken": false,
+      "retriesCount": 0,
+      "retriesStatusChange": false,
+      "parameters": [],
+      "tags": [
+        "Login",
+        "Autenticação"
+      ]
+    }
+  ],
   "name": "behaviors"
 }
