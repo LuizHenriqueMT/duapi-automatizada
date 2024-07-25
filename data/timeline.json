@@ -1,0 +1,45 @@
+[
+  {
+    "uid": "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "children": [],
+    "name": "timeline"
+  },
+  {
+    "uid": "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "children": [
+      {
+        "name": "Login - FAZER LOGIN COM SUCESSO NO SISTEMA",
+        "uid": "8bc6cf1530f18be8",
+        "parentUid": "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+        "status": "passed",
+        "time": {
+          "start": 1721910791146,
+          "stop": 1721910798743,
+          "duration": 7597
+        },
+        "flaky": false,
+        "newFailed": false,
+        "newPassed": false,
+        "newBroken": false,
+        "retriesCount": 0,
+        "retriesStatusChange": false,
+        "parameters": [],
+        "tags": [
+          "Login",
+          "Autenticação"
+        ]
+      }
+    ],
+    "name": "timeline"
+  },
+  {
+    "uid": "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "children": [],
+    "name": "timeline"
+  },
+  {
+    "uid": "ab17fc5a4eb3bca4b216b548c7f9fcbc",
+    "children": [],
+    "name": "timeline"
+  }
+]
