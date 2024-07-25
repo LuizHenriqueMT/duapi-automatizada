@@ -1,0 +1,325 @@
+name: Parallel Cypress Tests
+on: workflow_dispatch
+jobs:
+  initial_tests:
+    name: Initial Cypress run
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        container: [1, 2, 3, 4]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure Allure
+        run: npm install -g allure-commandline --save-dev
+
+      - name: Download plugin Allure
+        run: npm install --save-dev @shelex/cypress-allure-plugin
+
+      - name: Write the cypress.env.json file
+        run: |
+          echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+
+      - name: Run initial Cypress tests        
+        uses: cypress-io/github-action@v6
+        with:
+          record: true
+          parallel: true
+          group: "Initial Tests"
+          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+          # spec: "cypress/e2e/!(e2e.cy.js|funcionario.cy.js|produto.cy.js|entregaProduto.cy.js|loginTentativa.cy.js|novoWorkspace.cy.js)"
+          # spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)"
+          # spec: "cypress/e2e/(entregaProduto.cy.js|login.cy.js)"
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          allure: true
+
+      - name: Move Allure Results
+        if: always()
+        run: |
+          mkdir -p allure-results-${{ matrix.container }}
+          mv allure-results/* allure-results-${{ matrix.container }}/ || echo "placeholder" > allure-results-${{ matrix.container }}/placeholder.txt
+        
+      - name: Upload Allure Results Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.container }}
+          path: allure-results-${{ matrix.container }}
+          retention-days: 5
+
+  deploy:
+    needs: initial_tests
+    runs-on: ubuntu-22.04
+    if: success() || failure()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure Allure
+        run: npm install -g allure-commandline --save-dev
+
+      - name: Download Allure Results Artifact 1
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-1
+          path: allure-reports/allure-results-1
+
+      - name: Download Allure Results Artifact 2
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-2
+          path: allure-reports/allure-results-2
+
+      - name: Download Allure Results Artifact 3
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-3
+          path: allure-reports/allure-results-3
+
+      - name: Download Allure Results Artifact 4
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-4
+          path: allure-reports/allure-results-4
+
+      - name: Merge Allure Results
+        run: |
+          mkdir -p merged-allure-results
+          cp -r allure-reports/allure-results-1/* merged-allure-results/
+          cp -r allure-reports/allure-results-2/* merged-allure-results/
+          cp -r allure-reports/allure-results-3/* merged-allure-results/
+          cp -r allure-reports/allure-results-4/* merged-allure-results/
+
+      - name: Generate Final Allure Report
+        run: |
+          allure generate merged-allure-results --clean -o allure-report --lang br
+
+      # - name: Upload Reports Results
+      #   if: always()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: allure-report
+      #     path: allure-report 
+      #     retention-days: 5
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+
+      - name: Send Email
+        if: always()
+        run: |
+          node -e "
+          const nodemailer = require('nodemailer');
+          const fs = require('fs');
+          const path = require('path');
+          
+          async function sendEmail() {
+            let transporter = nodemailer.createTransport({
+              service: 'SendGrid',
+              auth: {
+                user: 'apikey',
+                pass: process.env.SENDGRID_API_KEY
+              }
+            });
+
+            let info = await transporter.sendMail({
+              from: process.env.EMAIL_USER,
+              to: process.env.EMAIL_TO,
+              subject: 'Relatório de Testes Automatizado',
+              html: 'O relatório dos testes automatizados está disponível. Acesse: <a href="https://luizhenriquemt.github.io/duapi-automatizada/#">Relatório</a>'
+            });
+          }
+
+          sendEmail().catch(console.error);
+          "
+
+    env:
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+      EMAIL_TO: ${{ secrets.EMAIL_TO }}      
+    
+############ LOGIN ############
+
+# name: Parallel Cypress Tests
+# on: workflow_dispatch
+# jobs:
+#   initial_tests:
+#     name: Initial Cypress run
+#     runs-on: ubuntu-22.04
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         container: [1, 2, 3, 4]
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Configure Allure
+#         run: npm install -g allure-commandline --save-dev
+
+#       - name: Write the cypress.env.json file
+#         run: |
+#           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+
+#       - name: Run initial Cypress tests        
+#         uses: cypress-io/github-action@v6
+#         with:
+#           record: true
+#           parallel: true
+#           group: "Initial Tests"
+#           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+#           spec: "cypress/e2e/!(e2e.cy.js|funcionario.cy.js|produto.cy.js|entregaProduto.cy.js|loginTentativa.cy.js|novoWorkspace.cy.js)"
+#           # spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)"
+#         env:
+#           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+#       - name: Generate Allure Report
+#         run: |
+#           allure generate allure-results --clean -o allure-report --lang br
+  
+#       - name: Upload Allure Report Artifact
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: allure-report-${{ matrix.container }}
+#           path: allure-report
+
+#   login_tentativa:
+#     name: Login Cypress run with delay
+#     runs-on: ubuntu-22.04
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Configure Allure
+#         run: npm install -g allure-commandline --save-dev
+
+#       - name: Write the cypress.env.json file
+#         run: |
+#           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+
+#       - name: Run login Cypress test
+#         uses: cypress-io/github-action@v6
+#         with:
+#           record: true
+#           parallel: false
+#           group: "Login Test"
+#           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+#           spec: "cypress/e2e/loginTentativa.cy.js"
+#         env:
+#           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         continue-on-error: true
+
+#       - name: Generate Allure Report
+#         run: |
+#           allure generate allure-results --clean -o allure-report --lang br
+  
+#       - name: Upload Allure Report Artifact
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: allure-report-login
+#           path: allure-report
+
+#   deploy:
+#     needs: [initial_tests, login_tentativa]
+#     runs-on: ubuntu-22.04
+#     if: success() || failure()
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+      
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Configure Allure
+#         run: npm install -g allure-commandline --save-dev
+
+#       - name: Download Allure Report Artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: allure-report-login 
+#           path: allure-report-login
+
+#       - name: Download Allure Report Artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: allure-report-1 
+#           path: allure-report-1
+
+#       - name: Download Allure Report Artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: allure-report-2
+#           path: allure-report-2
+
+#       - name: Merge Allure Results
+#         run: |
+#           mkdir -p merged-allure-results
+#           cp -r allure-report-login/* merged-allure-results/
+#           cp -r allure-report-1/* merged-allure-results/
+#           cp -r allure-report-2/* merged-allure-results/
+  
+#       - name: Generate Final Allure Report
+#         run: |
+#           allure generate merged-allure-results --clean -o allure-reports --lang br
+
+#       - name: Deploy to GitHub Pages
+#         uses: peaceiris/actions-gh-pages@v3
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./merged-allure-results
+
+#       - name: Send Email
+#         if: always()
+#         run: |
+#           node -e "
+#           const nodemailer = require('nodemailer');
+#           const fs = require('fs');
+#           const path = require('path');
+          
+#           async function sendEmail() {
+#             let transporter = nodemailer.createTransport({
+#               service: 'SendGrid',
+#               auth: {
+#                 user: 'apikey',
+#                 pass: process.env.SENDGRID_API_KEY
+#               }
+#             });
+
+#             let info = await transporter.sendMail({
+#               from: process.env.EMAIL_USER,
+#               to: process.env.EMAIL_TO,
+#               subject: 'Relatório de Testes Automatizado',
+#               html: 'O relatório dos testes automatizados está disponível. Acesse: <a href="https://luizhenriquemt.github.io/duapi-automatizada/#">Relatório</a>'
+#             });
+#           }
+
+#           sendEmail().catch(console.error);
+#           "
+
+#     env:
+#       EMAIL_USER: ${{ secrets.EMAIL_USER }}
+#       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+#       EMAIL_TO: ${{ secrets.EMAIL_TO }}          
