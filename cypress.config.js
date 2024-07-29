@@ -196,13 +196,11 @@ module.exports = defineConfig({
 
       return config;
     },
-
-
+    
+    baseUrl: env.URL_TESTE,
     env: {
       allure: true
-    },
-
-    baseUrl: env.URL_TESTE
+    }
 
   },
 });

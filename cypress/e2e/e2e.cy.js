@@ -63,11 +63,11 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
 
         const realizarTeste = () => {
             cy.visit('/funcionario');
-            // 
+
             cy.get('#btn-novo-funcionario').click();
 
             cy.get('#imagem-usuario').selectFile("cypress/img/profile.png", { force: true });
-            cy.get('#tutorial-funcionario-nome #nome').type('Teste Automatizado ' + dataAtual);
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
             cy.get('#tutorial-funcionario-cpf #cpf').type(generate());
             cy.get('#tutorial-funcionario-carteira #carteira').type(inserirRandom(1, 9, 7));
@@ -79,8 +79,8 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             cy.get('#tutorial-funcionario-data-nascimento #nascimento').type(gerarDataAtual(false, true));
             cy.get('#tutorial-funcionario-email #email').type('teste@teste.com');
 
-            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('Teste Automatizado').wait(700).type('{enter}');
-            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('Teste Automatizado').wait(700).type('{enter}');
+            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
+            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
 
             cy.get('#tutorial-funcionario-turno input[name="turno_id"]').type('TURNO ' + dataAtual).wait(850).type('{enter}')
             cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
@@ -154,7 +154,7 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
 
             cy.get('#tutorial-produto-foto #produto-foto').selectFile("cypress/img/epi.jpg", { force: true });
             cy.get('#tutorial-produto-codigo #codigo').type('P AUTO ' + dataAtual);
-            cy.get('#tutorial-produto-descricao #descricao').type('PRODUTO Automatizado ' + dataAtual);
+            cy.get('#tutorial-produto-descricao #descricao').type('PRODUTO AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-produto-referencia #referencia').type(inserirRandom(1, 9, 4));
             cy.get('#tutorial-produto-quantidade-entregar #qt_entrega').clear().type(inserirRandom(1, 9, 1));
             cy.get('#tutorial-produto-periodicidade #periodo').clear().type(inserirRandom(1, 9, 1));

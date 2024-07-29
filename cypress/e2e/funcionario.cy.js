@@ -67,7 +67,7 @@ describe('Funcionário', () => {
             cy.get('#btn-novo-funcionario').click();
 
             cy.get('#imagem-usuario').selectFile("cypress/img/profile.png", { force: true });
-            cy.get('#tutorial-funcionario-nome #nome').type('Teste Automatizado ' + dataAtual);
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
             cy.get('#tutorial-funcionario-cpf #cpf').type(generate());
             cy.get('#tutorial-funcionario-carteira #carteira').type(inserirRandom(1, 9, 7));
@@ -78,8 +78,8 @@ describe('Funcionário', () => {
             cy.get('#tutorial-funcionario-data-nascimento #nascimento').type(gerarDataAtual(false, true));
             cy.get('#tutorial-funcionario-email #email').type('teste@teste.com');
 
-            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('Teste Automatizado').wait(700).type('{enter}');
-            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('Teste Automatizado').wait(700).type('{enter}');
+            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
+            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
             cy.get('#tutorial-funcionario-turno input[name="turno_id"]').type('TURNO').wait(700).type('{enter}');
             cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type('SETOR').wait(700).type('{enter}');
             cy.get('#tutorial-funcionario-cargo input[name="cargo_id"]').type('CARGO').wait(700).type('{enter}');
@@ -111,7 +111,7 @@ describe('Funcionário', () => {
 
             cy.get('#btn-novo-funcionario').click();
 
-            cy.get('#tutorial-funcionario-nome #nome').type('Teste Automatizado ' + dataAtual);
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
             cy.get('#tutorial-funcionario-cpf #cpf').type(12345678901);
 
@@ -146,7 +146,7 @@ describe('Funcionário', () => {
 
             cy.get('#btn-novo-funcionario').click();
 
-            cy.get('#tutorial-funcionario-nome #nome').type('Teste Automatizado ' + dataAtual);
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
 
             cy.wait('@allRequests').then(() => {
                 const getFuncionarioRequest = allRequests.find(interception =>
@@ -188,7 +188,7 @@ describe('Funcionário', () => {
             for (var i = 0; i < 3; i++) {
                 cy.get('#btn-novo-funcionario').click();
 
-                cy.get('#tutorial-funcionario-nome #nome').type('Teste Automatizado ' + dataAtual);
+                cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
                 cy.intercept('POST', '/funcionario').as('postFuncionario');
                 cy.get('#btn-salvar-funcionario').click();
                 cy.wait('@postFuncionario').its('response.statusCode').should('eq', 200);

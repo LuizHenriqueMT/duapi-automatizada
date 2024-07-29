@@ -80,8 +80,6 @@ describe('Produto', () => {
                 }).then((response) => {
                     expect(response.status).to.eq(200);
                 }).as('postRisco');
-
-
             })
 
             // Funcionario
@@ -89,7 +87,7 @@ describe('Produto', () => {
 
             cy.get('#btn-novo-funcionario').click();
 
-            cy.get('#tutorial-funcionario-nome #nome').type('Teste Automatizado ' + dataAtual);
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
 
             cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type('SETOR ' + dataAtual).wait(850).type('{enter}');
@@ -154,7 +152,7 @@ describe('Produto', () => {
 
             cy.get('#tutorial-produto-foto #produto-foto').selectFile("cypress/img/epi.jpg", { force: true });
             cy.get('#tutorial-produto-codigo #codigo').type('P AUTO ' + dataAtual);
-            cy.get('#tutorial-produto-descricao #descricao').type('PRODUTO Automatizado ' + dataAtual);
+            cy.get('#tutorial-produto-descricao #descricao').type('PRODUTO AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-produto-referencia #referencia').type(inserirRandom(1, 9, 4));
             cy.get('#tutorial-produto-quantidade-entregar #qt_entrega').clear().type(inserirRandom(1, 9, 1));
             cy.get('#tutorial-produto-periodicidade #periodo').clear().type(inserirRandom(1, 9, 1));
@@ -771,21 +769,21 @@ describe('Produto', () => {
             cy.get('.actions a').contains('Salvar').click();
             cy.wait('@postProduto').its('response.statusCode').should('eq', 200);
 
-            cy.get('@postProduto').then((interception) => {
-                const produto = interception.response.body.data;
-                cy.task('saveProdutoCriado1', produto);
-            });
+            // cy.get('@postProduto').then((interception) => {
+            //     const produto = interception.response.body.data;
+            //     cy.task('saveProdutoCriado1', produto);
+            // });
 
-            cy.task('getProdutoCriado1').then(data => {
-                const tipoProdutoId = data.produto.tipo_produto_id;
+            // cy.task('getProdutoCriado1').then(data => {
+            //     const tipoProdutoId = data.produto.tipo_produto_id;
 
-                cy.intercept('GET', `/get_tipo_produto?id=${tipoProdutoId}`).as('getProduto');
-                cy.request(`/get_tipo_produto?id=${tipoProdutoId}`).then((response) => {
-                    const tipoProduto = response.body;
-                    cy.task('saveTipoProduto', tipoProduto);
-                });
+            //     cy.intercept('GET', `/get_tipo_produto?id=${tipoProdutoId}`).as('getProduto');
+            //     cy.request(`/get_tipo_produto?id=${tipoProdutoId}`).then((response) => {
+            //         const tipoProduto = response.body;
+            //         cy.task('saveTipoProduto', tipoProduto);
+            //     });
 
-            });
+            // });
 
         }
 
