@@ -64,7 +64,7 @@ describe('Relatório - Entregas Pendente', () => {
 
         const realizarTeste = () => {
             let promises = [];
-            const maxI = 2;
+            const maxI = 3;
 
             // SETOR
             cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
@@ -275,12 +275,13 @@ describe('Relatório - Entregas Pendente', () => {
             cy.get('input[name="data_entrega_ate"]').clear();
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
                 cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
-            })
+            });
             // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 29/07/2024 16:23:48').wait(850).type('{enter}');
             cy.get('#controla_troca').select('N');
+            
             cy.get('.btn-buscar').click();
 
-            for (var i = 1; i <= 2; i++) {
+            for (var i = 1; i <= 3; i++) {
                 cy.get('@produtoId' + i).then((response) => {
                     cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
                         cy.request({
@@ -301,8 +302,10 @@ describe('Relatório - Entregas Pendente', () => {
                     });
                 });
 
-                // PRODUTO PENDENTE
+                cy.get('#entregas-pendentes-table tr').should('have.length', 5);
+
                 if (i === 1) {
+                    // PRODUTO PENDENTE
                     cy.get('@codigoProduto').then((codigoProduto) => {
                         cy.get('@descricaoProduto').then((descricaoProduto) => {
                             cy.get('#entregas-pendentes-table :nth-child(2) b')
@@ -314,6 +317,7 @@ describe('Relatório - Entregas Pendente', () => {
                     });
 
                 } else if (i === 2) {
+                    // PRODUTO EM DIA
                     cy.get('@codigoProduto').then((codigoProduto) => {
                         cy.get('@descricaoProduto').then((descricaoProduto) => {
                             cy.get('#entregas-pendentes-table :nth-child(4) b')
@@ -321,6 +325,23 @@ describe('Relatório - Entregas Pendente', () => {
 
                             cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega Dentro do Prazo');
+                        });
+                    });
+
+                } else if (i === 3) {
+                    // PRODUTO NUNCA ENTREGUE
+                    cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
+                    cy.get('.btn-buscar').click();
+
+                    cy.get('#entregas-pendentes-table tr').should('have.length', 7);
+
+                    cy.get('@codigoProduto').then((codigoProduto) => {
+                        cy.get('@descricaoProduto').then((descricaoProduto) => {
+                            cy.get('#entregas-pendentes-table :nth-child(6) b')
+                                .should('contain', 'Produto: ' + codigoProduto + ' - ' + descricaoProduto);
+
+                            cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(3) span')
+                                .should('contain', 'Produto Nunca Entregue');
                         });
                     });
                 }
