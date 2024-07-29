@@ -1,14 +1,23 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Thu Jul 25 18:27:33 UTC 2024","Thu Jul 25 18:27:40 UTC 2024","6664","","Login","","","","Login - FAZER LOGIN COM SUCESSO NO SISTEMA",""
-"passed","Thu Jul 25 18:08:33 UTC 2024","Thu Jul 25 18:08:47 UTC 2024","14421","","Login 5 Tentativas","","","","Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA",""
-"passed","Thu Jul 25 18:27:00 UTC 2024","Thu Jul 25 18:27:09 UTC 2024","9063","","Funcionário","","","","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE",""
-"passed","Thu Jul 25 18:24:45 UTC 2024","Thu Jul 25 18:24:58 UTC 2024","12560","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS",""
-"passed","Thu Jul 25 18:08:47 UTC 2024","Thu Jul 25 18:19:06 UTC 2024","618167","","Login 5 Tentativas","","","","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS",""
-"passed","Thu Jul 25 18:25:15 UTC 2024","Thu Jul 25 18:26:17 UTC 2024","61609","","Novo Workspace","","","","Novo Workspace - CRIAR E ENTRAR COM SUCESSO NA NOVA WORKSPACE",""
-"passed","Thu Jul 25 18:27:09 UTC 2024","Thu Jul 25 18:27:22 UTC 2024","12937","","Funcionário","","","","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO",""
-"passed","Thu Jul 25 18:26:52 UTC 2024","Thu Jul 25 18:27:00 UTC 2024","8151","","Funcionário","","","","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO",""
-"passed","Thu Jul 25 18:24:34 UTC 2024","Thu Jul 25 18:24:45 UTC 2024","10638","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Liberação de Produto - LIBERAR O PRODUTO PARA O FUNCIONÁRIO ATRAVÉS DO CARGO",""
-"passed","Thu Jul 25 18:20:18 UTC 2024","Thu Jul 25 18:23:01 UTC 2024","163019","","Produto","","","","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES",""
-"passed","Thu Jul 25 18:23:27 UTC 2024","Thu Jul 25 18:23:58 UTC 2024","31711","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE",""
-"passed","Thu Jul 25 18:26:27 UTC 2024","Thu Jul 25 18:26:52 UTC 2024","24990","","Funcionário","","","","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE",""
-"passed","Thu Jul 25 18:23:58 UTC 2024","Thu Jul 25 18:24:34 UTC 2024","36192","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Cadastro de Produto - CADASTRAR PRODUTO SEM LIBERAÇÃO PARA FUNCIONARIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE",""
+"passed","Mon Jul 29 21:34:27 UTC 2024","Mon Jul 29 21:34:36 UTC 2024","9149","","Funcionário","","","","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO",""
+"passed","Mon Jul 29 21:27:39 UTC 2024","Mon Jul 29 21:30:29 UTC 2024","169768","","Produto","","","","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES",""
+"passed","Mon Jul 29 21:34:36 UTC 2024","Mon Jul 29 21:34:46 UTC 2024","9658","","Funcionário","","","","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE",""
+"passed","Mon Jul 29 21:16:02 UTC 2024","Mon Jul 29 21:16:16 UTC 2024","14056","","Login 5 Tentativas","","","","Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA",""
+"passed","Mon Jul 29 21:32:51 UTC 2024","Mon Jul 29 21:33:52 UTC 2024","61290","","Novo Workspace","","","","Novo Workspace - CRIAR E ENTRAR COM SUCESSO NA NOVA WORKSPACE",""
+"passed","Mon Jul 29 21:30:56 UTC 2024","Mon Jul 29 21:31:29 UTC 2024","32684","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE",""
+"passed","Mon Jul 29 21:31:29 UTC 2024","Mon Jul 29 21:32:07 UTC 2024","37753","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Cadastro de Produto - CADASTRAR PRODUTO SEM LIBERAÇÃO PARA FUNCIONARIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE",""
+"passed","Mon Jul 29 21:34:46 UTC 2024","Mon Jul 29 21:34:59 UTC 2024","12884","","Funcionário","","","","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO",""
+"passed","Mon Jul 29 21:35:11 UTC 2024","Mon Jul 29 21:35:17 UTC 2024","5992","","Login","","","","Login - FAZER LOGIN COM SUCESSO NO SISTEMA",""
+"passed","Mon Jul 29 21:16:16 UTC 2024","Mon Jul 29 21:26:34 UTC 2024","618341","","Login 5 Tentativas","","","","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS",""
+"passed","Mon Jul 29 21:32:19 UTC 2024","Mon Jul 29 21:32:33 UTC 2024","13285","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS",""
+"passed","Mon Jul 29 21:32:07 UTC 2024","Mon Jul 29 21:32:19 UTC 2024","12793","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","Liberação de Produto - LIBERAR O PRODUTO PARA O FUNCIONÁRIO ATRAVÉS DO CARGO",""
+"failed","Mon Jul 29 21:14:32 UTC 2024","Mon Jul 29 21:15:47 UTC 2024","75612","","Relatório - Entregas Pendente","","","","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES","
+            Teste Automático para visualização do relatório de Entregas Pendentes.
+            >> Cadastro de 3 produtos.
+            - Produto 1 com pendência de 1 dia e liberado para o funcionário.
+            - Produto 2 sem pedência faltando um 1 dia e liberado para o funcionário.
+            - Produto 3 nunca entregue e liberado para o funcionário.
+            >> Será feito a consulta primeiramente pelos dois produtos entregues, não podendo ser retornado a visualização do 3º produto.
+            Após os assertions será feito a consulta no relatório para o 3º produto nunca entregue.
+            "
+"passed","Mon Jul 29 21:34:02 UTC 2024","Mon Jul 29 21:34:27 UTC 2024","25036","","Funcionário","","","","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE",""
