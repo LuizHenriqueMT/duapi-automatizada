@@ -8,9 +8,25 @@ describe('Login 5 Tentativas', () => {
 
     // NÃO MUDAR OS TESTES 1 E 2 DE POSIÇÃO. FACILITA E OTIMIZA A EXECUÇÃO DOS TESTES.
 
-    it('Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA', () => {
+    it.only('Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA', () => {
         cy.allure().tag("Login", "Autenticação", "4 Tentativas senha incorreta", "Sem bloqueio, loga normalmente");
         cy.allure().owner("Luiz Henrique T.");
+        cy.allure().description(`
+            Teste Automático para Logar no sistema.
+
+            >> Serão realizadas 4 tentativas com senha incorreta para email existente.
+            >> Na 5ª vez que realizada a tentativa de login, deve ser inserido credenciais válidas. Será feito o logout e realizado mais uma tentativa 
+            errada com o mesmo email. 
+            
+            Regras:
+            1) Bloqueia o login do e-mail na 5ª tentativa falha utilizando a credencial (senha) inválida.
+            2) Se bloqueado o login, deve-se esperar 10 minutos contando a partir da primeira tentativa incorreta.
+
+            Resultado esperado: 
+            1) Na 5ª tentativa não seja bloqueado o login correto após 4 tentativas falhas.
+            2) Após as 4 tentativas falhas de login e o sucesso na 5ª vez, quando realizado o logout e inserido a credencial inválida novamente deve 
+            resetar o contador de bloqueio, permitindo tentar mais 5 vezes.              
+            `);
 
         cy.visit('/login');
 
@@ -40,6 +56,18 @@ describe('Login 5 Tentativas', () => {
             }
         });
 
+        // FAZ O LOGOUT E INSERE O MESMO EMAIL COM SENHA INVÁLIDA
+        cy.visit('/login');
+
+        // ERRA A SENHA 4 VEZES PARA FAZER O CONTADOR DE BLOQUEIO
+        for (var i = 0; i < 4; i++) {
+            loginTentativa(email, 'inexistenteSenha');
+            cy.get('#mensagem-retorno .alert').should('contain.text', 'Essas credenciais não correspondem aos nossos registros.');
+        }
+
+        // BLOQUEIO NA 5ª TENTATIVA UTILIZANDO SENHA INCORRETA
+        loginTentativa(email, 'inexistenteSenha');
+        cy.get('#mensagem-retorno .alert').should('contain.text', 'Muitas tentativas de login. Tente novamente em 10 minutos.');
     });
 
     it('Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS', () => {
@@ -49,8 +77,8 @@ describe('Login 5 Tentativas', () => {
         cy.clock();
         cy.visit('/login');
 
-        var email = Cypress.env('tentativa_login').email;
-        var senha = Cypress.env('tentativa_login').senha;
+        var email = Cypress.env('tentativa_login2').email;
+        var senha = Cypress.env('tentativa_login2').senha;
 
         // ERRA A SENHA 4 VEZES PARA FAZER O CONTADOR DE BLOQUEIO
         for (var i = 0; i < 4; i++) {
@@ -62,9 +90,6 @@ describe('Login 5 Tentativas', () => {
         // BLOQUEIO NA 5ª TENTATIVA UTILIZANDO SENHA INCORRETA
         loginTentativa(email, 'inexistenteSenha');
         cy.get('#mensagem-retorno .alert').should('contain.text', 'Muitas tentativas de login. Tente novamente em 10 minutos.');
-
-        cy.task('saveTimestamp', Date.now());
-        cy.task('saveEmail', email);
 
         // VERIFICAR APÓS 5 MINUTOS DE BLOQUEIO SE AINDA ESTÁ BLOQUEADO
         cy.wait(300000);
