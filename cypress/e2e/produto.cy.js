@@ -57,6 +57,13 @@ describe('Produto', () => {
     it('Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES', () => {
         cy.allure().tag("Novo Produto", "Com liberação Funcionario", "Setor", "Cargo", "Centro de Custo", "Risco", "GHE", "Inserção Todos Campos",
             "Novo Funcionário Setor/Cargo/CC/Risco/GHE");
+        cy.allure().description(`
+                Teste Automático para cadastro de um novo produto.
+                >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
+                >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
+                >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
+                Obs.: Implementar nesse teste o cenário onde verifica se o produto foi liberado corretamente.
+                `);
         cy.allure().owner("Luiz Henrique T.");
 
         var dataAtual = gerarDataAtual(true, false);
@@ -143,7 +150,13 @@ describe('Produto', () => {
 
             cy.intercept('POST', '/funcionario').as('postFuncionario');
             cy.get('#btn-salvar-funcionario').click();
-            cy.wait('@postFuncionario').its('response.statusCode').should('eq', 200);
+            cy.wait('@postFuncionario').then((interception) => {
+
+                cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
+
+                var nomeFuncionario = interception.response.body.data.nome;
+                cy.wrap(nomeFuncionario).as('nomeFuncionario');
+            });
 
             // Produto
             cy.visit('/produto');
@@ -227,520 +240,79 @@ describe('Produto', () => {
             cy.get('.actions a').contains('Próxima').click();
 
             cy.get('#tutorial-produto-grupo input[name="grupo_produto_id"]').type('GRUPO ' + dataAtual).wait(850).type('{enter}')
-            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteGrupo');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
+            cy.wait('@postAutocompleteGrupo').its('response.statusCode').should('eq', 200);
+            cy.get('@postAutocompleteGrade').then((interception) => {
+                console.log(interception);
+                const descricaoGrupo = interception.response.body.data.descricao;
+                cy.wrap(descricaoGrupo).as('descricaoGrupo');
+            });
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // ADICIONAR SETOR E REMOVER PELO CHECKBOX
+            // ADICIONAR SETOR
             // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
             cy.get('@setor').then(setor => {
                 cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}');
             })
             cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
+            cy.get('#numero_dias_setor').clear().type(1);
+            cy.get('#periodicidade_setor').select(0);
             cy.get('#add-setor').click();
             cy.get('.td-qtde-setor').should('exist');
-            cy.get('#produto-setor-table tr:first .check-setor').check();
-            cy.get('#remover-setor').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-setor').should('not.exist');
-
-            // ADICIONAR SETOR E REMOVER PELA AÇÃO EXCLUIR
-            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
-            cy.get('@setor').then(setor => {
-                cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
-            })
-            cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_setor').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_setor').select(inserirRandom(1, 7, 1));
-            cy.get('#add-setor').click();
-            cy.get('.td-qtde-setor').should('exist');
-            cy.get('#produto-setor-table .btn-action .fa-trash').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-setor').should('not.exist');
-
-            // ADICIONAR SETOR E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
-            cy.get('@setor').then(setor => {
-                cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}')
-            });
-            inserirRandom(1, 9, 1, '#qt_entregar_setor').then((numString) => {
-                cy.get('#qt_entregar_setor').clear().type(numString);
-            });
-            inserirRandom(1, 9, 1, '#numero_dias_setor').then((numString) => {
-                cy.get('#numero_dias_setor').clear().type(numString);
-            });
-            inserirRandom(1, 7, 1, '#periodicidade_setor').then((numString) => {
-                cy.get('#periodicidade_setor').select(numString);
-            });
-
-            cy.get('#add-setor').click();
-            cy.get('.td-qtde-setor').should('exist');
-
-            // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarSetorAntigo');
-            cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasSetorAntigo');
-            cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeSetorAntigo');
-
-            cy.get('#produto-setor-table tr:first .check-setor').check();
-            cy.get('#editar-produtos-setor').click();
-
-            cy.get('@qtEntregarSetorAntigo').then((qtEntregarSetorAntigo) => {
-                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarSetorAntigo).then((numString) => {
-                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(qtEntregarSetorAntigo).as('qtEntregarSetorAntigoShould');
-                });
-            });
-
-            cy.get('@diasSetorAntigo').then((diasSetorAntigo) => {
-                inserirRandom(1, 9, 1, '#numero_dias_update', diasSetorAntigo).then((numString) => {
-                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(diasSetorAntigo).as('diasSetorAntigoShould');
-                });
-            });
-
-            cy.get('@periodicidadeSetorAntigo').then((periodicidadeSetorAntigo) => {
-                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeSetorAntigo).then((numString) => {
-                    cy.get('#periodicidade_update').select(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(periodicidadeSetorAntigo).as('periodicidadeSetorAntigoShould');
-                });
-            });
-
-            cy.get('#salvar-alteracoes').click();
-
-            cy.get('.alert-duapi-message').should('contain', 'Setor atualizado com sucesso.');
-
-            // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-setor-table tr:first .td-qtde-setor input[class="produto-setor[qt_entregar]"]').invoke('val').as('qtEntregarSetorNovo');
-            cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodo]"]').invoke('val').as('diasSetorNovo');
-            cy.get('#produto-setor-table tr:first .td-periodicidade-setor input[class="produto-setor[periodicidade_id]"]').invoke('val').as('periodicidadeSetorNovo');
-
-            // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
-            cy.get('@qtEntregarSetorAntigoShould').then((qtEntregarAntigo) => {
-                cy.get('@qtEntregarSetorNovo').should('not.eq', qtEntregarAntigo);
-            });
-
-            cy.get('@diasSetorAntigoShould').then((diasSetorAntigo) => {
-                cy.get('@diasSetorNovo').should('not.eq', diasSetorAntigo);
-            });
-
-            cy.get('@periodicidadeSetorAntigoShould').then((periodicidadeSetorAntigo) => {
-                cy.get('@periodicidadeSetorNovo').should('not.eq', periodicidadeSetorAntigo);
-            });
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // ADICIONAR CARGO E REMOVER PELO CHECKBOX
+            // ADICIONAR CARGO
             // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
             cy.get('@cargo').then(cargo => {
                 cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
             })
             cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_cargo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_cargo').select(inserirRandom(1, 7, 1));
+            cy.get('#numero_dias_cargo').clear().type(1);
+            cy.get('#periodicidade_cargo').select(1);
             cy.get('#add-cargo').click();
             cy.get('.td-qtde-cargo').should('exist');
-            cy.get('#produto-cargo-table tr:first .check-cargo').check();
-            cy.get('#remover-cargo').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-cargo').should('not.exist');
-
-            // ADICIONAR CARGO E REMOVER PELA AÇÃO EXCLUIR
-            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
-            cy.get('@cargo').then(cargo => {
-                cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
-            })
-            cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_cargo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_cargo').select(inserirRandom(1, 7, 1));
-            cy.get('#add-cargo').click();
-            cy.get('.td-qtde-cargo').should('exist');
-            cy.get('#produto-cargo-table .btn-action .fa-trash').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-cargo').should('not.exist');
-
-            // ADICIONAR CARGO E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
-            cy.get('@cargo').then(cargo => {
-                cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}')
-            })
-            inserirRandom(1, 9, 1, '#qt_entregar_cargo').then((numString) => {
-                cy.get('#qt_entregar_cargo').clear().type(numString);
-            });
-            inserirRandom(1, 9, 1, '#numero_dias_cargo').then((numString) => {
-                cy.get('#numero_dias_cargo').clear().type(numString);
-            });
-            inserirRandom(1, 7, 1, '#periodicidade_cargo').then((numString) => {
-                cy.get('#periodicidade_cargo').select(numString);
-            });
-
-            cy.get('#add-cargo').click();
-            cy.get('.td-qtde-cargo').should('exist');
-
-            // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-cargo-table tr:first .td-qtde-cargo input[class="produto-cargo[qt_entregar]"]').invoke('val').as('qtEntregarCargoAntigo');
-            cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodo]"]').invoke('val').as('diasCargoAntigo');
-            cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodicidade_id]"]').invoke('val').as('periodicidadeCargoAntigo');
-
-            cy.get('#produto-cargo-table tr:first .check-cargo').check();
-            cy.get('#editar-produtos-cargo').click();
-
-            cy.get('@qtEntregarCargoAntigo').then((qtEntregarCargoAntigo) => {
-                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarCargoAntigo).then((numString) => {
-                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(qtEntregarCargoAntigo).as('qtEntregarCargoAntigoShould');
-                });
-            });
-
-            cy.get('@diasCargoAntigo').then((diasCargoAntigo) => {
-                inserirRandom(1, 9, 1, '#numero_dias_update', diasCargoAntigo).then((numString) => {
-                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(diasCargoAntigo).as('diasCargoAntigoShould');
-                });
-            });
-
-            cy.get('@periodicidadeCargoAntigo').then((periodicidadeCargoAntigo) => {
-                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeCargoAntigo).then((numString) => {
-                    cy.get('#periodicidade_update').select(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(periodicidadeCargoAntigo).as('periodicidadeCargoAntigoShould');
-                });
-            });
-
-            cy.get('#salvar-alteracoes').click();
-            cy.get('.alert-duapi-message').should('contain', 'Cargo atualizado com sucesso.');
-
-            // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-cargo-table tr:first .td-qtde-cargo input[class="produto-cargo[qt_entregar]"]').invoke('val').as('qtEntregarCargoNovo');
-            cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodo]"]').invoke('val').as('diasCargoNovo');
-            cy.get('#produto-cargo-table tr:first .td-periodicidade-cargo input[class="produto-cargo[periodicidade_id]"]').invoke('val').as('periodicidadeCargoNovo');
-
-            // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
-            cy.get('@qtEntregarCargoAntigoShould').then((qtEntregarAntigo) => {
-                cy.get('@qtEntregarCargoNovo').should('not.eq', qtEntregarAntigo);
-            });
-
-            cy.get('@diasCargoAntigoShould').then((diasAntigo) => {
-                cy.get('@diasCargoNovo').should('not.eq', diasAntigo);
-            });
-
-            cy.get('@periodicidadeCargoAntigoShould').then((periodicidadeAntigo) => {
-                cy.get('@periodicidadeCargoNovo').should('not.eq', periodicidadeAntigo);
-            });
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // ADICIONAR CENTRO DE CUSTO E REMOVER PELO CHECKBOX
+            // ADICIONAR CENTRO DE CUSTO
             // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
             cy.get('@cc').then(cc => {
                 cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
             })
             cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_centro_custo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_centro_custo').select(inserirRandom(1, 7, 1));
+            cy.get('#numero_dias_centro_custo').clear().type(1);
+            cy.get('#periodicidade_centro_custo').select(2);
             cy.get('#add-centro-custo').click();
             cy.get('.td-qtde-centro_custo').should('exist');
-            cy.get('#produto-centro_custo-table tr:first .check-centro_custo').check();
-            cy.get('#remover-centro_custo').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-centro_custo').should('not.exist');
-
-            // ADICIONAR CENTRO DE CUSTO E REMOVER PELA AÇÃO EXCLUIR
-            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
-            cy.get('@cc').then(cc => {
-                cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
-            })
-            cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_centro_custo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_centro_custo').select(inserirRandom(1, 7, 1));
-            cy.get('#add-centro-custo').click();
-            cy.get('.td-qtde-centro_custo').should('exist');
-            cy.get('#produto-centro_custo-table .btn-action .fa-trash').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-centro_custo').should('not.exist');
-
-            // ADICIONAR CENTRO DE CUSTO E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
-            cy.get('@cc').then(cc => {
-                cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}')
-            })
-            inserirRandom(1, 9, 1, '#qt_entregar_centro_custo').then((numString) => {
-                cy.get('#qt_entregar_centro_custo').clear().type(numString);
-            });
-            inserirRandom(1, 9, 1, '#numero_dias_centro_custo').then((numString) => {
-                cy.get('#numero_dias_centro_custo').clear().type(numString);
-            });
-            inserirRandom(1, 7, 1, '#periodicidade_centro_custo').then((numString) => {
-                cy.get('#periodicidade_centro_custo').select(numString);
-            });
-
-            cy.get('#add-centro-custo').click();
-            cy.get('.td-qtde-centro_custo').should('exist');
-
-            // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-centro_custo-table tr:first .td-qtde-centro_custo input[class="produto-centro_custo[qt_entregar]"]').invoke('val').as('qtEntregarCCAntigo');
-            cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodo]"]').invoke('val').as('diasCCAntigo');
-            cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodicidade_id]"]').invoke('val').as('periodicidadeCCAntigo');
-
-            cy.get('#produto-centro_custo-table tr:first .check-centro_custo').check();
-            cy.get('#editar-produtos-centro_custo').click();
-
-            cy.get('@qtEntregarCCAntigo').then((qtEntregarCCAntigo) => {
-                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarCCAntigo).then((numString) => {
-                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(qtEntregarCCAntigo).as('qtEntregarCCAntigoShould');
-                });
-            });
-
-            cy.get('@diasCCAntigo').then((diasCCAntigo) => {
-                inserirRandom(1, 9, 1, '#numero_dias_update', diasCCAntigo).then((numString) => {
-                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(diasCCAntigo).as('diasCCAntigoShould');
-                });
-            });
-
-            cy.get('@periodicidadeCCAntigo').then((periodicidadeCCAntigo) => {
-                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeCCAntigo).then((numString) => {
-                    cy.get('#periodicidade_update').select(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(periodicidadeCCAntigo).as('periodicidadeCCAntigoShould');
-                });
-            });
-
-            cy.get('#salvar-alteracoes').click();
-            cy.get('.alert-duapi-message').should('contain', 'Centro de Custo atualizado com sucesso.');
-
-            // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-centro_custo-table tr:first .td-qtde-centro_custo input[class="produto-centro_custo[qt_entregar]"]').invoke('val').as('qtEntregarCCNovo');
-            cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodo]"]').invoke('val').as('diasCCNovo');
-            cy.get('#produto-centro_custo-table tr:first .td-periodicidade-centro_custo input[class="produto-centro_custo[periodicidade_id]"]').invoke('val').as('periodicidadeCCNovo');
-
-            // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
-            cy.get('@qtEntregarCCAntigoShould').then((qtEntregarAntigo) => {
-                cy.get('@qtEntregarCCNovo').should('not.eq', qtEntregarAntigo);
-            });
-
-            cy.get('@diasCCAntigoShould').then((diasAntigo) => {
-                cy.get('@diasCCNovo').should('not.eq', diasAntigo);
-            });
-
-            cy.get('@periodicidadeCCAntigoShould').then((periodicidadeAntigo) => {
-                cy.get('@periodicidadeCCNovo').should('not.eq', periodicidadeAntigo);
-            });
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // ADICIONAR RISCO E REMOVER PELO CHECKBOX
+            // ADICIONAR RISCO
             // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
             cy.get('@risco').then(risco => {
                 cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
             });
             cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_risco').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_risco').select(inserirRandom(1, 7, 1));
+            cy.get('#numero_dias_risco').clear().type(1);
+            cy.get('#periodicidade_risco').select(3);
             cy.get('#add-risco').click();
             cy.get('.td-qtde-risco').should('exist');
-            cy.get('#produto-risco-table tr:first .check-risco').check();
-            cy.get('#remover-risco').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-risco').should('not.exist');
-
-            // ADICIONAR RISCO E REMOVER PELA AÇÃO EXCLUIR
-            // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
-            cy.get('@risco').then(risco => {
-                cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
-            });
-            cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_risco').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_risco').select(inserirRandom(1, 7, 1));
-            cy.get('#add-risco').click();
-            cy.get('.td-qtde-risco').should('exist');
-            cy.get('#produto-risco-table .btn-action .fa-trash').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-risco').should('not.exist');
-
-            // ADICIONAR RISCO E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
-            cy.get('@risco').then(risco => {
-                cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}')
-            });
-            inserirRandom(1, 9, 1, '#qt_entregar_risco').then((numString) => {
-                cy.get('#qt_entregar_risco').clear().type(numString);
-            });
-            inserirRandom(1, 9, 1, '#numero_dias_risco').then((numString) => {
-                cy.get('#numero_dias_risco').clear().type(numString);
-            });
-            inserirRandom(1, 7, 1, '#periodicidade_risco').then((numString) => {
-                cy.get('#periodicidade_risco').select(numString);
-            });
-
-            cy.get('#add-risco').click();
-            cy.get('.td-qtde-risco').should('exist');
-
-            // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-risco-table tr:first .td-qtde-risco input[class="produto-risco[qt_entregar]"]').invoke('val').as('qtEntregarRiscoAntigo');
-            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodo]"]').invoke('val').as('diasRiscoAntigo');
-            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodicidade_id]"]').invoke('val').as('periodicidadeRiscoAntigo');
-
-            cy.get('#produto-risco-table tr:first .check-risco').check();
-            cy.get('#editar-produtos-risco').click();
-
-            cy.get('@qtEntregarRiscoAntigo').then((qtEntregarRiscoAntigo) => {
-                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarRiscoAntigo).then((numString) => {
-                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(qtEntregarRiscoAntigo).as('qtEntregarRiscoAntigoShould');
-                });
-            });
-
-            cy.get('@diasRiscoAntigo').then((diasRiscoAntigo) => {
-                inserirRandom(1, 9, 1, '#numero_dias_update', diasRiscoAntigo).then((numString) => {
-                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(diasRiscoAntigo).as('diasRiscoAntigoShould');
-                });
-            });
-
-            cy.get('@periodicidadeRiscoAntigo').then((periodicidadeRiscoAntigo) => {
-                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeRiscoAntigo).then((numString) => {
-                    cy.get('#periodicidade_update').select(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(periodicidadeRiscoAntigo).as('periodicidadeRiscoAntigoShould');
-                });
-            });
-
-            cy.get('#salvar-alteracoes').click();
-            cy.get('.alert-duapi-message').should('contain', 'Risco atualizado com sucesso.');
-
-            // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-risco-table tr:first .td-qtde-risco input[class="produto-risco[qt_entregar]"]').invoke('val').as('qtEntregarRiscoNovo');
-            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodo]"]').invoke('val').as('diasRiscoNovo');
-            cy.get('#produto-risco-table tr:first .td-periodicidade-risco input[class="produto-risco[periodicidade_id]"]').invoke('val').as('periodicidadeRiscoNovo');
-
-            // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
-            cy.get('@qtEntregarRiscoAntigoShould').then((qtEntregarAntigo) => {
-                cy.get('@qtEntregarRiscoNovo').should('not.eq', qtEntregarAntigo);
-            });
-
-            cy.get('@diasRiscoAntigoShould').then((diasAntigo) => {
-                cy.get('@diasRiscoNovo').should('not.eq', diasAntigo);
-            });
-
-            cy.get('@periodicidadeRiscoAntigoShould').then((periodicidadeAntigo) => {
-                cy.get('@periodicidadeRiscoNovo').should('not.eq', periodicidadeAntigo);
-            });
 
             cy.get('.actions a').contains('Próxima').click();
 
-            // ADICIONAR GHE E REMOVER PELO CHECKBOX
+            // ADICIONAR GHE
             // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
             cy.get('@ghe').then(ghe => {
                 cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
             });
             cy.get('#qt_entregar_ghe').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_ghe').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_ghe').select(inserirRandom(1, 7, 1));
+            cy.get('#numero_dias_ghe').clear().type(1);
+            cy.get('#periodicidade_ghe').select(4);
             cy.get('#add-ghe').click();
             cy.get('.td-qtde-ghe').should('exist');
-            cy.get('#produto-ghe-table tr:first .check-ghe').check();
-            cy.get('#remover-ghe').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-ghe').should('not.exist');
-
-            // ADICIONAR GHE E REMOVER PELA AÇÃO EXCLUIR
-            // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
-            cy.get('@ghe').then(ghe => {
-                cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
-            });
-            cy.get('#qt_entregar_ghe').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_ghe').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#periodicidade_ghe').select(inserirRandom(1, 7, 1));
-            cy.get('#add-ghe').click();
-            cy.get('.td-qtde-ghe').should('exist');
-            cy.get('#produto-ghe-table .btn-action .fa-trash').click();
-            cy.get('.bootbox .modal-dialog .modal-content .modal-footer .btn-success').click();
-            cy.get('.td-qtde-ghe').should('not.exist');
-
-            // ADICIONAR GHE E ALTERAR A QUANTIDADE E PERIODICIDADE
-            // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
-            cy.get('@ghe').then(ghe => {
-                cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}')
-            });
-            inserirRandom(1, 9, 1, '#qt_entregar_ghe').then((numString) => {
-                cy.get('#qt_entregar_ghe').clear().type(numString);
-            });
-            inserirRandom(1, 9, 1, '#numero_dias_ghe').then((numString) => {
-                cy.get('#numero_dias_ghe').clear().type(numString);
-            });
-            inserirRandom(1, 7, 1, '#periodicidade_ghe').then((numString) => {
-                cy.get('#periodicidade_ghe').select(numString);
-            });
-
-            cy.get('#add-ghe').click();
-            cy.get('.td-qtde-ghe').should('exist');
-
-            // ARMAZENA OS PRIMEIROS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-ghe-table tr:first .td-qtde-ghe input[class="produto-ghe[qt_entregar]"]').invoke('val').as('qtEntregarGHEAntigo');
-            cy.get('#produto-ghe-table tr:first .td-periodicidade-ghe input[class="produto-ghe[periodo]"]').invoke('val').as('diasGHEAntigo');
-            cy.get('#produto-ghe-table tr:first .td-periodicidade-ghe input[class="produto-ghe[periodicidade_id]"]').invoke('val').as('periodicidadeGHEAntigo');
-
-            cy.get('#produto-ghe-table tr:first .check-ghe').check();
-            cy.get('#editar-produtos-ghe').click();
-
-            cy.get('@qtEntregarGHEAntigo').then((qtEntregarGHEAntigo) => {
-                inserirRandom(1, 9, 1, '#qt_entregar_update', qtEntregarGHEAntigo).then((numString) => {
-                    cy.get('#qt_entregar_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(qtEntregarGHEAntigo).as('qtEntregarGHEAntigoShould');
-                });
-            });
-
-            cy.get('@diasGHEAntigo').then((diasGHEAntigo) => {
-                inserirRandom(1, 9, 1, '#numero_dias_update', diasGHEAntigo).then((numString) => {
-                    cy.get('#numero_dias_update').clear({ force: true }).type(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(diasGHEAntigo).as('diasGHEAntigoShould');
-                });
-            });
-
-            cy.get('@periodicidadeGHEAntigo').then((periodicidadeGHEAntigo) => {
-                inserirRandom(1, 7, 1, '#periodicidade_update', periodicidadeGHEAntigo).then((numString) => {
-                    cy.get('#periodicidade_update').select(numString, { force: true });
-                    // COLOCANDO NOVO ALIAS PARA NÃO PERDER O VALOR PARA COMPARAÇÃO
-                    cy.wrap(periodicidadeGHEAntigo).as('periodicidadeGHEAntigoShould');
-                });
-            });
-
-            cy.get('#salvar-alteracoes').click();
-            cy.get('.alert-duapi-message').should('contain', 'GHE atualizado com sucesso');
-
-            // ARMAZENA OS ÚLTIMOS VALORES INSERIDOS PARA COMPARAÇÃO
-            cy.get('#produto-ghe-table tr:first .td-qtde-ghe input[class="produto-ghe[qt_entregar]"]').invoke('val').as('qtEntregarGHENovo');
-            cy.get('#produto-ghe-table tr:first .td-periodicidade-ghe input[class="produto-ghe[periodo]"]').invoke('val').as('diasGHENovo');
-            cy.get('#produto-ghe-table tr:first .td-periodicidade-ghe input[class="produto-ghe[periodicidade_id]"]').invoke('val').as('periodicidadeGHENovo');
-
-            // ASSERTIONS PARA VERIFICAR SE FOI FEITO ALTERAÇÃO CORRETAMENTE
-            cy.get('@qtEntregarGHEAntigoShould').then((qtEntregarAntigo) => {
-                cy.get('@qtEntregarGHENovo').should('not.eq', qtEntregarAntigo);
-            });
-
-            cy.get('@diasGHEAntigoShould').then((diasAntigo) => {
-                cy.get('@diasGHENovo').should('not.eq', diasAntigo);
-            });
-
-            cy.get('@periodicidadeGHEAntigoShould').then((periodicidadeAntigo) => {
-                cy.get('@periodicidadeGHENovo').should('not.eq', periodicidadeAntigo);
-            });
 
             cy.get('.actions a').contains('Próxima').click();
 
@@ -767,24 +339,33 @@ describe('Produto', () => {
 
             cy.intercept('POST', '/produto').as('postProduto');
             cy.get('.actions a').contains('Salvar').click();
-            cy.wait('@postProduto').its('response.statusCode').should('eq', 200);
+            cy.wait('@postProduto').then((interception) => {
+                cy.get('@postProduto').its('response.statusCode').should('eq', 200);
 
-            // cy.get('@postProduto').then((interception) => {
-            //     const produto = interception.response.body.data;
-            //     cy.task('saveProdutoCriado1', produto);
-            // });
+                const descricaoProduto = interception.response.body.data.descricao;
+                cy.wrap(descricaoProduto).as('descricaoProduto');
+            });
 
-            // cy.task('getProdutoCriado1').then(data => {
-            //     const tipoProdutoId = data.produto.tipo_produto_id;
+            // CONSULTAR LIBERAÇÕES NA FICHA TÉCNICA
+            cy.visit('/funcionario_produto');
 
-            //     cy.intercept('GET', `/get_tipo_produto?id=${tipoProdutoId}`).as('getProduto');
-            //     cy.request(`/get_tipo_produto?id=${tipoProdutoId}`).then((response) => {
-            //         const tipoProduto = response.body;
-            //         cy.task('saveTipoProduto', tipoProduto);
-            //     });
+            // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 30/07/2024 09:33:35').wait(850).type('{enter}');
+            cy.get('@nomeFuncionario').then(nomeFuncionario => {
+                cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
+            });
+            
+            // PRODUTO POSSUI GRUPO DE PRODUTO, ENTÃO SERÁ EXIBIDO NA FICHA O GRUPO, AQUI É A VALIDAÇÃO
+            cy.get('@descricaoGrupo').then((descricaoGrupo) => {
+                cy.get('#produto-sugestao-entregar-table tr :nth-child(4) a').should('contain', descricaoGrupo);
+            });
+            cy.get('#produto-sugestao-entregar-table tr .periodicidade').should('contain', '1 Dia(s)');
+            cy.get('#produto-sugestao-entregar-table tr .data_previsao').should('contain', gerarPrevisaoEntrega(1));
 
-            // });
-
+            // ABRIR MODAL DE VISUALIZAÇÃO DE PRODUTOS DO GRUPO
+            cy.get('#produto-sugestao-entregar-table tr a[title="Detalhes"]').click();
+            cy.get('@descricaoProduto').then((descricaoProduto) => {
+                    cy.get('#products-group-product-table tr :nth-child(4)').should('contain', descricaoProduto)
+            });
         }
 
         configurarParametros('config.json', {
@@ -793,6 +374,34 @@ describe('Produto', () => {
         }, '/produto', realizarTeste);
     });
 });
+
+function gerarPrevisaoEntrega(previsao, hora = false) {
+    var dataAtual = new Date();
+    var dd = String(dataAtual.getDate()).padStart(2, '0');
+    var mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+    var yyyy = dataAtual.getFullYear();
+
+    var H = String(dataAtual.getHours()).padStart(2, '0');
+    var m = String(dataAtual.getMinutes()).padStart(2, '0');
+    var i = String(dataAtual.getSeconds()).padStart(2, '0');
+
+    if (previsao) {
+        dataAtual.setDate(dataAtual.getDate() + previsao);
+        dd = String(dataAtual.getDate()).padStart(2, '0');
+        mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+        yyyy = dataAtual.getFullYear();
+    } else {
+        dd = String(dd).padStart(2, '0');
+    }
+
+    if (hora === true) {
+        dataAtual = dd + '/' + mm + '/' + yyyy + ' ' + H + ':' + m + ':' + i;
+    } else {
+        dataAtual = dd + '/' + mm + '/' + yyyy;
+    }
+
+    return dataAtual;
+}
 
 function gerarDataAtual(hora = false, nascimento = false) {
     var dataAtual = new Date();

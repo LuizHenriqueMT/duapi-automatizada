@@ -255,11 +255,11 @@ describe('Relatório - Entregas Pendente', () => {
 
             // ENTREGA MANUAL
             for (var i = 1; i <= 2; i++) {
-                cy.visit('/entrega_manual')
+                cy.visit('/entrega_manual');
 
                 cy.get('@nomeFuncionario').then(nomeFuncionario => {
                     cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
-                })
+                });
 
                 if (i === 1) {
                     cy.get('#data_entrega').clear().type(gerarDataAtual(false, 2)).type('{esc}');
