@@ -1,6 +1,7 @@
 import { generate } from 'gerador-validador-cpf';
 import "cypress-real-events";
 const token = Cypress.env('API_TOKEN');
+
 describe('Relatório - Entregas Pendente', () => {
 
     const email = Cypress.env('login').email;
@@ -163,7 +164,7 @@ describe('Relatório - Entregas Pendente', () => {
                     cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
                     cy.wait('@postAutocompleteGrade').its('response.statusCode').should('eq', 200);
 
-                    cy.get('#add-grade').click();
+                    cy.get('#add-grade').should('be.visible').click();
 
                     cy.get('.grade_desc').should('exist')
 

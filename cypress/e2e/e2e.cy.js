@@ -106,8 +106,8 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             cy.get('#tutorial-funcionario-admissao #admissao').type(gerarDataAtual(false, false));
             cy.get('#tutorial-funcionario-data-nascimento #nascimento').type(gerarDataAtual(false, true));
             cy.get('#tutorial-funcionario-email #email').type('teste@teste.com');
-            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
-            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
+            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('TESTE AUTOMATIZADO').wait(850).type('{enter}');
+            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('TESTE AUTOMATIZADO').wait(850).type('{enter}');
 
             cy.get('#tutorial-funcionario-turno input[name="turno_id"]').type('TURNO ' + dataAtual).wait(850).type('{enter}')
             cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
