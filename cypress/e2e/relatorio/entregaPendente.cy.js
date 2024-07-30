@@ -71,12 +71,15 @@ describe('Relatório - Entregas Pendente', () => {
             Após os assertions será feito a consulta no relatório para o 3º produto nunca entregue.
 
             Regras:
-            1) Na Entrega Manual é recuperado o valor de quantidade a entregar e periodicidade o cadastro de produto e não da liberação
+            1) Na Entrega Manual é recuperado a quantidade de entrega e periodicidade do cadastro de produto e não da liberação
             do funcionário caso houver.
             2) No relatório de Entregas Pendentes somente será exibido o produto como pendente caso esteja liberado para o funcionário.
                 
             Resultado esperado:
-            1) No relatório de Visualizar 2 produtos liberados para o funcionário, 1º produto com pendência
+            1) No relatório de Entrega Pendentes deve visualizar 2 produtos liberados para o funcionário, 1º produto com pendência
+            e 2º em dia. Será feito assertions validando se são os mesmos produtos entregues e com pendencia ou em dia.
+            2) No relatório de Entregas Pendentes deve visualizar agora 3 produtos liberados para o funcionário, os dois anteriores
+            e o 3º nunca entregue.
         `);
 
         var dataAtual = gerarDataAtual(true, 0);
