@@ -66,6 +66,12 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
             >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
             >> Entregar o produto criado e libarado para o funcionário criado.
+
+            Resultado esperado:
+            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
+            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            4) Validar se o cálculo da previsão da próxima entrega está correto.
         `);
 
         var dataAtual = gerarDataAtual(true, false);
