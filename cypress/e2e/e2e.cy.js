@@ -66,7 +66,7 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
             >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
             >> Entregar o produto criado e libarado para o funcionário criado.
-            `);
+        `);
 
         var dataAtual = gerarDataAtual(true, false);
 

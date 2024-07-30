@@ -26,7 +26,7 @@ describe('Login 5 Tentativas', () => {
             1) Após 4 tentativas falhas de login e o sucesso na 5ª vez, deve permitir entrar no sistema normalmente.
             2) Após 4 tentativas falhas de login e o sucesso na 5ª vez, quando realizado o logout e inserido a credencial inválida novamente deve 
             resetar o contador de bloqueio, permitindo tentar mais 5 vezes.              
-            `);
+        `);
 
         cy.visit('/login');
 

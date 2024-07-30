@@ -59,13 +59,25 @@ describe('Produto', () => {
             "Novo Funcionário Setor/Cargo/CC/Risco/GHE");
         cy.allure().owner("Luiz Henrique T.");
         cy.allure().description(`
-                Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
+            Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
 
-                >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
-                >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
-                >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
-                >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionátio.
-                `);
+            >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
+            >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
+            >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
+            >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionário.
+
+            Regras:
+            1) Quando realizado mais de uma liberação do mesmo produto para o mesmo funcionário, irá permanecer aquela com menor periodidicidade.
+            2) Na Entrega de Produtos será exibido o produto com menor periodicidade.
+            3) Na Entrega de Produtos aparece o grupo de produto caso o produto esteja vinculado à um grupo.
+            4) Na Ficha Técnica aparece o grupo de produto caso o produto esteja vinculado à um grupo, exceto na seção 
+            "Produtos em Posse do Funcionário".
+            
+            Resultado esperado:
+            1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            3) Validar se o cálculo da previsão da próxima entrega está correto.
+        `);
 
         var dataAtual = gerarDataAtual(true, false);
 
