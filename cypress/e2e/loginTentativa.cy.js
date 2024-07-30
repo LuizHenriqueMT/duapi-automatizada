@@ -8,7 +8,7 @@ describe('Login 5 Tentativas', () => {
 
     // NÃO MUDAR OS TESTES 1 E 2 DE POSIÇÃO. FACILITA E OTIMIZA A EXECUÇÃO DOS TESTES.
 
-    it.only('Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA', () => {
+    it('Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA', () => {
         cy.allure().tag("Login", "Autenticação", "4 Tentativas senha incorreta", "Sem bloqueio, loga normalmente");
         cy.allure().owner("Luiz Henrique T.");
         cy.allure().description(`

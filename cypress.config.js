@@ -175,28 +175,49 @@ module.exports = defineConfig({
       on('after:run', async (results) => {
         console.log('Testes concluídos...');
 
-        if (process.env.CI) {
-          console.log('Execução no ambiente CI detectada, pulando geração de relatório local...');
-          return;
+        // Diretórios do Allure
+        const allureResultsDir = path.join(__dirname, 'allure-results');
+        const allureReportDir = path.join(__dirname, 'allure-report');
+        const allureHistoryDir = path.join(allureResultsDir, 'history');
+
+        // Cria o diretório de histórico se ele não existir
+        if (!fs.existsSync(allureHistoryDir)) {
+          fs.mkdirSync(allureHistoryDir, { recursive: true });
         }
 
-        await new Promise((resolve, reject) => {
-          exec('npm run allure:report', function (error, stdout, stderr) {
-            console.log('Gerando relatório...');
+        // Copia o histórico existente, se houver
+        const existingHistoryDir = path.join(allureReportDir, 'history');
+        if (fs.existsSync(existingHistoryDir)) {
+          fs.readdirSync(existingHistoryDir).forEach((file) => {
+            const srcFile = path.join(existingHistoryDir, file);
+            const destFile = path.join(allureHistoryDir, file);
+            fs.copyFileSync(srcFile, destFile);
+          });
+          console.log('Histórico copiado com sucesso para allure-results.');
+        } else {
+          console.log('Nenhum histórico anterior encontrado.');
+        }
 
-            if (error !== null) {
-              console.log('exec error: ' + error);
+        // Gera o relatório Allure
+        await new Promise((resolve, reject) => {
+          exec('npm run allure:report', (error, stdout, stderr) => {
+            console.log('Gerando relatório...');
+            console.log(stdout);
+
+            if (error) {
+              console.error('Erro na geração do relatório:', stderr);
               return reject(error);
             }
 
-            resolve(sendEmail());
+            console.log('Relatório Allure gerado com sucesso!');
+            resolve();
           });
         });
       });
 
       return config;
     },
-    
+
     baseUrl: env.URL_TESTE,
     env: {
       allure: true

@@ -7,7 +7,7 @@
     "cy:mobile": "cypress run --config viewportHeight=1000,viewportWidth=600",
     "cy:reportHomologacao": "cypress run --env allure=true --spec \"cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)\"",
     "cy:reportSpec": "cypress run --env allure=true --spec cypress/e2e/login.cy.js",
-    "allure:open": "allure open",
+    "allure:open": "allure open allure-report",
     "allure:report": "allure generate allure-results --clean -o allure-report --lang br",
     "allure:reportSingle": "allure generate --single-file allure-results --clean -o allure-report --lang br"
   },

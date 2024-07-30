@@ -95,11 +95,18 @@ jobs:
       - name: Merge Allure Results
         run: |
           mkdir -p merged-allure-results
-          cp -r allure-reports/allure-results-1/* merged-allure-results/
-          cp -r allure-reports/allure-results-2/* merged-allure-results/
-          cp -r allure-reports/allure-results-3/* merged-allure-results/
-          cp -r allure-reports/allure-results-4/* merged-allure-results/
-
+          cp -r allure-reports/allure-results-1/* merged-allure-results/ || true
+          cp -r allure-reports/allure-results-2/* merged-allure-results/ || true
+          cp -r allure-reports/allure-results-3/* merged-allure-results/ || true
+          cp -r allure-reports/allure-results-4/* merged-allure-results/ || true
+  
+      - name: Preserve Allure History
+        run: |
+          mkdir -p merged-allure-results/history
+          if [ -d allure-report/history ]; then
+            cp -r allure-report/history/* merged-allure-results/history/ || true
+          fi
+  
       - name: Generate Final Allure Report
         run: |
           allure generate merged-allure-results --clean -o allure-report --lang br
