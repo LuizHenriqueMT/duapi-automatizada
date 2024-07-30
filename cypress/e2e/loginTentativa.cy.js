@@ -23,8 +23,8 @@ describe('Login 5 Tentativas', () => {
             2) Se bloqueado o login, deve-se esperar 10 minutos contando a partir da primeira tentativa incorreta.
 
             Resultado esperado: 
-            1) Na 5ª tentativa não seja bloqueado o login correto após 4 tentativas falhas.
-            2) Após as 4 tentativas falhas de login e o sucesso na 5ª vez, quando realizado o logout e inserido a credencial inválida novamente deve 
+            1) Após 4 tentativas falhas de login e o sucesso na 5ª vez, deve permitir entrar no sistema normalmente.
+            2) Após 4 tentativas falhas de login e o sucesso na 5ª vez, quando realizado o logout e inserido a credencial inválida novamente deve 
             resetar o contador de bloqueio, permitindo tentar mais 5 vezes.              
             `);
 
@@ -37,7 +37,6 @@ describe('Login 5 Tentativas', () => {
         for (var i = 0; i < 4; i++) {
             loginTentativa(email, 'inexistenteSenha');
             cy.get('#mensagem-retorno .alert').should('contain.text', 'Essas credenciais não correspondem aos nossos registros.');
-
         }
 
         // ENTRA NO SISTEMA COM A SENHA CORRETA NA 5ª TENTATIVA DE INSERÇÃO DE SENHA
@@ -73,6 +72,20 @@ describe('Login 5 Tentativas', () => {
     it('Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS', () => {
         cy.allure().tag("Login", "Autenticação", "5 Tentativas senha incorreta", "Depois de 10 minutos conecta senha correta");
         cy.allure().owner("Luiz Henrique T.");
+        cy.allure().description(`
+            Teste Automático para Logar no sistema após 10 minutos de bloqueio.
+
+            >> Serão realizadas 5 tentativas com senha incorreta para email existente.
+            
+            Regras:
+            1) Bloqueia o login do e-mail na 5ª tentativa falha utilizando a credencial (senha) inválida.
+            2) Quando bloqueado o login, deve-se esperar 10 minutos contando a partir da primeira tentativa incorreta.
+
+            Resultado esperado: 
+            1) Realizar 5 tentativas de login incorreta fazendo com que na 5ª vez seja bloqueado e iniciado o contador.
+            2) Após 5 minutos de bloqueio será feito uma validação para verificar se ainda está bloqueado e não permite acesso.
+            3) Após 10 minutos de bloqueio será feito o login com credenciais válidas.
+            `);
 
         cy.clock();
         cy.visit('/login');
