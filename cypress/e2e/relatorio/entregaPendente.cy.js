@@ -57,16 +57,18 @@ describe('Relatório - Entregas Pendente', () => {
 
     it('Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES', () => {
         cy.allure().tag("Novo Funcionario", "Novo Dado Autocomplete", "Inserção Todos Campos", "Inserção Validação Entrega - Senha");
+        cy.allure().owner("Luiz Henrique T.");
         cy.allure().description(`
             Teste Automático para visualização do relatório de Entregas Pendentes.
-            >> Cadastro de 3 produtos.
-            - Produto 1 com pendência de 1 dia e liberado para o funcionário.
-            - Produto 2 sem pedência faltando um 1 dia e liberado para o funcionário.
-            - Produto 3 nunca entregue e liberado para o funcionário.
+
+            >> Serão cadastrados 3 produtos.
+            1) Produto 1 com pendência de 1 dia e liberado para o funcionário.
+            2) Produto 2 sem pedência (1 dia) e liberado para o funcionário.
+            3) Produto 3 nunca entregue e liberado para o funcionário.
+
             >> Será feito a consulta primeiramente pelos dois produtos entregues, não podendo ser retornado a visualização do 3º produto.
             Após os assertions será feito a consulta no relatório para o 3º produto nunca entregue.
             `);
-        cy.allure().owner("Luiz Henrique T.");
 
         var dataAtual = gerarDataAtual(true, 0);
         var qtdeEntregar = 0;

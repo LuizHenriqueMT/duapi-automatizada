@@ -1,6 +1,7 @@
+import { generate } from 'gerador-validador-cpf';
+import "cypress-real-events";
 const token = Cypress.env('API_TOKEN');
-let csrfToken;
-describe('Produto', () => {
+describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
 
     const email = Cypress.env('login').email;
     const senha = Cypress.env('login').senha;
@@ -54,111 +55,99 @@ describe('Produto', () => {
         });
     };
 
-    it('Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES', () => {
-        cy.allure().tag("Novo Produto", "Com liberação Funcionario", "Setor", "Cargo", "Centro de Custo", "Risco", "GHE", "Inserção Todos Campos",
-            "Novo Funcionário Setor/Cargo/CC/Risco/GHE");
+    it('Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE', () => {
+        cy.allure().tag("Novo Funcionario", "Novo Dado Autocomplete", "Inserção Todos Campos", "Inserção Validação Entrega - Senha");
         cy.allure().owner("Luiz Henrique T.");
-        cy.allure().description(`
-                Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
-
-                >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
-                >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
-                >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
-                >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionátio.
-                `);
 
         var dataAtual = gerarDataAtual(true, false);
 
         const realizarTeste = () => {
-
-            // RISCO
-            cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-                cy.request({
-                    method: 'POST',
-                    url: '/riscos',
-                    body: {
-                        descricao: 'RISCO ' + dataAtual,
-                        _token: csrfToken
-                    },
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    failOnStatusCode: false
-                }).then((response) => {
-                    expect(response.status).to.eq(200);
-                }).as('postRisco');
-            })
-
-            // FUNCIONÁRIO
             cy.visit('/funcionario');
 
             cy.get('#btn-novo-funcionario').click();
 
+            cy.get('#imagem-usuario').selectFile("cypress/img/profile.png", { force: true });
             cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
             cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
+            cy.get('#tutorial-funcionario-cpf #cpf').type(generate());
+            cy.get('#tutorial-funcionario-carteira #carteira').type(inserirRandom(1, 9, 7));
+            cy.get('#tutorial-funcionario-pg #rg').type(inserirRandom(1, 9, 7));
+            cy.get('#tutorial-funcionario-pis #pis').type(inserirRandom(1, 9, 7));
+
+
+            cy.get('#tutorial-funcionario-admissao #admissao').type(gerarDataAtual(false, false));
+            cy.get('#tutorial-funcionario-data-nascimento #nascimento').type(gerarDataAtual(false, true));
+            cy.get('#tutorial-funcionario-email #email').type('teste@teste.com');
+
+            cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
+            cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
+
+            cy.get('#tutorial-funcionario-turno input[name="turno_id"]').type('TURNO ' + dataAtual).wait(850).type('{enter}')
+            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
+            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
+
 
             cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type('SETOR ' + dataAtual).wait(850).type('{enter}');
-            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteSetor');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocompleteSetor').its('response.statusCode').should('eq', 200);
-            cy.get('@postAutocompleteSetor').then((interception) => {
-                const setor = interception.response.body.data.descricao;
-                cy.wrap(setor).as('setor');
-            });
+            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
             cy.get('#tutorial-funcionario-cargo input[name="cargo_id"]').type('CARGO ' + dataAtual).wait(850).type('{enter}');
             cy.intercept('POST', '/autocomplete/save').as('postAutocompleteCargo');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
             cy.wait('@postAutocompleteCargo').its('response.statusCode').should('eq', 200);
             cy.get('@postAutocompleteCargo').then((interception) => {
-                const cargo = interception.response.body.data.descricao;
-                cy.wrap(cargo).as('cargo');
-
                 const data = interception.response.body.data;
                 cy.task('saveCargo', data);
             });
 
             cy.get('#tutorial-funcionario-centro-custo input[name="centro_custo_id"]').type('CC ' + dataAtual).wait(850).type('{enter}');
-            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteCC');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocompleteCC').its('response.statusCode').should('eq', 200);
-            cy.get('@postAutocompleteCC').then((interception) => {
-                const cc = interception.response.body.data.descricao;
-                cy.wrap(cc).as('cc');
-            })
+            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
             cy.get('#tutorial-funcionario-ghe input[name="ghe_id"]').type('GHE ' + dataAtual).wait(850).type('{enter}');
-            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteGHE');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocompleteGHE').its('response.statusCode').should('eq', 200);
-            cy.get('@postAutocompleteGHE').then((interception) => {
-                const ghe = interception.response.body.data.descricao;
-                cy.wrap(ghe).as('ghe');
-            });
+            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
-            cy.get('#btn-risco-tab a').contains('Riscos').click();
-            cy.get('@postRisco').then((response) => {
-                var risco = response.body.data.descricao;
-                cy.wrap(risco).as('risco');
+            cy.get('#tutorial-funcionario-local-retirada input[name="local_retirada_id"]').type('LOCAL RETIRADA ' + dataAtual).wait(850).type('{enter}');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
+            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
-                cy.get('#risco > .input-group > .input-group-btn > .btn').click();
-                cy.get('#risco-modal input[name="descricao"]').type(risco).wait(700).type('{enter}');
-                cy.get('#risco-modal > .modal-dialog > .modal-content > form > .modal-body > :nth-child(2) > .form-group > .col-md-12 > .btn').click();
-                cy.get('#riscotable-modal tr:first td:first input').check();
-                cy.get('#risco-modal > .modal-dialog > .modal-content > .modal-footer > .btn').click();
-            });
+            cy.get('#tutorial-funcionario-identificador #identificador').type(inserirRandom(1, 9, 7));
+            cy.get('#tutorial-funcionario-inicio-ferias #inicio_ferias').type(gerarDataAtual(false, false));
+            cy.get('#tutorial-funcionario-fim-ferias #fim_ferias').type(gerarDataAtual(false, false));
+
+            cy.get('#btn-validacao-entrega-tab').click();
+            cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('S');
+            cy.get('#senha_nova').type('123');
+            cy.get('#confirmar').type('123');
 
             cy.intercept('POST', '/funcionario').as('postFuncionario');
             cy.get('#btn-salvar-funcionario').click();
-            cy.wait('@postFuncionario').then((interception) => {
-                cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
+            cy.wait('@postFuncionario').its('response.statusCode').should('eq', 200);
 
-                var nomeFuncionario = interception.response.body.data.nome;
-                cy.wrap(nomeFuncionario).as('nomeFuncionario');
+            cy.get('@postFuncionario').then((interception) => {
+                const funcionario = interception.response.body.data;
+                cy.task('saveFuncionarioCriado1', funcionario);
             });
+        }
 
-            // PRODUTO
+        configurarParametros('config.json', {
+            autoincremente_funcionario: 'N',
+        }, '/funcionario', realizarTeste);
+    });
+
+    it('Cadastro de Produto - CADASTRAR PRODUTO SEM LIBERAÇÃO PARA FUNCIONARIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE', () => {
+        cy.allure().tag("Novo Produto", "Sem liberação Funcionario", "Novo Dado Autocomplete", "Inserção Todos Campos");
+        cy.allure().owner("Luiz Henrique T.");
+
+        var dataAtual = gerarDataAtual(true, false);
+
+        const realizarTeste = () => {
             cy.visit('/produto');
 
             cy.get('#btn-novo-produto').click();
@@ -240,78 +229,9 @@ describe('Produto', () => {
             cy.get('.actions a').contains('Próxima').click();
 
             cy.get('#tutorial-produto-grupo input[name="grupo_produto_id"]').type('GRUPO ' + dataAtual).wait(850).type('{enter}')
-            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteGrupo');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocompleteGrupo').its('response.statusCode').should('eq', 200);
-            cy.get('@postAutocompleteGrupo').then((interception) => {
-                const descricaoGrupo = interception.response.body.data.descricao;
-                cy.wrap(descricaoGrupo).as('descricaoGrupo');
-            });
-
-            cy.get('.actions a').contains('Próxima').click();
-
-            // ADICIONAR SETOR
-            // cy.get('input[name="setor"]').type('SETOR 12/07/2024 17:36:07').wait(850).type('{enter}');
-            cy.get('@setor').then(setor => {
-                cy.get('input[name="setor"]').type(setor).wait(850).type('{enter}');
-            })
-            cy.get('#qt_entregar_setor').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_setor').clear().type(1);
-            cy.get('#periodicidade_setor').select(0);
-            cy.get('#add-setor').click();
-            cy.get('.td-qtde-setor').should('exist');
-
-            cy.get('.actions a').contains('Próxima').click();
-
-            // ADICIONAR CARGO
-            // cy.get('input[name="cargo_id"]').type('CARGO 12/07/2024 17:34:22').wait(850).type('{enter}');
-            cy.get('@cargo').then(cargo => {
-                cy.get('input[name="cargo_id"]').type(cargo).wait(850).type('{enter}');
-            })
-            cy.get('#qt_entregar_cargo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_cargo').clear().type(1);
-            cy.get('#periodicidade_cargo').select(1);
-            cy.get('#add-cargo').click();
-            cy.get('.td-qtde-cargo').should('exist');
-
-            cy.get('.actions a').contains('Próxima').click();
-
-            // ADICIONAR CENTRO DE CUSTO
-            // cy.get('#centro_custo input[name="centro_custo_id"]').type('CC 12/07/2024 17:34:22').wait(850).type('{enter}');
-            cy.get('@cc').then(cc => {
-                cy.get('#centro_custo input[name="centro_custo_id"]').type(cc).wait(850).type('{enter}');
-            })
-            cy.get('#qt_entregar_centro_custo').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_centro_custo').clear().type(1);
-            cy.get('#periodicidade_centro_custo').select(2);
-            cy.get('#add-centro-custo').click();
-            cy.get('.td-qtde-centro_custo').should('exist');
-
-            cy.get('.actions a').contains('Próxima').click();
-
-            // ADICIONAR RISCO
-            // cy.get('#risco input[name="centro_custo_id"]').type('RISCO 19/07/2024 14:49:05').wait(850).type('{enter}');
-            cy.get('@risco').then(risco => {
-                cy.get('#risco input[name="centro_custo_id"]').type(risco).wait(850).type('{enter}');
-            });
-            cy.get('#qt_entregar_risco').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_risco').clear().type(1);
-            cy.get('#periodicidade_risco').select(3);
-            cy.get('#add-risco').click();
-            cy.get('.td-qtde-risco').should('exist');
-
-            cy.get('.actions a').contains('Próxima').click();
-
-            // ADICIONAR GHE
-            // cy.get('#ghe input[name="ghe_id"]').type('GHE 12/07/2024 17:53:30').wait(850).type('{enter}');
-            cy.get('@ghe').then(ghe => {
-                cy.get('#ghe input[name="ghe_id"]').type(ghe).wait(850).type('{enter}');
-            });
-            cy.get('#qt_entregar_ghe').clear().type(inserirRandom(1, 9, 1));
-            cy.get('#numero_dias_ghe').clear().type(1);
-            cy.get('#periodicidade_ghe').select(4);
-            cy.get('#add-ghe').click();
-            cy.get('.td-qtde-ghe').should('exist');
+            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
             cy.get('.actions a').contains('Próxima').click();
 
@@ -338,14 +258,71 @@ describe('Produto', () => {
 
             cy.intercept('POST', '/produto').as('postProduto');
             cy.get('.actions a').contains('Salvar').click();
-            cy.wait('@postProduto').then((interception) => {
-                cy.get('@postProduto').its('response.statusCode').should('eq', 200);
+            cy.wait('@postProduto').its('response.statusCode').should('eq', 200);
 
-                const descricaoProduto = interception.response.body.data.descricao;
-                cy.wrap(descricaoProduto).as('descricaoProduto');
+            cy.get('@postProduto').then((interception) => {
+                const produto = interception.response.body.data;
+                cy.task('saveProdutoCriado1', produto);
             });
 
-            // CONSULTAR LIBERAÇÕES NA FICHA TÉCNICA
+            cy.task('getProdutoCriado1').then(data => {
+                const tipoProdutoId = data.produto.tipo_produto_id;
+
+                cy.intercept('GET', `/get_tipo_produto?id=${tipoProdutoId}`).as('getProduto');
+                cy.request(`/get_tipo_produto?id=${tipoProdutoId}`).then((response) => {
+                    const tipoProduto = response.body;
+                    cy.task('saveTipoProduto', tipoProduto);
+                });
+
+            });
+
+        }
+
+        configurarParametros('config.json', {
+            permite_liberacao_funcionario: 'N',
+        }, '/produto', realizarTeste);
+
+    });
+
+    it('Liberação de Produto - LIBERAR O PRODUTO PARA O FUNCIONÁRIO ATRAVÉS DO CARGO', () => {
+        cy.allure().tag("Liberação de Produto", "Produto", "Funcionario", "Cargo", "1 liberação");
+        cy.allure().owner("Luiz Henrique T.");
+
+        const realizarTeste = () => {
+            cy.visit('/liberacao_produto');
+
+            cy.get('#tutorial-liberacao-tipo-liberacao #tipoLiberacao').select('LP');
+
+            cy.task('getProdutoCriado1').then(data => {
+                const descricao = data.produto.descricao;
+                cy.get('#filtro_relacao').type(descricao);
+                cy.get('input[data-descricao="' + descricao + '"]').check();
+            })
+
+            cy.get('.liberacao-produto a').contains('Cargo').click();
+
+            cy.task('getFuncionarioCriado1').then(data => {
+                cy.get('#cargo').type(data.cargo.descricao).wait(500);
+                cy.get('.select2-results__option').click();
+            });
+
+            cy.get('#adicionar-liberacao-cargo').click();
+
+            cy.intercept('POST', '/salvar_liberacao_produto').as('postLiberacaoProduto');
+            cy.get('#salvar').click();
+            cy.wait('@postLiberacaoProduto').its('response.statusCode').should('eq', 200);
+
+        }
+
+        configurarParametros('config.json', {
+        }, '/liberacao_produto', realizarTeste);
+    });
+
+    it('Consultar Liberação - CONSULTA NA FICHA TÉCNICA SE A LIBERAÇÃO PRO FUNCIONÁRIO É VÁLIDA', () => {
+        cy.allure().tag("Consulta Liberação de Produto", "Produto", "Funcionario", "Cargo", "1 liberação");
+        cy.allure().owner("Luiz Henrique T.");
+
+        const realizarTeste = () => {
             cy.visit('/funcionario_produto');
 
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
@@ -367,39 +344,83 @@ describe('Produto', () => {
         }
 
         configurarParametros('config.json', {
-            autoincremente_funcionario: 'N',
-            permite_liberacao_funcionario: 'S',
-        }, '/produto', realizarTeste);
+        }, '/liberacao_produto', realizarTeste);
     });
+
+    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS', () => {
+        cy.allure().tag("Entrega de Produto", "Produto", "Funcionario", "Entrega normal", "Validação");
+        cy.allure().owner("Luiz Henrique T.");
+
+        const realizarTeste = () => {
+            cy.visit('/entrega_produtos');
+
+            cy.task('getFuncionarioCriado1').then(data => {
+                cy.get('#tutorial-entrega-funcionario input[name="funcionario_id"]').type(data.funcionario.nome).wait(700).type('{enter}');
+
+                cy.task('getProdutoCriado1').then(data => {
+                    const qtdeEntrega = data.tipoProduto.informar_quantidade_na_entrega;
+                    const produtoId = data.produto.id;
+                    const qtdeEntregaProduto = data.produto.qt_entrega;
+
+                    cy.intercept('GET', `/get_produto?id=${produtoId}`).as('getProduto');
+                    cy.request({
+                        method: 'GET',
+                        url: `/get_produto?id=${produtoId}`
+                    }).then((response) => {
+                        const gradeId = response.body.grades[0].grade_id;
+
+                        cy.request({
+                            method: 'POST',
+                            url: Cypress.env('API_DUAPI'),
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Token': token
+                            },
+                            body: {
+                                produto_id: produtoId,
+                                quantidade: qtdeEntregaProduto,
+                                grade_id: gradeId,
+                                fornecedor_produto_id: produtoId,
+                                numero_nota: "",
+                                serie: "",
+                                tipo_movimento: "E",
+                                empresa_id: 1,
+                                deposito_id: 1,
+                                observacao: "MOVIMENTAÇÃO AUTOMATICA"
+                            },
+                            failOnStatusCode: false
+                        });
+                    });
+
+                    if (qtdeEntrega === 'N') {
+                        cy.get('a.btn-entrega').click().wait(1000);
+                        cy.get('a.btn-entrega').click({ force: true });
+
+                        cy.get('.produto_descricao', { timeout: 10000 }).should('be.visible');
+
+                        cy.get('#btnSalvar').click({ force: true });
+                        cy.get('#validacao_senha').type('123');
+                        cy.get('.btn').contains('Validar').click();
+                    } else {
+                        cy.get('a.btn-entrega').click({ force: true }).wait(1000);
+                        cy.get('a.btn-entrega').click({ force: true });
+
+                        cy.get('#seleciona_quantidade').click().wait(950);
+                        cy.get('.produto_descricao', { timeout: 10000 }).should('be.visible');
+
+                        cy.get('#btnSalvar').click({ force: true });
+                        cy.get('#validacao_senha').type('123');
+                        cy.get('.btn').contains('Validar').click();
+                    }
+                })
+            });
+        }
+
+        configurarParametros('config.json', {
+        }, '/entrega_produtos', realizarTeste);
+    });
+
 });
-
-function gerarPrevisaoEntrega(previsao, hora = false) {
-    var dataAtual = new Date();
-    var dd = String(dataAtual.getDate()).padStart(2, '0');
-    var mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
-    var yyyy = dataAtual.getFullYear();
-
-    var H = String(dataAtual.getHours()).padStart(2, '0');
-    var m = String(dataAtual.getMinutes()).padStart(2, '0');
-    var i = String(dataAtual.getSeconds()).padStart(2, '0');
-
-    if (previsao) {
-        dataAtual.setDate(dataAtual.getDate() + previsao);
-        dd = String(dataAtual.getDate()).padStart(2, '0');
-        mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
-        yyyy = dataAtual.getFullYear();
-    } else {
-        dd = String(dd).padStart(2, '0');
-    }
-
-    if (hora === true) {
-        dataAtual = dd + '/' + mm + '/' + yyyy + ' ' + H + ':' + m + ':' + i;
-    } else {
-        dataAtual = dd + '/' + mm + '/' + yyyy;
-    }
-
-    return dataAtual;
-}
 
 function gerarDataAtual(hora = false, nascimento = false) {
     var dataAtual = new Date();
@@ -428,6 +449,26 @@ function gerarNumeroAleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+function inserirRandom(min, max, digit = 0) {
+    var numRandom = [];
+    var numString = '';
+    var num = null;
+    var i = 0;
+
+    if (digit !== 0) {
+        for (i = 0; i < digit; i++) {
+            num = gerarNumeroAleatorio(min, max);
+            numRandom.push(num);
+        }
+
+        numString = numRandom.join('');
+        return numString
+    }
+
+    return '0000';
+}
+
 function inserirEpoch() {
     var timestamp = new Date().getTime();
     return timestamp;
@@ -450,51 +491,6 @@ function inserirTipoProduto() {
             return null;
             break;
     }
-}
-
-function inserirRandom(min, max, digit = 0, elemento = false, valModificado = false) {
-    var numRandom = [];
-    let numString = '';
-
-    if (digit !== 0 && elemento && !valModificado) {
-        return cy.get(elemento).invoke('val').then((elementoVal) => {
-
-            let numRandom = [];
-            for (let i = 0; i < digit; i++) {
-                const num = gerarNumeroAleatorio(min, max);
-                numRandom.push(num);
-            }
-
-            numString = numRandom.join('');;
-            return numString;
-        });
-    } if (digit !== 0 && elemento && valModificado) {
-        return cy.get(elemento).invoke('val').then((elementoVal) => {
-
-            do {
-                let numRandom = [];
-                for (let i = 0; i < digit; i++) {
-                    const num = gerarNumeroAleatorio(min, max);
-                    numRandom.push(num);
-                }
-
-                numString = numRandom.join('');
-            } while (numString == valModificado);
-
-            return numString;
-        });
-    } else {
-        for (let i = 0; i < digit; i++) {
-            const num = gerarNumeroAleatorio(min, max);
-            numRandom.push(num);
-        }
-
-        numString = numRandom.join('');
-        return numString
-    }
-
-    return '0000';
-
 }
 
 function inserirDataRandom(dataValida = 'A') {

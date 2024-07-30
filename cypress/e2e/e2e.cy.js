@@ -55,13 +55,43 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
         });
     };
 
-    it('Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE', () => {
+    it('E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS', () => {
         cy.allure().tag("Novo Funcionario", "Novo Dado Autocomplete", "Inserção Todos Campos", "Inserção Validação Entrega - Senha");
         cy.allure().owner("Luiz Henrique T.");
+        cy.allure().description(`
+            Teste Automático para o fluxo e2e principal de entrega de produto.
+            
+            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
+            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
+            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
+            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
+            >> Entregar o produto criado e libarado para o funcionário criado.
+            `);
 
         var dataAtual = gerarDataAtual(true, false);
 
         const realizarTeste = () => {
+
+            // ----CADASTRO DE RISCO----
+            cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                cy.request({
+                    method: 'POST',
+                    url: '/riscos',
+                    body: {
+                        descricao: 'RISCO ' + dataAtual,
+                        _token: csrfToken
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    failOnStatusCode: false
+                }).then((response) => {
+                    expect(response.status).to.eq(200);
+                }).as('postRisco');
+            })
+
+            // ----CADASTRO DE FUNCIONÁRIO----
             cy.visit('/funcionario');
 
             cy.get('#btn-novo-funcionario').click();
@@ -73,12 +103,9 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             cy.get('#tutorial-funcionario-carteira #carteira').type(inserirRandom(1, 9, 7));
             cy.get('#tutorial-funcionario-pg #rg').type(inserirRandom(1, 9, 7));
             cy.get('#tutorial-funcionario-pis #pis').type(inserirRandom(1, 9, 7));
-
-
             cy.get('#tutorial-funcionario-admissao #admissao').type(gerarDataAtual(false, false));
             cy.get('#tutorial-funcionario-data-nascimento #nascimento').type(gerarDataAtual(false, true));
             cy.get('#tutorial-funcionario-email #email').type('teste@teste.com');
-
             cy.get('#tutorial-funcionario-lider input[name="funcionario_lider_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
             cy.get('#tutorial-funcionario-gestor input[name="funcionario_gestor_id"]').type('TESTE AUTOMATIZADO').wait(700).type('{enter}');
 
@@ -87,30 +114,41 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
             cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
-
             cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type('SETOR ' + dataAtual).wait(850).type('{enter}');
-            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteSetor');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
+            cy.wait('@postAutocompleteSetor').its('response.statusCode').should('eq', 200);
+            cy.get('@postAutocompleteSetor').then((interception) => {
+                const setor = interception.response.body.data.descricao;
+                cy.wrap(setor).as('setor');
+            });
 
             cy.get('#tutorial-funcionario-cargo input[name="cargo_id"]').type('CARGO ' + dataAtual).wait(850).type('{enter}');
             cy.intercept('POST', '/autocomplete/save').as('postAutocompleteCargo');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
             cy.wait('@postAutocompleteCargo').its('response.statusCode').should('eq', 200);
             cy.get('@postAutocompleteCargo').then((interception) => {
-                const data = interception.response.body.data;
-                cy.task('saveCargo', data);
+                const cargo = interception.response.body.data.descricao;
+                cy.wrap(cargo).as('cargo');
             });
 
             cy.get('#tutorial-funcionario-centro-custo input[name="centro_custo_id"]').type('CC ' + dataAtual).wait(850).type('{enter}');
-            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteCC');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
+            cy.wait('@postAutocompleteCC').its('response.statusCode').should('eq', 200);
+            cy.get('@postAutocompleteCC').then((interception) => {
+                const cc = interception.response.body.data.descricao;
+                cy.wrap(cc).as('cc');
+            });
 
             cy.get('#tutorial-funcionario-ghe input[name="ghe_id"]').type('GHE ' + dataAtual).wait(850).type('{enter}');
-            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteGHE');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
+            cy.wait('@postAutocompleteGHE').its('response.statusCode').should('eq', 200);
+            cy.get('@postAutocompleteGHE').then((interception) => {
+                const ghe = interception.response.body.data.descricao;
+                cy.wrap(ghe).as('ghe');
+            });
 
             cy.get('#tutorial-funcionario-local-retirada input[name="local_retirada_id"]').type('LOCAL RETIRADA ' + dataAtual).wait(850).type('{enter}');
             cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
@@ -118,36 +156,36 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
 
             cy.get('#tutorial-funcionario-identificador #identificador').type(inserirRandom(1, 9, 7));
-            cy.get('#tutorial-funcionario-inicio-ferias #inicio_ferias').type(gerarDataAtual(false, false));
-            cy.get('#tutorial-funcionario-fim-ferias #fim_ferias').type(gerarDataAtual(false, false));
+            cy.get('#tutorial-funcionario-inicio-ferias #inicio_ferias').type(gerarPrevisaoEntrega(2));
+            cy.get('#tutorial-funcionario-fim-ferias #fim_ferias').type(gerarPrevisaoEntrega(3));
 
             cy.get('#btn-validacao-entrega-tab').click();
             cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('S');
             cy.get('#senha_nova').type('123');
             cy.get('#confirmar').type('123');
 
+            cy.get('#btn-risco-tab a').contains('Riscos').click();
+            cy.get('@postRisco').then((response) => {
+                var risco = response.body.data.descricao;
+                cy.wrap(risco).as('risco');
+
+                cy.get('#risco > .input-group > .input-group-btn > .btn').click();
+                cy.get('#risco-modal input[name="descricao"]').type(risco).wait(700).type('{enter}');
+                cy.get('#risco-modal > .modal-dialog > .modal-content > form > .modal-body > :nth-child(2) > .form-group > .col-md-12 > .btn').click();
+                cy.get('#riscotable-modal tr:first td:first input').check();
+                cy.get('#risco-modal > .modal-dialog > .modal-content > .modal-footer > .btn').click();
+            });
+
             cy.intercept('POST', '/funcionario').as('postFuncionario');
             cy.get('#btn-salvar-funcionario').click();
-            cy.wait('@postFuncionario').its('response.statusCode').should('eq', 200);
+            cy.wait('@postFuncionario').then((interception) => {
+                cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
 
-            cy.get('@postFuncionario').then((interception) => {
-                const funcionario = interception.response.body.data;
-                cy.task('saveFuncionarioCriado1', funcionario);
+                var nomeFuncionario = interception.response.body.data.nome;
+                cy.wrap(nomeFuncionario).as('nomeFuncionario');
             });
-        }
 
-        configurarParametros('config.json', {
-            autoincremente_funcionario: 'N',
-        }, '/funcionario', realizarTeste);
-    });
-
-    it('Cadastro de Produto - CADASTRAR PRODUTO SEM LIBERAÇÃO PARA FUNCIONARIO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE', () => {
-        cy.allure().tag("Novo Produto", "Sem liberação Funcionario", "Novo Dado Autocomplete", "Inserção Todos Campos");
-        cy.allure().owner("Luiz Henrique T.");
-
-        var dataAtual = gerarDataAtual(true, false);
-
-        const realizarTeste = () => {
+            // ----CADASTRO DE PRODUTO----
             cy.visit('/produto');
 
             cy.get('#btn-novo-produto').click();
@@ -229,9 +267,13 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
             cy.get('.actions a').contains('Próxima').click();
 
             cy.get('#tutorial-produto-grupo input[name="grupo_produto_id"]').type('GRUPO ' + dataAtual).wait(850).type('{enter}')
-            cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
+            cy.intercept('POST', '/autocomplete/save').as('postAutocompleteGrupo');
             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
+            cy.wait('@postAutocompleteGrupo').its('response.statusCode').should('eq', 200);
+            cy.get('@postAutocompleteGrupo').then((interception) => {
+                const descricaoGrupo = interception.response.body.data.descricao;
+                cy.wrap(descricaoGrupo).as('descricaoGrupo');
+            });
 
             cy.get('.actions a').contains('Próxima').click();
 
@@ -258,140 +300,228 @@ describe('End 2 End - Funcionário / Produto / Liberação / Entrega', () => {
 
             cy.intercept('POST', '/produto').as('postProduto');
             cy.get('.actions a').contains('Salvar').click();
-            cy.wait('@postProduto').its('response.statusCode').should('eq', 200);
+            cy.wait('@postProduto').then((interception) => {
+                cy.get('@postProduto').its('response.statusCode').should('eq', 200);
 
-            cy.get('@postProduto').then((interception) => {
-                const produto = interception.response.body.data;
-                cy.task('saveProdutoCriado1', produto);
-            });
+                const descricaoProduto = interception.response.body.data.descricao;
+                const tipoProdutoId = interception.response.body.data.tipo_produto_id;
 
-            cy.task('getProdutoCriado1').then(data => {
-                const tipoProdutoId = data.produto.tipo_produto_id;
+                cy.wrap(descricaoProduto).as('descricaoProduto');
 
-                cy.intercept('GET', `/get_tipo_produto?id=${tipoProdutoId}`).as('getProduto');
                 cy.request(`/get_tipo_produto?id=${tipoProdutoId}`).then((response) => {
-                    const tipoProduto = response.body;
-                    cy.task('saveTipoProduto', tipoProduto);
+                    const tipoProduto = response.body.informar_quantidade_na_entrega;
+                    cy.wrap(tipoProduto).as('tipoProduto');
                 });
-
             });
 
-        }
-
-        configurarParametros('config.json', {
-            permite_liberacao_funcionario: 'N',
-        }, '/produto', realizarTeste);
-
-    });
-
-    it('Liberação de Produto - LIBERAR O PRODUTO PARA O FUNCIONÁRIO ATRAVÉS DO CARGO', () => {
-        cy.allure().tag("Liberação de Produto", "Produto", "Funcionario", "Cargo", "1 liberação");
-        cy.allure().owner("Luiz Henrique T.");
-
-        const realizarTeste = () => {
+            // ----LIBERAÇÃO DE PRODUTO----
             cy.visit('/liberacao_produto');
 
             cy.get('#tutorial-liberacao-tipo-liberacao #tipoLiberacao').select('LP');
 
-            cy.task('getProdutoCriado1').then(data => {
-                const descricao = data.produto.descricao;
-                cy.get('#filtro_relacao').type(descricao);
-                cy.get('input[data-descricao="' + descricao + '"]').check();
-            })
-
-            cy.get('.liberacao-produto a').contains('Cargo').click();
-
-            cy.task('getFuncionarioCriado1').then(data => {
-                cy.get('#cargo').type(data.cargo.descricao).wait(500);
-                cy.get('.select2-results__option').click();
+            cy.get('@descricaoProduto').then((descricaoProduto) => {
+                cy.get('#filtro_relacao').type(descricaoProduto);
+                cy.get('input[data-descricao="' + descricaoProduto + '"]').check();
             });
 
+            // LIBERAÇÃO SETOR
+            cy.get('.liberacao-produto a').contains('Setor').click();
+            cy.get('@setor').then((cargo) => {
+                cy.get('#setor').type(cargo).wait(500);
+                cy.get('.select2-results__option').click();
+            });
+            cy.get('#quantidade-setor').clear().type(1);
+            cy.get('#periodo-setor').clear().type(1);
+            cy.get('#periodicidade-setor').select(0);
+            cy.get('#adicionar-liberacao-setor').click();
+
+            // LIBERAÇÃO CARGO
+            cy.get('.liberacao-produto a').contains('Cargo').click();
+            cy.get('@cargo').then((cargo) => {
+                cy.get('#cargo').type(cargo).wait(500);
+                cy.get('.select2-results__option').click();
+            });
+            cy.get('#quantidade-cargo').clear().type(1);
+            cy.get('#periodo-cargo').clear().type(2);
+            cy.get('#periodicidade-cargo').select(1);
             cy.get('#adicionar-liberacao-cargo').click();
 
+            // LIBERAÇÃO CENTRO DE CUSTO
+            cy.get('.liberacao-produto a').contains('Centro de Custo').click();
+            cy.get('@cc').then((cc) => {
+                cy.get('#centro-custo').type(cc).wait(500);
+                cy.get('.select2-results__option').click();
+            });
+            cy.get('#quantidade-centro-custo').clear().type(1);
+            cy.get('#periodo-centro-custo').clear().type(2);
+            cy.get('#periodicidade-centro-custo').select(1);
+            cy.get('#adicionar-liberacao-centro-custo').click();
+
+            // LIBERAÇÃO GHE
+            cy.get('.liberacao-produto a').contains('GHE').click();
+            cy.get('@ghe').then((ghe) => {
+                cy.get('#ghe').type(ghe).wait(500);
+                cy.get('.select2-results__option').click();
+            });
+            cy.get('#quantidade-ghe').clear().type(1);
+            cy.get('#periodo-ghe').clear().type(2);
+            cy.get('#periodicidade-ghe').select(1);
+            cy.get('#adicionar-liberacao-ghe').click();
+
+            // LIBERAÇÃO RISCO
+            cy.get('.liberacao-produto a').contains('Risco').click();
+            cy.get('@postRisco').then((risco) => {
+                var risco = risco.body.data.descricao;
+                cy.get('#risco').type(risco).wait(500);
+                cy.get('.select2-results__option').click();
+            });
+            cy.get('#quantidade-risco').clear().type(1);
+            cy.get('#periodo-risco').clear().type(2);
+            cy.get('#periodicidade-risco').select(1);
+            cy.get('#adicionar-liberacao-risco').click();
+
+            // SALVAR LIBERAÇÕES
             cy.intercept('POST', '/salvar_liberacao_produto').as('postLiberacaoProduto');
             cy.get('#salvar').click();
             cy.wait('@postLiberacaoProduto').its('response.statusCode').should('eq', 200);
 
-        }
+            // ----VALIDAÇÃO DA LIBERAÇÃO DE PRODUTO----
+            cy.visit('/funcionario_produto');
 
-        configurarParametros('config.json', {
-        }, '/liberacao_produto', realizarTeste);
-    });
+            cy.get('@nomeFuncionario').then(nomeFuncionario => {
+                cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
+            });
 
-    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS', () => {
-        cy.allure().tag("Entrega de Produto", "Produto", "Funcionario", "Entrega normal", "Validação");
-        cy.allure().owner("Luiz Henrique T.");
+            // PRODUTO POSSUI GRUPO DE PRODUTO, ENTÃO SERÁ EXIBIDO NA FICHA O GRUPO, AQUI É A VALIDAÇÃO
+            cy.get('@descricaoGrupo').then((descricaoGrupo) => {
+                cy.get('#produto-sugestao-entregar-table tr :nth-child(4) a').should('contain', descricaoGrupo);
+            });
+            cy.get('#produto-sugestao-entregar-table tr .periodicidade').should('contain', '1 Dia(s)');
+            cy.get('#produto-sugestao-entregar-table tr .data_previsao').should('contain', gerarPrevisaoEntrega(1));
 
-        const realizarTeste = () => {
+            // ABRIR MODAL DE VISUALIZAÇÃO DE PRODUTOS DO GRUPO
+            cy.get('#produto-sugestao-entregar-table tr a[title="Detalhes"]').click();
+            cy.get('@descricaoProduto').then((descricaoProduto) => {
+                cy.get('#products-group-product-table tr :nth-child(4)').should('contain', descricaoProduto)
+            });
+
+            // ----ENTREGA DE PRODUTO----
             cy.visit('/entrega_produtos');
 
-            cy.task('getFuncionarioCriado1').then(data => {
-                cy.get('#tutorial-entrega-funcionario input[name="funcionario_id"]').type(data.funcionario.nome).wait(700).type('{enter}');
+            cy.get('@nomeFuncionario').then(nomeFuncionario => {
+                cy.get('#tutorial-entrega-funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(700).type('{enter}');
+            });
 
-                cy.task('getProdutoCriado1').then(data => {
-                    const qtdeEntrega = data.tipoProduto.informar_quantidade_na_entrega;
-                    const produtoId = data.produto.id;
-                    const qtdeEntregaProduto = data.produto.qt_entrega;
+            // MOVIMENTAÇÃO AUTOMATIZADA
+            cy.get('@postProduto').then((interception) => {
+                cy.get('@postProduto').its('response.statusCode').should('eq', 200);
 
-                    cy.intercept('GET', `/get_produto?id=${produtoId}`).as('getProduto');
+                var produtoId = interception.response.body.data.id;
+                cy.wrap(produtoId).as('produtoId');
+
+                cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
                     cy.request({
                         method: 'GET',
-                        url: `/get_produto?id=${produtoId}`
+                        url: '/get_produto?id=' + produtoId,
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        failOnStatusCode: false
                     }).then((response) => {
-                        const gradeId = response.body.grades[0].grade_id;
+                        var produtoId = response.body.id;
+                        var gradeProduto = response.body.grades[0].grade_id;
+                        var caProduto = response.body.fornecedores[0].id;
 
-                        cy.request({
-                            method: 'POST',
-                            url: Cypress.env('API_DUAPI'),
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Token': token
-                            },
-                            body: {
-                                produto_id: produtoId,
-                                quantidade: qtdeEntregaProduto,
-                                grade_id: gradeId,
-                                fornecedor_produto_id: produtoId,
-                                numero_nota: "",
-                                serie: "",
-                                tipo_movimento: "E",
-                                empresa_id: 1,
-                                deposito_id: 1,
-                                observacao: "MOVIMENTAÇÃO AUTOMATICA"
-                            },
-                            failOnStatusCode: false
+                        cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                            cy.request({
+                                method: 'POST',
+                                url: Cypress.env('API_DUAPI'),
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Token': token
+                                },
+                                body: {
+                                    produto_id: produtoId,
+                                    quantidade: 100,
+                                    grade_id: gradeProduto,
+                                    fornecedor_produto_id: caProduto,
+                                    numero_nota: "",
+                                    serie: "",
+                                    tipo_movimento: "E",
+                                    empresa_id: 1,
+                                    deposito_id: 1,
+                                    observacao: "MOVIMENTAÇÃO AUTOMATICA"
+                                },
+                                failOnStatusCode: false
+                            }).then((response) => {
+                                expect(response.status).to.eq(200);
+                            });
                         });
                     });
-
-                    if (qtdeEntrega === 'N') {
-                        cy.get('a.btn-entrega').click().wait(1000);
-                        cy.get('a.btn-entrega').click({ force: true });
-
-                        cy.get('.produto_descricao', { timeout: 10000 }).should('be.visible');
-
-                        cy.get('#btnSalvar').click({ force: true });
-                        cy.get('#validacao_senha').type('123');
-                        cy.get('.btn').contains('Validar').click();
-                    } else {
-                        cy.get('a.btn-entrega').click({ force: true }).wait(1000);
-                        cy.get('a.btn-entrega').click({ force: true });
-
-                        cy.get('#seleciona_quantidade').click().wait(950);
-                        cy.get('.produto_descricao', { timeout: 10000 }).should('be.visible');
-
-                        cy.get('#btnSalvar').click({ force: true });
-                        cy.get('#validacao_senha').type('123');
-                        cy.get('.btn').contains('Validar').click();
-                    }
-                })
+                });
             });
+
+            cy.get('@tipoProduto').then((tipoProduto) => {
+                if (tipoProduto === 'N') {
+                    cy.get('a.btn-entrega').click().wait(1000);
+                    cy.get('a.btn-entrega').click({ force: true });
+
+                    cy.get('.produto_descricao', { timeout: 10000 }).should('be.visible');
+
+                    cy.get('#btnSalvar').click({ force: true });
+                    cy.get('#validacao_senha').type('123');
+                    cy.get('.btn').contains('Validar').click();
+                } else {
+                    cy.get('a.btn-entrega').click({ force: true }).wait(1000);
+                    cy.get('a.btn-entrega').click({ force: true });
+
+                    cy.get('#seleciona_quantidade').click().wait(950);
+                    cy.get('.produto_descricao', { timeout: 10000 }).should('be.visible');
+
+                    cy.get('#btnSalvar').click({ force: true });
+                    cy.get('#validacao_senha').type('123');
+                    cy.get('.btn').contains('Validar').click();
+                }
+            })
         }
 
         configurarParametros('config.json', {
-        }, '/entrega_produtos', realizarTeste);
+            autoincremente_funcionario: 'N',
+            permite_liberacao_funcionario: 'N',
+        }, '/funcionario', realizarTeste);
     });
 
 });
+
+
+function gerarPrevisaoEntrega(previsao, hora = false) {
+    var dataAtual = new Date();
+    var dd = String(dataAtual.getDate()).padStart(2, '0');
+    var mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+    var yyyy = dataAtual.getFullYear();
+
+    var H = String(dataAtual.getHours()).padStart(2, '0');
+    var m = String(dataAtual.getMinutes()).padStart(2, '0');
+    var i = String(dataAtual.getSeconds()).padStart(2, '0');
+
+    if (previsao) {
+        dataAtual.setDate(dataAtual.getDate() + previsao);
+        dd = String(dataAtual.getDate()).padStart(2, '0');
+        mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+        yyyy = dataAtual.getFullYear();
+    } else {
+        dd = String(dd).padStart(2, '0');
+    }
+
+    if (hora === true) {
+        dataAtual = dd + '/' + mm + '/' + yyyy + ' ' + H + ':' + m + ':' + i;
+    } else {
+        dataAtual = dd + '/' + mm + '/' + yyyy;
+    }
+
+    return dataAtual;
+}
 
 function gerarDataAtual(hora = false, nascimento = false) {
     var dataAtual = new Date();
