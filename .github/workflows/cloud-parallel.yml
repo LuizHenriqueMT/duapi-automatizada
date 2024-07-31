@@ -85,11 +85,11 @@ jobs:
       - name: Download plugin Allure
         run: npm install --save-dev @shelex/cypress-allure-plugin
 
-      # - name: Clone gh-pages for History
-      #   run: |
-      #     git clone --branch=gh-pages --single-branch https://github.com/luizhenriquemt/duapi-automatizada.git gh-pages
-      #     mkdir -p merged-allure-results/history
-      #     cp -r gh-pages/history/* merged-allure-results/history/ || true
+      - name: Clone gh-pages for History
+        run: |
+          git clone --branch=gh-pages --single-branch https://github.com/luizhenriquemt/duapi-automatizada.git gh-pages
+          mkdir -p merged-allure-results/history
+          cp -r gh-pages/history/* merged-allure-results/history/ || true
 
       - name: Download Allure Results Artifact 1
         uses: actions/download-artifact@v4
@@ -123,12 +123,12 @@ jobs:
           cp -r allure-reports/allure-results-3/* merged-allure-results/
           cp -r allure-reports/allure-results-4/* merged-allure-results/
   
-      # - name: Preserve Allure History
-      #   run: |
-      #     mkdir -p merged-allure-results/history
-      #     if [ -d allure-report/history ]; then
-      #       cp -r allure-report/history/* merged-allure-results/history/
-      #     fi
+      - name: Preserve Allure History
+        run: |
+          mkdir -p merged-allure-results/history
+          if [ -d allure-report/history ]; then
+            cp -r allure-report/history/* merged-allure-results/history/
+          fi
   
       - name: Generate Final Allure Report
         run: |
@@ -149,33 +149,33 @@ jobs:
           publish_dir: ./allure-report
           keep_files: true
 
-      - name: Send Email
-        if: always()
-        run: |
-          node -e "
-          const nodemailer = require('nodemailer');
-          const fs = require('fs');
-          const path = require('path');
+      # - name: Send Email
+      #   if: always()
+      #   run: |
+      #     node -e "
+      #     const nodemailer = require('nodemailer');
+      #     const fs = require('fs');
+      #     const path = require('path');
           
-          async function sendEmail() {
-            let transporter = nodemailer.createTransport({
-              service: 'SendGrid',
-              auth: {
-                user: 'apikey',
-                pass: process.env.SENDGRID_API_KEY
-              }
-            });
+      #     async function sendEmail() {
+      #       let transporter = nodemailer.createTransport({
+      #         service: 'SendGrid',
+      #         auth: {
+      #           user: 'apikey',
+      #           pass: process.env.SENDGRID_API_KEY
+      #         }
+      #       });
 
-            let info = await transporter.sendMail({
-              from: process.env.EMAIL_USER,
-              to: process.env.EMAIL_TO,
-              subject: 'Relatório de Testes Automatizado',
-              html: 'O relatório dos testes automatizados está disponível. Acesse: <a href="https://luizhenriquemt.github.io/duapi-automatizada/#">Relatório</a>'
-            });
-          }
+      #       let info = await transporter.sendMail({
+      #         from: process.env.EMAIL_USER,
+      #         to: process.env.EMAIL_TO,
+      #         subject: 'Relatório de Testes Automatizado',
+      #         html: 'O relatório dos testes automatizados está disponível. Acesse: <a href="https://luizhenriquemt.github.io/duapi-automatizada/#">Relatório</a>'
+      #       });
+      #     }
 
-          sendEmail().catch(console.error);
-          "
+      #     sendEmail().catch(console.error);
+      #     "
 
     env:
       EMAIL_USER: ${{ secrets.EMAIL_USER }}
