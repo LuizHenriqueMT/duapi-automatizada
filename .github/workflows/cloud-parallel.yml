@@ -117,12 +117,12 @@ jobs:
           cp -r allure-reports/allure-results-3/* merged-allure-results/
           cp -r allure-reports/allure-results-4/* merged-allure-results/
   
-      - name: Preserve Allure History
-        run: |
-          mkdir -p merged-allure-results/history
-          if [ -d allure-report/history ]; then
-            cp -r allure-report/history/* merged-allure-results/history/
-          fi
+      # - name: Preserve Allure History
+      #   run: |
+      #     mkdir -p merged-allure-results/history
+      #     if [ -d allure-report/history ]; then
+      #       cp -r allure-report/history/* merged-allure-results/history/
+      #     fi
   
       - name: Generate Final Allure Report
         run: |
