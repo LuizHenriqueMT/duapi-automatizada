@@ -25,16 +25,6 @@ jobs:
         run: |
           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
 
-      - name: Create Environment File
-        run: |
-          echo "Browser=$BROWSER" > environment.properties
-          echo "Browser.Version=$BROWSER_VERSION" >> environment.properties
-          echo "Platform=${{ runner.os }}" >> environment.properties
-          echo "Platform.Version=$(uname -r)" >> environment.properties
-          echo "Environment=CI" >> environment.properties
-          echo "Cypress.Version=$CYPRESS_VERSION" >> environment.properties
-          echo "Node.Version=$NODE_VERSION" >> environment.properties
-
       - name: Run initial Cypress tests        
         uses: cypress-io/github-action@v6
         with:
@@ -57,6 +47,16 @@ jobs:
           mkdir -p allure-results-${{ matrix.container }}
           mv allure-results/* allure-results-${{ matrix.container }}/ || echo "placeholder" > allure-results-${{ matrix.container }}/placeholder.txt
         
+      - name: Create Environment File
+        run: |
+          echo "Browser=$BROWSER" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Browser.Version=$BROWSER_VERSION" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Platform=${{ runner.os }}" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Platform.Version=$(uname -r)" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Environment=CI" >> allure-results-${{ matrix.container }}/environment.properties
+          echo "Cypress.Version=$CYPRESS_VERSION" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Node.Version=$NODE_VERSION" > allure-results-${{ matrix.container }}/environment.properties
+
       - name: Upload Allure Results Artifact
         if: always()
         uses: actions/upload-artifact@v4
