@@ -41,6 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           allure: true
           ALLURE_LANG: br
+          LANG: pt_BR.UTF-8
+          LC_ALL: pt_BR.UTF-8
 
       - name: Move Allure Results
         if: always()
