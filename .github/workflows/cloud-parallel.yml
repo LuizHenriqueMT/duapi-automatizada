@@ -40,8 +40,6 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           allure: true
-          ALLURE_LANG: "br"
-
 
       - name: Move Allure Results
         if: always()
@@ -128,8 +126,7 @@ jobs:
   
       - name: Generate Final Allure Report
         run: |
-          export ALLURE_LANG=br
-          allure generate merged-allure-results --clean -o allure-report
+          allure generate merged-allure-results --clean -o allure-report --lang br || { echo 'Error generating Allure report'; exit 1; }
 
       # - name: Upload Reports Results
       #   if: always()
