@@ -79,11 +79,11 @@ jobs:
       - name: Configure Allure
         run: npm install -g allure-commandline --save-dev
 
-      - name: Clone gh-pages for History
-        run: |
-          git clone --branch=gh-pages --single-branch https://github.com/luizhenriquemt/duapi-automatizada.git gh-pages
-          mkdir -p merged-allure-results/history
-          cp -r gh-pages/history/* merged-allure-results/history/ || true
+      # - name: Clone gh-pages for History
+      #   run: |
+      #     git clone --branch=gh-pages --single-branch https://github.com/luizhenriquemt/duapi-automatizada.git gh-pages
+      #     mkdir -p merged-allure-results/history
+      #     cp -r gh-pages/history/* merged-allure-results/history/ || true
 
       - name: Download Allure Results Artifact 1
         uses: actions/download-artifact@v4
