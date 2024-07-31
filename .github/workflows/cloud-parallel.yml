@@ -50,12 +50,12 @@ jobs:
       - name: Create Environment File
         run: |
           echo "Browser=$BROWSER" > allure-results-${{ matrix.container }}/environment.properties
-          echo "Browser.Version=$BROWSER_VERSION" > allure-results-${{ matrix.container }}/environment.properties
-          echo "Platform=${{ runner.os }}" > allure-results-${{ matrix.container }}/environment.properties
-          echo "Platform.Version=$(uname -r)" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Browser.Version=$BROWSER_VERSION" >> allure-results-${{ matrix.container }}/environment.properties
+          echo "Platform=${{ runner.os }}" >> allure-results-${{ matrix.container }}/environment.properties
+          echo "Platform.Version=$(uname -r)" >> allure-results-${{ matrix.container }}/environment.properties
           echo "Environment=CI" >> allure-results-${{ matrix.container }}/environment.properties
-          echo "Cypress.Version=$CYPRESS_VERSION" > allure-results-${{ matrix.container }}/environment.properties
-          echo "Node.Version=$NODE_VERSION" > allure-results-${{ matrix.container }}/environment.properties
+          echo "Cypress.Version=$CYPRESS_VERSION" >> allure-results-${{ matrix.container }}/environment.properties
+          echo "Node.Version=$NODE_VERSION" >> allure-results-${{ matrix.container }}/environment.properties
 
       - name: Upload Allure Results Artifact
         if: always()
