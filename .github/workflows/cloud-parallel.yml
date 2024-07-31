@@ -49,33 +49,8 @@ jobs:
         
       - name: Create Environment File
         run: |
-          # if command -v google-chrome > /dev/null; then
-          #   echo "Browser=Chrome" > allure-results-${{ matrix.container }}/environment.properties
-          #   echo "Browser.Version=$(google-chrome --version)" >> allure-results-${{ matrix.container }}/environment.properties
-          # fi
-
-          # if command -v firefox > /dev/null; then
-          #   echo "Browser=Firefox" > allure-results-${{ matrix.container }}/environment.properties
-          #   echo "Browser.Version=$(firefox --version)" >> allure-results-${{ matrix.container }}/environment.properties
-          # fi
-
-          # if command -v microsoft-edge > /dev/null; then
-          #   echo "Browser=Edge" > allure-results-${{ matrix.container }}/environment.properties
-          #   echo "Browser.Version=$(microsoft-edge --version)" >> allure-results-${{ matrix.container }}/environment.properties
-          # fi
-
-          # if command -v npx > /dev/null && npx electron --version > /dev/null 2>&1; then
-          #   echo "Browser=Electron" > allure-results-${{ matrix.container }}/environment.properties
-          #   echo "Browser.Version=$(npx electron --version)" >> allure-results-${{ matrix.container }}/environment.properties
-          # fi
-
-          # if [ ! -f allure-results-${{ matrix.container }}/environment.properties ]; then
-          #   echo "Browser=Unknown" > allure-results-${{ matrix.container }}/environment.properties
-          #   echo "Browser.Version=Unknown" >> allure-results-${{ matrix.container }}/environment.properties
-          # fi
-
           echo "Browser=$(npx cypress --version | sed -n '3 p' | awk '{print $1}')" > allure-results-${{ matrix.container }}/environment.properties
-          echo "Browser.Version=(npx cypress --version | sed -n '3 p' | awk '{print $3}')" >> allure-results-${{ matrix.container }}/environment.properties
+          echo "Browser.Version=$(npx cypress --version | sed -n '3 p' | awk '{print $3}')" >> allure-results-${{ matrix.container }}/environment.properties
           echo "Platform=${{ runner.os }}" >> allure-results-${{ matrix.container }}/environment.properties
           echo "Platform.Version=$(uname -r)" >> allure-results-${{ matrix.container }}/environment.properties
           echo "Environment=CI" >> allure-results-${{ matrix.container }}/environment.properties
