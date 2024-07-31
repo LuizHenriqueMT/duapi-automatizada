@@ -81,6 +81,9 @@ jobs:
 
       - name: Configure Allure
         run: npm install -g allure-commandline --save-dev
+        
+      - name: Download plugin Allure
+        run: npm install --save-dev @shelex/cypress-allure-plugin
 
       # - name: Clone gh-pages for History
       #   run: |
