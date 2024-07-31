@@ -25,6 +25,16 @@ jobs:
         run: |
           echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
 
+      - name: Create Environment File
+        run: |
+          echo "Browser=$BROWSER" > environment.properties
+          echo "Browser.Version=$BROWSER_VERSION" >> environment.properties
+          echo "Platform=${{ runner.os }}" >> environment.properties
+          echo "Platform.Version=$(uname -r)" >> environment.properties
+          echo "Environment=CI" >> environment.properties
+          echo "Cypress.Version=$CYPRESS_VERSION" >> environment.properties
+          echo "Node.Version=$NODE_VERSION" >> environment.properties
+
       - name: Run initial Cypress tests        
         uses: cypress-io/github-action@v6
         with:

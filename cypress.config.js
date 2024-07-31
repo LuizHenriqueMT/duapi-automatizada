@@ -175,10 +175,18 @@ module.exports = defineConfig({
       on('after:run', async (results) => {
         console.log('Testes concluídos...');
 
-        // Diretórios do Allure
         const allureResultsDir = path.join(__dirname, 'allure-results');
         const allureReportDir = path.join(__dirname, 'allure-report');
         const allureHistoryDir = path.join(allureResultsDir, 'history');
+        const envFile = path.join(__dirname, 'allure-results/environment.properties');
+
+        // Copia o arquivo de ambiente se ele existir
+        if (fs.existsSync(envFile)) {
+          fs.copyFileSync(envFile, path.join(allureResultsDir, 'environment.properties'));
+          console.log('Arquivo de ambiente copiado para allure-results.');
+        } else {
+          console.log('Arquivo environment.properties não encontrado.');
+        }
 
         // Cria o diretório de histórico se ele não existir
         if (!fs.existsSync(allureHistoryDir)) {
