@@ -228,8 +228,18 @@ module.exports = defineConfig({
 
     baseUrl: env.URL_TESTE,
     env: {
-      allure: true
-    }
+      allure: true,
+      CYPRESS_MEMORY_LIMIT: 4096
+    },
+    chromeWebSecurity: false,
+    viewportWidth: 1280,
+    viewportHeight: 720,
+    defaultCommandTimeout: 10000,
+    pageLoadTimeout: 60000,
+    requestTimeout: 15000,
+    responseTimeout: 30000,
+    // numTestsKeptInMemory: 0,
+    experimentalMemoryManagement: true
 
   },
 });
