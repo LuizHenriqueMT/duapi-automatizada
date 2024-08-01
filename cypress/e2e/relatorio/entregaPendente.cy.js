@@ -790,95 +790,148 @@ describe('Relatório - Entregas Pendente', () => {
 
             // PRODUTO
             cy.wrap(Array.from({ length: maxGrupo }, (_, i) => i + 1)).each((i) => {
+
+                // GRUPO DE PRODUTO
+                cy.request({
+                    method: 'POST',
+                    url: Cypress.env('API_DUAPI_2') + '/grupo_produto',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Token': token
+                    },
+                    body: {
+                        "descricao": "GRUPO " + i + " " + dataAtual
+                    },
+                    failOnStatusCode: false
+                }).then((response) => {
+                    expect(response.status).to.eq(200);
+                    var grupoProdutoId = response.body.data[0].id;
+                    var descricaoGrupoProduto = response.body.data[0].descricao;
+
+                    cy.wrap(grupoProdutoId).as('grupoProdutoId' + i);
+                    cy.wrap(descricaoGrupoProduto).as('descricaoGrupoProduto' + i);
+                });
+
                 cy.wrap(Array.from({ length: maxProduto }, (_, j) => j + 1)).each((j) => {
                     cy.wait(1000);
-                    contProduto = (i - 1) * maxProduto + j;
+                    contProduto += 1;
                     qtdeEntregar = inserirRandom(1, 9, 1);
+                    ((index) => {
+                        cy.get('@grupoProdutoId' + i).then(grupoProdutoId => {
+                            cy.get('@descricaoGrupoProduto' + i).then(descricaoGrupoProduto => {
 
-                    // GRUPO DE PRODUTO
-                    cy.request({
-                        method: 'POST',
-                        url: Cypress.env('API_DUAPI_2') + '/grupo_produto',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Token': token
-                        },
-                        body: {
-                            "descricao": "GRUPO " + i + " " + dataAtual
-                        },
-                        failOnStatusCode: false
-                    }).then((response) => {
-                        expect(response.status).to.eq(200);
-                        var grupoProdutoId = response.body.data[0].id;
-                        var descricaoGrupoProduto = response.body.data[0].descricao;
+                                // FORNECEDOR
+                                cy.request({
+                                    method: 'POST',
+                                    url: Cypress.env('API_DUAPI_2') + '/cadastrar_fornecedores',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Token': token
+                                    },
+                                    body: {
+                                        "descricao": "FORNECEDOR " + i + j + " " + dataAtual
+                                    },
+                                    failOnStatusCode: false
+                                }).then((response) => {
+                                    expect(response.status).to.eq(200);
+                                    var fornecedorId = response.body.data[0].id;
 
-                        // FORNECEDOR
-                        cy.request({
-                            method: 'POST',
-                            url: Cypress.env('API_DUAPI_2') + '/cadastrar_fornecedores',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Token': token
-                            },
-                            body: {
-                                "descricao": "FORNECEDOR " + i + j + " " + dataAtual
-                            },
-                            failOnStatusCode: false
-                        }).then((response) => {
-                            expect(response.status).to.eq(200);
-                            var fornecedorId = response.body.data[0].id;
+                                    // PRODUTO
+                                    cy.request({
+                                        method: 'POST',
+                                        url: Cypress.env('API_DUAPI_2') + '/cadastrar_produtos',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Token': token
+                                        },
+                                        body: {
+                                            "codigo": "P AUTO " + i + j + " " + dataAtual,
+                                            "descricao": "PRODUTO AUTOMATIZADO " + i + j + " " + dataAtual,
+                                            "periodo": 1,
+                                            "periodicidade": j,
+                                            "vl_custo": inserirValorString(1, 9, 5),
+                                            "ativo": "S",
+                                            "qt_entrega": qtdeEntregar,
+                                            "controla_troca": "N",
+                                            "controle_epi": "S",
+                                            "empresa_id": 1,
+                                            "grupo_produto_id": grupoProdutoId,
+                                            "unidade": {
+                                                "descricao": "Par",
+                                                "sigla": "Par",
+                                                "operador": "M",
+                                                "fator": 1
+                                            },
+                                            "grupo_produto": {
+                                                "descricao": descricaoGrupoProduto
+                                            },
+                                            "tipo_produto": {
+                                                "descricao": "EPI",
+                                                "informar_quantidade_na_entrega": "S",
+                                                "gera_entrega_indevida": "S"
+                                            },
+                                            "fornecedor_produto": {
+                                                "codigo": inserirRandom(1, 9, 6),
+                                                "fornecedor_id": fornecedorId,
+                                                "ca": inserirRandom(10000, 99999, 1),
+                                                "data_vencimento_ca": inserirDataRandom('S'),
+                                                "codigo_barra": "",
+                                                "fator_compra": 1
+                                            },
 
-                            // PRODUTO
-                            cy.request({
-                                method: 'POST',
-                                url: Cypress.env('API_DUAPI_2') + '/cadastrar_produtos',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Token': token
-                                },
-                                body: {
-                                    "codigo": "P AUTO " + i + j + " " + dataAtual,
-                                    "descricao": "PRODUTO AUTOMATIZADO " + i + j + " " + dataAtual,
-                                    "periodo": 1,
-                                    "periodicidade": j,
-                                    "vl_custo": inserirValorString(1, 9, 5),
-                                    "ativo": "S",
-                                    "qt_entrega": qtdeEntregar,
-                                    "controla_troca": "N",
-                                    "controle_epi": "S",
-                                    "empresa_id": 1,
-                                    "grupo_produto_id": grupoProdutoId,
-                                    "unidade": {
-                                      "descricao": "Par",
-                                      "sigla": "Par",
-                                      "operador": "M",
-                                      "fator": 1
-                                    },
-                                    "grupo_produto": {
-                                      "descricao": descricaoGrupoProduto
-                                    },
-                                    "tipo_produto": {
-                                      "descricao": "EPI",
-                                      "informar_quantidade_na_entrega": "S",
-                                      "gera_entrega_indevida": "S"
-                                    },
-                                    "fornecedor_produto": {
-                                      "codigo": inserirRandom(1, 9, 6),
-                                      "fornecedor_id": fornecedorId,
-                                      "ca": inserirRandom(10000, 99999, 1),
-                                      "data_vencimento_ca": inserirDataRandom('S'),
-                                      "codigo_barra": "",
-                                      "fator_compra": 1
-                                    },
+                                        },
+                                        failOnStatusCode: false
+                                    }).then((response) => {
+                                        expect(response.status).to.eq(200);
+                                        var produtoId = response.body.data[0].id;
 
-                                },
-                                failOnStatusCode: false
-                            }).then((response) => {
-                                expect(response.status).to.eq(200);
+                                        // MOVIMENTAÇÃO DE ESTOQUE DOS PRODUTOS CRIADOS
+                                        cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                                            cy.request({
+                                                method: 'GET',
+                                                url: '/get_produto?id=' + produtoId,
+                                                headers: {
+                                                    'Authorization': `Bearer ${token}`,
+                                                    'Content-Type': 'application/json'
+                                                },
+                                                failOnStatusCode: false
+                                            }).then((response) => {
+                                                var produtoId = response.body.id;
+
+                                                var caProduto = response.body.fornecedores[0].id;
+
+                                                cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                                                    cy.request({
+                                                        method: 'POST',
+                                                        url: Cypress.env('API_DUAPI'),
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'Token': token
+                                                        },
+                                                        body: {
+                                                            produto_id: produtoId,
+                                                            quantidade: 100,
+
+                                                            fornecedor_produto_id: caProduto,
+                                                            numero_nota: "",
+                                                            serie: "",
+                                                            tipo_movimento: "E",
+                                                            empresa_id: 1,
+                                                            deposito_id: 1,
+                                                            observacao: "MOVIMENTAÇÃO AUTOMATICA"
+                                                        },
+                                                        failOnStatusCode: false
+                                                    }).then((response) => {
+                                                        expect(response.status).to.eq(200);
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    }).as('postProduto' + index);
+                                });
                             });
                         });
-                    });
-
+                    })(contProduto);
                 });
             });
 
@@ -1547,29 +1600,29 @@ function inserirValorString(min, max, digit = 0) {
     var numString = '';
     var num = null;
     var i = 0;
-  
+
     if (digit !== 0) {
-      for (i = 0; i < digit; i++) {
-        num = gerarNumeroAleatorio(min, max);
-        numRandom.push(num);
-      }
-  
-      numString = numRandom.join('');
-  
-      let numStringComVirgula;
-      if (numString.length > 2) {
-        const ultimosDoisNumeros = numString.slice(-2);
-        const inicioDaString = numString.slice(0, -2);
-        numStringComVirgula = inicioDaString + ',' + ultimosDoisNumeros;
-      } else {
-        numStringComVirgula = numString;
-      }
-  
-      return numStringComVirgula;
+        for (i = 0; i < digit; i++) {
+            num = gerarNumeroAleatorio(min, max);
+            numRandom.push(num);
+        }
+
+        numString = numRandom.join('');
+
+        let numStringComVirgula;
+        if (numString.length > 2) {
+            const ultimosDoisNumeros = numString.slice(-2);
+            const inicioDaString = numString.slice(0, -2);
+            numStringComVirgula = inicioDaString + ',' + ultimosDoisNumeros;
+        } else {
+            numStringComVirgula = numString;
+        }
+
+        return numStringComVirgula;
     }
-  
+
     return '0000';
-  }
+}
 
 function inserirRandom(min, max, digit = 0) {
     var numRandom = [];
