@@ -737,56 +737,59 @@ describe('Relatório - Entregas Pendente', () => {
             let promises = [];
             const maxI = 3;
             const maxProduto = 2;
-            const maxGrupo = 4;
+            const maxGrupo = 7;
             var contProduto = 0;
 
-            // // SETOR
-            // cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-            //     cy.request({
-            //         method: 'POST',
-            //         url: '/setor',
-            //         body: {
-            //             descricao: 'SETOR ' + dataAtual,
-            //             ativo: 'S',
-            //             _token: csrfToken
-            //         },
-            //         headers: {
-            //             'Authorization': `Bearer ${token}`,
-            //             'Content-Type': 'application/json'
-            //         },
-            //         failOnStatusCode: false
-            //     }).then((response) => {
-            //         expect(response.status).to.eq(200);
-            //         const setor = response.body.data.descricao;
-            //         cy.wrap(setor).as('setor');
-            //     })
-            // });
+            // SETOR
+            cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                cy.request({
+                    method: 'POST',
+                    url: '/setor',
+                    body: {
+                        descricao: 'SETOR ' + dataAtual,
+                        ativo: 'S',
+                        _token: csrfToken
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    failOnStatusCode: false
+                }).then((response) => {
+                    expect(response.status).to.eq(200);
+                    const setor = response.body.data.descricao;
+                    const setorId = response.body.data.id;
 
-            // // FUNCIONÁRIO
-            // cy.visit('/funcionario');
+                    cy.wrap(setor).as('setor');
+                    cy.wrap(setorId).as('setorId');
+                })
+            });
 
-            // cy.get('#btn-novo-funcionario').click();
+            // FUNCIONÁRIO
+            cy.visit('/funcionario');
 
-            // cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
-            // cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
-            // cy.get('@setor').then(setor => {
-            //     cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type(setor).wait(950).type('{enter}');
-            // })
+            cy.get('#btn-novo-funcionario').click();
 
-            // cy.get('#btn-validacao-entrega-tab').click();
-            // cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('S');
-            // cy.get('#senha_nova').type('123');
-            // cy.get('#confirmar').type('123');
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
+            cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
+            cy.get('@setor').then(setor => {
+                cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type(setor).wait(950).type('{enter}');
+            })
 
-            // cy.intercept('POST', '/funcionario').as('postFuncionario');
-            // cy.get('#btn-salvar-funcionario').click();
-            // cy.wait('@postFuncionario').then((interception) => {
+            cy.get('#btn-validacao-entrega-tab').click();
+            cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('S');
+            cy.get('#senha_nova').type('123');
+            cy.get('#confirmar').type('123');
 
-            //     cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
+            cy.intercept('POST', '/funcionario').as('postFuncionario');
+            cy.get('#btn-salvar-funcionario').click();
+            cy.wait('@postFuncionario').then((interception) => {
 
-            //     var nomeFuncionario = interception.response.body.data.nome;
-            //     cy.wrap(nomeFuncionario).as('nomeFuncionario');
-            // });
+                cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
+
+                var nomeFuncionario = interception.response.body.data.nome;
+                cy.wrap(nomeFuncionario).as('nomeFuncionario');
+            });
 
             // PRODUTO
             cy.wrap(Array.from({ length: maxGrupo }, (_, i) => i + 1)).each((i) => {
@@ -814,304 +817,192 @@ describe('Relatório - Entregas Pendente', () => {
 
                 cy.wrap(Array.from({ length: maxProduto }, (_, j) => j + 1)).each((j) => {
                     cy.wait(1000);
-                    contProduto += 1;
-                    qtdeEntregar = inserirRandom(1, 9, 1);
-                    ((index) => {
-                        cy.get('@grupoProdutoId' + i).then(grupoProdutoId => {
-                            cy.get('@descricaoGrupoProduto' + i).then(descricaoGrupoProduto => {
 
-                                // FORNECEDOR
-                                cy.request({
-                                    method: 'POST',
-                                    url: Cypress.env('API_DUAPI_2') + '/cadastrar_fornecedores',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Token': token
-                                    },
-                                    body: {
-                                        "descricao": "FORNECEDOR " + i + j + " " + dataAtual
-                                    },
-                                    failOnStatusCode: false
-                                }).then((response) => {
-                                    expect(response.status).to.eq(200);
-                                    var fornecedorId = response.body.data[0].id;
+                    if (i > 3 && j > 1) {
+                        return false;
+                    } else {
 
-                                    // PRODUTO
+                        contProduto += 1;
+                        qtdeEntregar = inserirRandom(1, 9, 1);
+
+                        ((index) => {
+                            cy.get('@grupoProdutoId' + i).then(grupoProdutoId => {
+                                cy.get('@descricaoGrupoProduto' + i).then(descricaoGrupoProduto => {
+
+                                    // FORNECEDOR
                                     cy.request({
                                         method: 'POST',
-                                        url: Cypress.env('API_DUAPI_2') + '/cadastrar_produtos',
+                                        url: Cypress.env('API_DUAPI_2') + '/cadastrar_fornecedores',
                                         headers: {
                                             'Content-Type': 'application/json',
                                             'Token': token
                                         },
                                         body: {
-                                            "codigo": "P AUTO " + i + j + " " + dataAtual,
-                                            "descricao": "PRODUTO AUTOMATIZADO " + i + j + " " + dataAtual,
-                                            "periodo": 1,
-                                            "periodicidade": j,
-                                            "vl_custo": inserirValorString(1, 9, 5),
-                                            "ativo": "S",
-                                            "qt_entrega": qtdeEntregar,
-                                            "controla_troca": "N",
-                                            "controle_epi": "S",
-                                            "empresa_id": 1,
-                                            "grupo_produto_id": grupoProdutoId,
-                                            "unidade": {
-                                                "descricao": "Par",
-                                                "sigla": "Par",
-                                                "operador": "M",
-                                                "fator": 1
-                                            },
-                                            "grupo_produto": {
-                                                "descricao": descricaoGrupoProduto
-                                            },
-                                            "tipo_produto": {
-                                                "descricao": "EPI",
-                                                "informar_quantidade_na_entrega": "S",
-                                                "gera_entrega_indevida": "S"
-                                            },
-                                            "fornecedor_produto": {
-                                                "codigo": inserirRandom(1, 9, 6),
-                                                "fornecedor_id": fornecedorId,
-                                                "ca": inserirRandom(10000, 99999, 1),
-                                                "data_vencimento_ca": inserirDataRandom('S'),
-                                                "codigo_barra": "",
-                                                "fator_compra": 1
-                                            },
-
+                                            "descricao": i <= 3 ? "FORNECEDOR " + i + j + " " + dataAtual : "FORNECEDOR " + i + " " + dataAtual
                                         },
                                         failOnStatusCode: false
                                     }).then((response) => {
                                         expect(response.status).to.eq(200);
-                                        var produtoId = response.body.data[0].id;
+                                        var fornecedorId = response.body.data[0].id;
 
-                                        // MOVIMENTAÇÃO DE ESTOQUE DOS PRODUTOS CRIADOS
-                                        cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-                                            cy.request({
-                                                method: 'GET',
-                                                url: '/get_produto?id=' + produtoId,
-                                                headers: {
-                                                    'Authorization': `Bearer ${token}`,
-                                                    'Content-Type': 'application/json'
+                                        // PRODUTO
+                                        cy.request({
+                                            method: 'POST',
+                                            url: Cypress.env('API_DUAPI_2') + '/cadastrar_produtos',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Token': token
+                                            },
+                                            body: {
+                                                "codigo": i <= 3 ? "P AUTO " + i + j + " " + dataAtual : "P AUTO " + i + " " + dataAtual,
+                                                "descricao": i <= 3 ? "PRODUTO AUTOMATIZADO " + i + j + " " + dataAtual : "PRODUTO AUTOMATIZADO " + i + " " + dataAtual,
+                                                "periodo": 1,
+                                                "periodicidade": 1,
+                                                "vl_custo": inserirValorString(1, 9, 5),
+                                                "ativo": "S",
+                                                "qt_entrega": qtdeEntregar,
+                                                "controla_troca": "N",
+                                                "controle_epi": "S",
+                                                "empresa_id": 1,
+                                                "grupo_produto_id": grupoProdutoId,
+                                                "unidade": {
+                                                    "descricao": "Par",
+                                                    "sigla": "Par",
+                                                    "operador": "M",
+                                                    "fator": 1
                                                 },
-                                                failOnStatusCode: false
-                                            }).then((response) => {
-                                                var produtoId = response.body.id;
+                                                "grupo_produto": {
+                                                    "descricao": descricaoGrupoProduto
+                                                },
+                                                "tipo_produto": {
+                                                    "descricao": "EPI",
+                                                    "informar_quantidade_na_entrega": "S",
+                                                    "gera_entrega_indevida": "S"
+                                                },
+                                                "fornecedor_produto": {
+                                                    "codigo": inserirRandom(1, 9, 6),
+                                                    "fornecedor_id": fornecedorId,
+                                                    "ca": inserirRandom(10000, 99999, 1),
+                                                    "data_vencimento_ca": inserirDataRandom('S'),
+                                                    "codigo_barra": "",
+                                                    "fator_compra": 1
+                                                },
 
-                                                var caProduto = response.body.fornecedores[0].id;
+                                            },
+                                            failOnStatusCode: false
+                                        }).then((response) => {
+                                            expect(response.status).to.eq(200);
+                                            var produtoId = response.body.data[0].id;
 
-                                                cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-                                                    cy.request({
-                                                        method: 'POST',
-                                                        url: Cypress.env('API_DUAPI'),
-                                                        headers: {
-                                                            'Content-Type': 'application/json',
-                                                            'Token': token
-                                                        },
-                                                        body: {
-                                                            produto_id: produtoId,
-                                                            quantidade: 100,
+                                            // MOVIMENTAÇÃO DE ESTOQUE DOS PRODUTOS CRIADOS
+                                            cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                                                cy.request({
+                                                    method: 'GET',
+                                                    url: '/get_produto?id=' + produtoId,
+                                                    headers: {
+                                                        'Authorization': `Bearer ${token}`,
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    failOnStatusCode: false
+                                                }).then((response) => {
+                                                    var produtoId = response.body.id;
+                                                    var caProduto = response.body.fornecedores[0].id;
+                                                    var descricaoProduto = response.body.descricao;
 
-                                                            fornecedor_produto_id: caProduto,
-                                                            numero_nota: "",
-                                                            serie: "",
-                                                            tipo_movimento: "E",
-                                                            empresa_id: 1,
-                                                            deposito_id: 1,
-                                                            observacao: "MOVIMENTAÇÃO AUTOMATICA"
-                                                        },
-                                                        failOnStatusCode: false
-                                                    }).then((response) => {
-                                                        expect(response.status).to.eq(200);
+                                                    cy.wrap(descricaoProduto).as('descricaoProduto' + index);
+                                                    cy.wrap(produtoId).as('produtoId' + index);
+
+                                                    cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                                                        cy.request({
+                                                            method: 'POST',
+                                                            url: Cypress.env('API_DUAPI'),
+                                                            headers: {
+                                                                'Content-Type': 'application/json',
+                                                                'Token': token
+                                                            },
+                                                            body: {
+                                                                produto_id: produtoId,
+                                                                quantidade: 100,
+
+                                                                fornecedor_produto_id: caProduto,
+                                                                numero_nota: "",
+                                                                serie: "",
+                                                                tipo_movimento: "E",
+                                                                empresa_id: 1,
+                                                                deposito_id: 1,
+                                                                observacao: "MOVIMENTAÇÃO AUTOMATICA"
+                                                            },
+                                                            failOnStatusCode: false
+                                                        }).then((response) => {
+                                                            expect(response.status).to.eq(200);
+
+                                                            // LIBERAÇÃO PARA DO PRODUTO PARA O SETOR CRIADO
+                                                            cy.get('@setorId').then(setorId => {
+                                                                cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                                                                    cy.request({
+                                                                        method: 'POST',
+                                                                        url: Cypress.env('API_DUAPI_2') + '/liberacao_produto',
+                                                                        headers: {
+                                                                            'Content-Type': 'application/json',
+                                                                            'Token': token
+                                                                        },
+                                                                        body: {
+                                                                            "produto_id": produtoId,
+                                                                            "relacao_id": setorId,
+                                                                            "tipo": "S",
+                                                                            "empresa_id": 1,
+                                                                            "qt_entregar": qtdeEntregar,
+                                                                            "dias": 1
+                                                                        },
+                                                                        failOnStatusCode: false
+                                                                    }).then((response) => {
+                                                                        expect(response.status).to.eq(200);
+
+                                                                    });
+                                                                });
+                                                            });
+                                                        });
                                                     });
                                                 });
                                             });
                                         });
-                                    }).as('postProduto' + index);
+                                    });
                                 });
                             });
-                        });
-                    })(contProduto);
+                        })(contProduto);
+                    }
                 });
+
             });
-
-            cy.visit('/produto');
-
-            // cy.wrap(Array.from({ length: maxGrupo }, (_, i) => i + 1)).each((i) => {
-            //     cy.wrap(Array.from({ length: maxProduto }, (_, j) => j + 1)).each((j) => {
-            //         cy.wait(2000);
-
-            //         contProduto = (i - 1) * maxProduto + j;
-            //         qtdeEntregar = inserirRandom(1, 9, 1);
-
-            //         cy.get('#btn-novo-produto').click();
-
-            //         cy.get('#tutorial-produto-codigo #codigo').type('P AUTO ' + i + j + ' ' + dataAtual);
-            //         cy.get('#tutorial-produto-descricao #descricao').type('PRODUTO AUTOMATIZADO ' + i + j + ' ' + dataAtual);
-
-            //         cy.get('#tutorial-produto-quantidade-entregar #qt_entrega').clear().type(qtdeEntregar);
-            //         cy.get('#tutorial-produto-periodicidade #periodo').clear().type(1);
-            //         cy.get('#tutorial-produto-periodicidade #periodicidade').select(0);
-            //         cy.get('#tutorial-produto-valor #vl_custo').clear().type(inserirRandom(1, 99999, 1));
-
-            //         cy.get('.actions a').contains('Próxima').click();
-
-            //         cy.wait(300);
-
-            //         cy.get('#tutorial-produto-fornecedor input[name="fornecedor_id"]').type('FORNECEDOR ' + i + j + ' ' + dataAtual).wait(950).type('{enter}')
-            //         cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
-            //         cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            //         cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
-
-            //         cy.wait(300);
-
-            //         cy.get('#tutorial-produto-fornecedor-codigo #codigo_produto_fornecedor').type(inserirRandom(1, 9, 6));
-            //         cy.get('#tutorial-produto-fornecedor-fator-compra #fator_compra').type(inserirRandom(1, 5, 1));
-            //         cy.get('#tutorial-produto-fornecedor-ca #ca').type(inserirRandom(10000, 99999, 1));
-            //         cy.get('#tutorial-produto-fornecedor-ca-data-vencimento #data_vencimento').type(inserirDataRandom('S')).type('{esc}');
-            //         cy.get('#add-adicionar-fornecedor').click();
-
-            //         cy.get('.fornecedor_desc').should('exist');
-
-            //         cy.wait(300);
-
-            //         cy.get('.actions a').contains('Próxima').click();
-
-            //         cy.get('#tutorial-grade-titulo input[name="grade_id"]').type('GRADE ' + i + j + ' ' + inserirEpoch()).wait(950).type('{enter}')
-            //         cy.intercept('POST', '/autocomplete/save').as('postAutocompleteGrade');
-            //         cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            //         cy.wait('@postAutocompleteGrade').its('response.statusCode').should('eq', 200);
-
-            //         cy.get('#add-grade').should('be.visible').click();
-
-            //         cy.get('.grade_desc').should('exist');
-
-            //         cy.wait(300);
-
-            //         cy.get('.actions a').contains('Próxima').click();
-            //         cy.wait(100);
-            //         cy.get('.actions a').contains('Próxima').click();
-
-            //         if (j > 1) {
-            //             cy.get('#tutorial-produto-grupo input[name="grupo_produto_id"]').type('GRUPO ' + i + ' ' + dataAtual).wait(950).type('{enter}')
-
-            //         } else {
-            //             cy.get('#tutorial-produto-grupo input[name="grupo_produto_id"]').type('GRUPO ' + i + ' ' + dataAtual).wait(950).type('{enter}')
-            //             cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
-            //             cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
-            //             cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
-            //         }
-            //         cy.get('.actions a').contains('Próxima').click();
-
-            //         cy.wait(300);
-
-            //         // ADICIONAR SETOR
-            //         // cy.get('input[name="setor"]').type('SETOR 1 26/07/2024 08:48:31').wait(950).type('{enter}');
-            //         cy.get('@setor').then(setor => {
-            //             cy.get('input[name="setor"]').type(setor).wait(950).type('{enter}');
-            //         })
-            //         cy.get('#qt_entregar_setor').clear().type(qtdeEntregar);
-            //         cy.get('#numero_dias_setor').clear().type(1);
-            //         cy.get('#periodicidade_setor').select(0);
-            //         cy.get('#add-setor').click();
-            //         cy.get('.td-qtde-setor').should('exist');
-
-            //         cy.wait(300);
-
-            //         cy.get('.actions a').contains('Próxima').click();
-            //         cy.wait(100);
-            //         cy.get('.actions a').contains('Próxima').click();
-            //         cy.wait(100);
-            //         cy.get('.actions a').contains('Próxima').click();
-            //         cy.wait(100);
-            //         cy.get('.actions a').contains('Próxima').click();
-            //         cy.wait(100);
-            //         cy.get('.actions a').contains('Próxima').click();
-            //         cy.wait(100);
-            //         cy.get('.actions a').contains('Próxima').click();
-
-            //         cy.wait(2000);
-
-            //         ((index) => {
-            //             cy.intercept('POST', '/produto').as('postProduto' + index);
-            //             cy.get('.actions a').contains('Salvar').click();
-            //             cy.wait('@postProduto' + index).then((interception) => {
-            //                 cy.get('@postProduto' + index).its('response.statusCode').should('eq', 200);
-
-            //                 var produto = interception.response.body.data.descricao;
-            //                 cy.wrap(produto).as('produto' + index);
-
-            //                 var produtoId = interception.response.body.data.id;
-            //                 cy.wrap(produtoId).as('produtoId' + index);
-
-            //                 // cy.get('@produtoId' + index).then((response) => {
-            //                 cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-            //                     cy.request({
-            //                         method: 'GET',
-            //                         url: '/get_produto?id=' + produtoId,
-            //                         headers: {
-            //                             'Authorization': `Bearer ${token}`,
-            //                             'Content-Type': 'application/json'
-            //                         },
-            //                         failOnStatusCode: false
-            //                     }).then((response) => {
-            //                         var produtoId = response.body.id;
-            //                         var gradeProduto = response.body.grades[0].grade_id;
-            //                         var caProduto = response.body.fornecedores[0].id;
-
-            //                         cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-            //                             cy.request({
-            //                                 method: 'POST',
-            //                                 url: Cypress.env('API_DUAPI'),
-            //                                 headers: {
-            //                                     'Content-Type': 'application/json',
-            //                                     'Token': token
-            //                                 },
-            //                                 body: {
-            //                                     produto_id: produtoId,
-            //                                     quantidade: 100,
-            //                                     grade_id: gradeProduto,
-            //                                     fornecedor_produto_id: caProduto,
-            //                                     numero_nota: "",
-            //                                     serie: "",
-            //                                     tipo_movimento: "E",
-            //                                     empresa_id: 1,
-            //                                     deposito_id: 1,
-            //                                     observacao: "MOVIMENTAÇÃO AUTOMATICA"
-            //                                 },
-            //                                 failOnStatusCode: false
-            //                             }).then((response) => {
-            //                                 expect(response.status).to.eq(200);
-            //                             });
-            //                         });
-            //                     });
-            //                 });
-            //                 // });
-            //             });
-            //         })(contProduto);
-            //     })
-            // })
 
             // ENTREGA MANUAL
             cy.visit('/entrega_manual');
-            entregaManual('@produto6', 0);
-            entregaManual('@produto7', 2);
-            entregaManual('@produto8', 0);
+            entregaManual('@descricaoProduto1', -10); // GRUPO 1
+            entregaManual('@descricaoProduto2', -5); // GRUPO 1
+            entregaManual('@descricaoProduto3', -2); // GRUPO 2
+            entregaManual('@descricaoProduto4', 0); // GRUPO 2
+            entregaManual('@descricaoProduto7', -2); // GRUPO 4
+            entregaManual('@descricaoProduto7', 0); // GRUPO 4
+            entregaManual('@descricaoProduto8', -2); // GRUPO 5
+            entregaManual('@descricaoProduto9', 0); // GRUPO 5
 
             function entregaManual(produtoIndex, dia) {
-
+                cy.get('#funcionario button[data-target="#funcionario-modal"]').click().should('be.visible', { timeout: 1000 });
+                cy.wait(850);
                 cy.get('@nomeFuncionario').then(nomeFuncionario => {
-                    cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
+                    cy.get('#funcionario-modal input[name="nome"]').clear().type(nomeFuncionario);
                 });
+                cy.get('#funcionario-modal button[type="submit"]').click();
+                cy.get('#funcionariotable-modal tr :nth-child(1)').click();
 
                 if (dia === 0) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, 0)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(0)).type('{esc}');
                 } else if (dia !== 0) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, dia)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(dia)).type('{esc}');
                 }
 
                 cy.get(produtoIndex).then((produto) => {
-                    cy.get('#produto input[name="produto_id"]').type(produto).wait(950).type('{enter}');
+                    cy.get('#produto input[name="produto_id"]').type(produto).wait(1000).type('{enter}');
                 });
                 cy.get('#adicionar').click();
                 cy.get('#entregas-table td.produto_descricao').should('exist');
@@ -1120,30 +1011,6 @@ describe('Relatório - Entregas Pendente', () => {
                 cy.get('#form-motivo-entrega-manual #motivo').type('MOTIVO DE ENTREGA MANUAL - AUTOMATIZADO ' + dataAtual);
                 cy.get('#btn-salvar-motivo').click();
             }
-
-            // for (var i = 1; i <= 2; i++) {
-            //     cy.visit('/entrega_manual');
-
-            //     cy.get('@nomeFuncionario').then(nomeFuncionario => {
-            //         cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
-            //     });
-
-            //     if (i === 1) {
-            //         cy.get('#data_entrega').clear().type(gerarDataAtual(false, 2)).type('{esc}');
-            //     } else if (i === 2) {
-            //         cy.get('#data_entrega').clear().type(gerarDataAtual(false, 0)).type('{esc}');
-            //     }
-
-            //     cy.get('@produto' + i).then((produto) => {
-            //         cy.get('#produto input[name="produto_id"]').type(produto).wait(950).type('{enter}');
-            //     });
-            //     cy.get('#adicionar').click();
-            //     cy.get('#entregas-table td.produto_descricao').should('exist');
-            //     cy.get('#btnSalvar').click();
-
-            //     cy.get('#form-motivo-entrega-manual #motivo').type('MOTIVO DE ENTREGA MANUAL - AUTOMATIZADO ' + dataAtual);
-            //     cy.get('#btn-salvar-motivo').click();
-            // }
 
             // CONSULTAR RELATÓRIO
             cy.visit('/relatorio_entregas_pendentes');
@@ -1157,8 +1024,10 @@ describe('Relatório - Entregas Pendente', () => {
 
             cy.get('.btn-buscar').click();
 
-            for (var i = 1; i <= 3; i++) {
-                cy.get('@produtoId' + i).then((response) => {
+            const arrProdutos = [1, 2, 3, 4, 7, 8, 9];
+
+            arrProdutos.forEach(produto => {
+                cy.get('@produtoId' + produto).then((response) => {
                     cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
                         cy.request({
                             method: 'GET',
@@ -1172,30 +1041,32 @@ describe('Relatório - Entregas Pendente', () => {
                             var codigoGrupo = response.body.grupo_produto.id;
                             var descricaoGrupo = response.body.grupo_produto.descricao;
 
-                            cy.wrap(codigoGrupo).as('codigoGrupo');
-                            cy.wrap(descricaoGrupo).as('descricaoGrupo');
+                            cy.wrap(codigoGrupo).as('codigoGrupo' + produto);
+                            cy.wrap(descricaoGrupo).as('descricaoGrupo' + produto);
                         });
                     });
                 });
 
                 cy.get('#entregas-pendentes-table tr').should('have.length', 5);
 
-                if (i === 1) {
-                    // PRODUTO PENDENTE
-                    cy.get('@codigoGrupo').then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo').then((descricaoGrupo) => {
+                if (produto === 1) {
+                    // GRUPO COM PRODUTO PENDENTE
+                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
                             cy.get('#entregas-pendentes-table :nth-child(2) b')
                                 .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
 
                             cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega em atraso');
+                            cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
+                                .should('contain', '4');
                         });
                     });
 
-                } else if (i === 2) {
-                    // PRODUTO EM DIA
-                    cy.get('@codigoGrupo').then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo').then((descricaoGrupo) => {
+                } else if (produto === 2) {
+                    // GRUPO COM PRODUTO EM DIA
+                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
                             cy.get('#entregas-pendentes-table :nth-child(4) b')
                                 .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
 
@@ -1204,15 +1075,15 @@ describe('Relatório - Entregas Pendente', () => {
                         });
                     });
 
-                } else if (i === 3) {
+                } else if (produto === 3) {
                     // PRODUTO NUNCA ENTREGUE
                     cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
                     cy.get('.btn-buscar').click();
 
                     cy.get('#entregas-pendentes-table tr').should('have.length', 7);
 
-                    cy.get('@codigoGrupo').then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo').then((descricaoGrupo) => {
+                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
                             cy.get('#entregas-pendentes-table :nth-child(6) b')
                                 .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
 
@@ -1221,7 +1092,7 @@ describe('Relatório - Entregas Pendente', () => {
                         });
                     });
                 }
-            }
+            });
         }
 
         configurarParametros('config.json', {
@@ -1430,7 +1301,7 @@ describe('Relatório - Entregas Pendente', () => {
             // ENTREGA MANUAL
             cy.visit('/entrega_manual');
             entregaManual('@produto4', 0);
-            entregaManual('@produto5', 2);
+            entregaManual('@produto5', -2);
             entregaManual('@produto6', 0);
 
             function entregaManual(produtoIndex, dia) {
@@ -1440,9 +1311,9 @@ describe('Relatório - Entregas Pendente', () => {
                 });
 
                 if (dia === 0) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, 0)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(0)).type('{esc}');
                 } else if (dia !== 0) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, dia)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(dia)).type('{esc}');
                 }
 
                 cy.get(produtoIndex).then((produto) => {
@@ -1567,6 +1438,34 @@ describe('Relatório - Entregas Pendente', () => {
     });
 
 });
+
+function gerarOutraData(previsao, hora = false) {
+    var dataAtual = new Date();
+    var dd = String(dataAtual.getDate()).padStart(2, '0');
+    var mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+    var yyyy = dataAtual.getFullYear();
+
+    var H = String(dataAtual.getHours()).padStart(2, '0');
+    var m = String(dataAtual.getMinutes()).padStart(2, '0');
+    var i = String(dataAtual.getSeconds()).padStart(2, '0');
+
+    if (previsao) {
+        dataAtual.setDate(dataAtual.getDate() + (previsao));
+        dd = String(dataAtual.getDate()).padStart(2, '0');
+        mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+        yyyy = dataAtual.getFullYear();
+    } else {
+        dd = String(dd).padStart(2, '0');
+    }
+
+    if (hora === true) {
+        dataAtual = dd + '/' + mm + '/' + yyyy + ' ' + H + ':' + m + ':' + i;
+    } else {
+        dataAtual = dd + '/' + mm + '/' + yyyy;
+    }
+
+    return dataAtual;
+}
 
 function gerarDataAtual(hora = false, pendencia = 0) {
     var dataAtual = new Date();

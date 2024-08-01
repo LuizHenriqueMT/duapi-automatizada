@@ -512,7 +512,7 @@ function gerarPrevisaoEntrega(previsao, hora = false) {
     var i = String(dataAtual.getSeconds()).padStart(2, '0');
 
     if (previsao) {
-        dataAtual.setDate(dataAtual.getDate() + previsao);
+        dataAtual.setDate(dataAtual.getDate() + (previsao));
         dd = String(dataAtual.getDate()).padStart(2, '0');
         mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
         yyyy = dataAtual.getFullYear();
