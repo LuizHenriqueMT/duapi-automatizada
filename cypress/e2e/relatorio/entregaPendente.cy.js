@@ -1047,7 +1047,7 @@ describe('Relatório - Entregas Pendente', () => {
                     });
                 });
 
-                cy.get('#entregas-pendentes-table tr').should('have.length', 5);
+                cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
                 if (produto === 1) {
                     // GRUPO COM PRODUTO PENDENTE
