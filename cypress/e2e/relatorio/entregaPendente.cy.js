@@ -1065,9 +1065,8 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '3');
                         });
                     });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
-                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                    cy.get('@valorProduto' + produto).then(valorProduto => {
                         var valorAtualizado = valorProduto.replace(',', '.');
                         var valorFormatado = parseFloat(valorAtualizado);
                         somaVlrProduto += valorFormatado;
@@ -1086,9 +1085,8 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '4');
                         });
                     });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
-                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                    cy.get('@valorProduto' + produto).then(valorProduto => {
                         valorAtualizado = valorProduto.replace(',', '.');
                         valorFormatado = parseFloat(valorAtualizado);
                         somaVlrProduto += valorFormatado;
@@ -1107,9 +1105,8 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '7');
                         });
                     });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
-                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                    cy.get('@valorProduto' + produto).then(valorProduto => {
                         valorAtualizado = valorProduto.replace(',', '.');
                         valorFormatado = parseFloat(valorAtualizado);
                         somaVlrProduto += valorFormatado;
@@ -1128,9 +1125,8 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '3');
                         });
                     });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
-                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                    cy.get('@valorProduto' + produto).then(valorProduto => {
                         valorAtualizado = valorProduto.replace(',', '.');
                         valorFormatado = parseFloat(valorAtualizado);
                         somaVlrProduto += valorFormatado;
@@ -1151,7 +1147,10 @@ describe('Relatório - Entregas Pendente', () => {
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
-                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                    // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
+                    cy.get('#totaisEntrega #totalQtde').should('contain', 5);
+
+                    cy.get('@valorProduto' + produto).then(valorProduto => {
                         valorAtualizado = valorProduto.replace(',', '.');
                         valorFormatado = parseFloat(valorAtualizado);
                         somaVlrProduto += valorFormatado;
@@ -1172,6 +1171,9 @@ describe('Relatório - Entregas Pendente', () => {
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 15);
+
+                    // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
+                    cy.get('#totaisEntrega #totalQtde').should('contain', 7);
 
                 } else if (produto === 10) {
                     // PRODUTO NUNCA ENTREGUE
@@ -1199,6 +1201,7 @@ describe('Relatório - Entregas Pendente', () => {
                 });
                 cy.get('#totaisEntrega #totalVlCusto').should('contain', valorFormatado);
             });
+
         }
 
         configurarParametros('config.json', {
