@@ -1019,12 +1019,15 @@ describe('Relatório - Entregas Pendente', () => {
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
                 cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
             });
-            // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 29/07/2024 16:23:48').wait(950).type('{enter}');
+            // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 02/08/2024 13:32:03').wait(950).type('{enter}');
             cy.get('#controla_troca').select('N');
 
             cy.get('.btn-buscar').click();
 
-            const arrProdutos = [1, 3, 7, 8, 9, 5, 10];
+            const arrProdutos = [2, 4, 7, 8, 9, 5, 10];
+            var somaVlrProduto = 0;
+            var valorAtualizado = 0;
+            var valorFormatado = 0;
 
             arrProdutos.forEach(produto => {
                 cy.get('@produtoId' + produto).then((response) => {
@@ -1040,14 +1043,16 @@ describe('Relatório - Entregas Pendente', () => {
                         }).then((response) => {
                             var codigoGrupo = response.body.grupo_produto.id;
                             var descricaoGrupo = response.body.grupo_produto.descricao;
+                            var valorProduto = response.body.vl_custo;
 
                             cy.wrap(codigoGrupo).as('codigoGrupo' + produto);
                             cy.wrap(descricaoGrupo).as('descricaoGrupo' + produto);
+                            cy.wrap(valorProduto).as('valorProduto' + produto);
                         });
                     });
                 });
 
-                if (produto === 1) {
+                if (produto === 2) {
                     // GRUPO COM PRODUTO PENDENTE
                     cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
                         cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
@@ -1060,10 +1065,15 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '4');
                         });
                     });
-
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
-                } else if (produto === 3) {
+                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                        var valorAtualizado = valorProduto.replace(',', '.');
+                        var valorFormatado = parseFloat(valorAtualizado);
+                        somaVlrProduto += valorFormatado;
+                    });
+
+                } else if (produto === 4) {
                     // GRUPO COM PRODUTO EM DIA
                     cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
                         cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
@@ -1078,6 +1088,12 @@ describe('Relatório - Entregas Pendente', () => {
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
+                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                        valorAtualizado = valorProduto.replace(',', '.');
+                        valorFormatado = parseFloat(valorAtualizado);
+                        somaVlrProduto += valorFormatado;
+                    });
+
                 } else if (produto === 7) {
                     // GRUPO COM PRODUTO EM DIA
                     cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
@@ -1091,8 +1107,13 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '1');
                         });
                     });
-
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
+
+                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                        valorAtualizado = valorProduto.replace(',', '.');
+                        valorFormatado = parseFloat(valorAtualizado);
+                        somaVlrProduto += valorFormatado;
+                    });
 
                 } else if (produto === 8) {
                     // GRUPO COM PRODUTO PENDENTE
@@ -1107,8 +1128,13 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', '1');
                         });
                     });
-
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
+
+                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                        valorAtualizado = valorProduto.replace(',', '.');
+                        valorFormatado = parseFloat(valorAtualizado);
+                        somaVlrProduto += valorFormatado;
+                    });
 
                 } else if (produto === 9) {
                     // GRUPO COM PRODUTO EM DIA
@@ -1124,6 +1150,12 @@ describe('Relatório - Entregas Pendente', () => {
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
+
+                    cy.get('@valorProduto' + produto).then(valorProduto => {                        
+                        valorAtualizado = valorProduto.replace(',', '.');
+                        valorFormatado = parseFloat(valorAtualizado);
+                        somaVlrProduto += valorFormatado;
+                    });
 
                 } else if (produto === 5) {
                     // PRODUTO NUNCA ENTREGUE
@@ -1157,6 +1189,15 @@ describe('Relatório - Entregas Pendente', () => {
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 15);
                 }
+            });
+
+            // VERIFICA VALOR TOTAL DAS ENTREGAS
+            cy.then(() => {
+                valorFormatado = somaVlrProduto.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                cy.get('#totaisEntrega #totalVlCusto').should('contain', valorFormatado);
             });
         }
 
