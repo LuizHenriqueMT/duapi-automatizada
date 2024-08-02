@@ -1024,7 +1024,7 @@ describe('Relatório - Entregas Pendente', () => {
 
             cy.get('.btn-buscar').click();
 
-            const arrProdutos = [1, 3, 7, 8, 9];
+            const arrProdutos = [1, 3, 7, 8, 9, 5, 10];
 
             arrProdutos.forEach(produto => {
                 cy.get('@produtoId' + produto).then((response) => {
@@ -1111,8 +1111,8 @@ describe('Relatório - Entregas Pendente', () => {
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
 
                 } else if (produto === 9) {
-                     // GRUPO COM PRODUTO EM DIA
-                     cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+                    // GRUPO COM PRODUTO EM DIA
+                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
                         cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
                             cy.get('#entregas-pendentes-table :nth-child(10) b')
                                 .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
@@ -1124,25 +1124,39 @@ describe('Relatório - Entregas Pendente', () => {
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
+
+                } else if (produto === 5) {
+                    // PRODUTO NUNCA ENTREGUE
+                    cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
+                    cy.get('.btn-buscar').click();
+
+                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+                            cy.get('#entregas-pendentes-table :nth-child(6) b')
+                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+                            cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(3) span')
+                                .should('contain', 'Produto Nunca Entregue');
+                        });
+                    });
+                    cy.get('#entregas-pendentes-table tr').should('have.length', 15);
+
+                } else if (produto === 10) {
+                    // PRODUTO NUNCA ENTREGUE
+                    cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
+                    cy.get('.btn-buscar').click();
+
+                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+                            cy.get('#entregas-pendentes-table :nth-child(14) b')
+                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+                            cy.get('#entregas-pendentes-table :nth-child(15) :nth-child(3) span')
+                                .should('contain', 'Produto Nunca Entregue');
+                        });
+                    });
+                    cy.get('#entregas-pendentes-table tr').should('have.length', 15);
                 }
-
-                // if (produto === 3) {
-                //     // PRODUTO NUNCA ENTREGUE
-                //     cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
-                //     cy.get('.btn-buscar').click();
-
-                //     cy.get('#entregas-pendentes-table tr').should('have.length', 7);
-
-                //     cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                //         cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                //             cy.get('#entregas-pendentes-table :nth-child(6) b')
-                //                 .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                //             cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(3) span')
-                //                 .should('contain', 'Produto Nunca Entregue');
-                //         });
-                //     });
-                // }
             });
         }
 
