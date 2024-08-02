@@ -856,7 +856,7 @@ describe('Relatório - Entregas Pendente', () => {
                                             body: {
                                                 "codigo": i <= 3 ? "P AUTO " + i + j + " " + dataAtual : "P AUTO " + i + " " + dataAtual,
                                                 "descricao": i <= 3 ? "PRODUTO AUTOMATIZADO " + i + j + " " + dataAtual : "PRODUTO AUTOMATIZADO " + i + " " + dataAtual,
-                                                "periodo": 1,
+                                                "periodo": index,
                                                 "periodicidade": 1,
                                                 "vl_custo": inserirValorString(1, 9, 5),
                                                 "ativo": "S",
@@ -952,7 +952,7 @@ describe('Relatório - Entregas Pendente', () => {
                                                                             "tipo": "S",
                                                                             "empresa_id": 1,
                                                                             "qt_entregar": qtdeEntregar,
-                                                                            "dias": 1
+                                                                            "dias": index
                                                                         },
                                                                         failOnStatusCode: false
                                                                     }).then((response) => {
@@ -979,11 +979,11 @@ describe('Relatório - Entregas Pendente', () => {
             cy.visit('/entrega_manual');
             entregaManual('@descricaoProduto1', -10); // GRUPO 1
             entregaManual('@descricaoProduto2', -5); // GRUPO 1
-            entregaManual('@descricaoProduto3', -2); // GRUPO 2
+            entregaManual('@descricaoProduto3', -5); // GRUPO 2
             entregaManual('@descricaoProduto4', 0); // GRUPO 2
-            entregaManual('@descricaoProduto7', -2); // GRUPO 4
+            entregaManual('@descricaoProduto7', -9); // GRUPO 4
             entregaManual('@descricaoProduto7', 0); // GRUPO 4
-            entregaManual('@descricaoProduto8', -2); // GRUPO 5
+            entregaManual('@descricaoProduto8', -11); // GRUPO 5
             entregaManual('@descricaoProduto9', 0); // GRUPO 6
 
             function entregaManual(produtoIndex, dia) {
@@ -1062,7 +1062,7 @@ describe('Relatório - Entregas Pendente', () => {
                             cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega em atraso');
                             cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
-                                .should('contain', '4');
+                                .should('contain', '3');
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
@@ -1083,7 +1083,7 @@ describe('Relatório - Entregas Pendente', () => {
                             cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega Dentro do Prazo');
                             cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
-                                .should('contain', '1');
+                                .should('contain', '4');
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
@@ -1104,7 +1104,7 @@ describe('Relatório - Entregas Pendente', () => {
                             cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega Dentro do Prazo');
                             cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(6) div span')
-                                .should('contain', '1');
+                                .should('contain', '7');
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
@@ -1125,7 +1125,7 @@ describe('Relatório - Entregas Pendente', () => {
                             cy.get('#entregas-pendentes-table :nth-child(9) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega em atraso');
                             cy.get('#entregas-pendentes-table :nth-child(9) :nth-child(6) div span')
-                                .should('contain', '1');
+                                .should('contain', '3');
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
@@ -1146,7 +1146,7 @@ describe('Relatório - Entregas Pendente', () => {
                             cy.get('#entregas-pendentes-table :nth-child(11) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega Dentro do Prazo');
                             cy.get('#entregas-pendentes-table :nth-child(11) :nth-child(6) div span')
-                                .should('contain', '1');
+                                .should('contain', '9');
                         });
                     });
                     cy.get('#entregas-pendentes-table tr').should('have.length', 11);
