@@ -737,7 +737,7 @@ describe('Relatório - Entregas Pendente', () => {
             let promises = [];
             const maxI = 3;
             const maxProduto = 2;
-            const maxGrupo = 2; // 7
+            const maxGrupo = 7; // 7
             var contProduto = 0;
 
             // SETOR
@@ -981,10 +981,10 @@ describe('Relatório - Entregas Pendente', () => {
             entregaManual('@descricaoProduto2', -5); // GRUPO 1
             entregaManual('@descricaoProduto3', -5); // GRUPO 2
             entregaManual('@descricaoProduto4', 0); // GRUPO 2
-            // entregaManual('@descricaoProduto7', -9); // GRUPO 4
-            // entregaManual('@descricaoProduto7', 0); // GRUPO 4
-            // entregaManual('@descricaoProduto8', -10); // GRUPO 5
-            // entregaManual('@descricaoProduto9', 0); // GRUPO 6
+            entregaManual('@descricaoProduto7', -9); // GRUPO 4
+            entregaManual('@descricaoProduto7', 0); // GRUPO 4
+            entregaManual('@descricaoProduto8', -10); // GRUPO 5
+            entregaManual('@descricaoProduto9', 0); // GRUPO 6
 
             function entregaManual(produtoIndex, dia) {
                 cy.get('#funcionario button[data-target="#funcionario-modal"]').click().should('be.visible', { timeout: 1000 });
@@ -1205,6 +1205,7 @@ describe('Relatório - Entregas Pendente', () => {
             // CONSULTA PRODUTOS DA FICHA DE EPI
             cy.visit('/funcionario_produto');
 
+            // TESTE AUTOMATIZADO 06/08/2024 16:54:13
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
                 cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
             });
@@ -1213,55 +1214,61 @@ describe('Relatório - Entregas Pendente', () => {
             var contador2 = 0;
             var periodicidade = 1;
 
-            cy.wrap(Array.from({ length: 2 }, (_, z) => z + 1)).each((z) => {
+            cy.wrap(Array.from({ length: 7 }, (_, z) => z + 1)).each((z) => {
                 contador += 1;
 
                 ((index, periodicidade) => {
                     cy.get('@descricaoGrupoProduto' + z).then(descricaoGrupo => {
 
-                        var dataTroca = gerarDataTroca(periodicidade);
-                        
+                        if (index <= 4) {
+                            var dataTroca = gerarDataTroca(periodicidade);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade} Dia(s)`);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
 
-                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
-                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade} Dia(s)`);
-                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
-                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
+                        } else {
+                            var dataTroca = gerarDataTroca(periodicidade - 1);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade - 1} Dia(s)`);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
+                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
+                        }
 
-                        cy.wrap(Array.from({ length: 2 }, (_, t) => t + 1)).each((t) => {
-                            contador2 += 1;
-                            ((indexT) => {
-                                cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
-                                    cy.get(`#products-group-product-table tr:nth-child(${t}) :nth-child(4)`).should('contain', descricaoProduto);
-                                });
-                            })(contador2);
+                        if (index <= 3) {
+                            cy.wrap(Array.from({ length: 2 }, (_, t) => t + 1)).each((t) => {
+                                contador2 += 1;
+                                ((indexT) => {
+                                    cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
+                                        cy.get(`#products-group-product-table tr:nth-child(${t}) :nth-child(4)`).should('contain', descricaoProduto);
+                                    });
+                                })(contador2);
+                            });
+                        } else {
 
-                        });
+                            cy.wrap(Array.from({ length: 1 }, (_, t) => t + 1)).each((t) => {
+                                contador2 += 1;
+                                ((indexT) => {
+                                    cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
+                                        cy.get(`#products-group-product-table tr:nth-child(1) :nth-child(4)`).should('contain', descricaoProduto);
+                                    });
+                                })(contador2);
+                            });
+                        }
 
                         cy.get('#groupListProducts .btn').click();
                     });
 
                 })(contador, periodicidade);
 
-                periodicidade += 2;
+                if (contador <= 4) {
+                    periodicidade += 2;
+
+                } else {
+                    periodicidade += 1;
+                }
             });
 
-            // for(var i = 1; i <= 4; i++){
-
-            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) td:nth-child(4) a`).should('contain', 'GRUPO 1 02/08/2024 15:31:13');
-            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) td:nth-child(7)`).should('contain', '1 Dia(s)');
-            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) td:nth-child(8)`).should('contain', gerarOutraData(1));
-            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) a[title="Detalhes"]`).click();
-            //     if (i <= 3) {
-            //         for(var j = 1; j <= 2; j++){
-            //             cy.get(`#products-group-product-table tr:nth-child(1) :nth-child(4)`).should('contain', 'PRODUTO AUTOMATIZADO 11 02/08/2024 15:31:13')
-            //             cy.get(`#products-group-product-table tr:nth-child(2) :nth-child(4)`).should('contain', 'PRODUTO AUTOMATIZADO 12 02/08/2024 15:31:13')
-            //         }
-            //     }
-            // }
-
-            // cy.get('@descricaoProduto').then((descricaoProduto) => {
-            //     cy.get('#products-group-product-table tr :nth-child(4)').should('contain', descricaoProduto)
-            // });
 
         }
 
