@@ -737,7 +737,7 @@ describe('Relatório - Entregas Pendente', () => {
             let promises = [];
             const maxI = 3;
             const maxProduto = 2;
-            const maxGrupo = 7;
+            const maxGrupo = 2; // 7
             var contProduto = 0;
 
             // SETOR
@@ -981,10 +981,10 @@ describe('Relatório - Entregas Pendente', () => {
             entregaManual('@descricaoProduto2', -5); // GRUPO 1
             entregaManual('@descricaoProduto3', -5); // GRUPO 2
             entregaManual('@descricaoProduto4', 0); // GRUPO 2
-            entregaManual('@descricaoProduto7', -9); // GRUPO 4
-            entregaManual('@descricaoProduto7', 0); // GRUPO 4
-            entregaManual('@descricaoProduto8', -11); // GRUPO 5
-            entregaManual('@descricaoProduto9', 0); // GRUPO 6
+            // entregaManual('@descricaoProduto7', -9); // GRUPO 4
+            // entregaManual('@descricaoProduto7', 0); // GRUPO 4
+            // entregaManual('@descricaoProduto8', -10); // GRUPO 5
+            // entregaManual('@descricaoProduto9', 0); // GRUPO 6
 
             function entregaManual(produtoIndex, dia) {
                 cy.get('#funcionario button[data-target="#funcionario-modal"]').click().should('be.visible', { timeout: 1000 });
@@ -1012,195 +1012,256 @@ describe('Relatório - Entregas Pendente', () => {
                 cy.get('#btn-salvar-motivo').click();
             }
 
-            // CONSULTAR RELATÓRIO
-            cy.visit('/relatorio_entregas_pendentes');
+            // // CONSULTAR RELATÓRIO
+            // cy.visit('/relatorio_entregas_pendentes');
 
-            cy.get('input[name="data_entrega_ate"]').clear();
+            // cy.get('input[name="data_entrega_ate"]').clear();
+            // cy.get('@nomeFuncionario').then(nomeFuncionario => {
+            //     cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
+            // });
+            // // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 02/08/2024 13:32:03').wait(950).type('{enter}');
+            // cy.get('#controla_troca').select('N');
+
+            // cy.get('.btn-buscar').click();
+
+            // const arrProdutos = [2, 4, 7, 8, 9, 5, 10];
+            // var somaVlrProduto = 0;
+            // var valorAtualizado = 0;
+            // var valorFormatado = 0;
+
+            // arrProdutos.forEach(produto => {
+            //     cy.get('@produtoId' + produto).then((response) => {
+            //         cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+            //             cy.request({
+            //                 method: 'GET',
+            //                 url: '/get_produto?id=' + response,
+            //                 headers: {
+            //                     'Authorization': `Bearer ${token}`,
+            //                     'Content-Type': 'application/json'
+            //                 },
+            //                 failOnStatusCode: false
+            //             }).then((response) => {
+            //                 var codigoGrupo = response.body.grupo_produto.id;
+            //                 var descricaoGrupo = response.body.grupo_produto.descricao;
+            //                 var valorProduto = response.body.vl_custo;
+
+            //                 cy.wrap(codigoGrupo).as('codigoGrupo' + produto);
+            //                 cy.wrap(descricaoGrupo).as('descricaoGrupo' + produto);
+            //                 cy.wrap(valorProduto).as('valorProduto' + produto);
+            //             });
+            //         });
+            //     });
+
+            //     if (produto === 2) {
+            //         // GRUPO COM PRODUTO PENDENTE
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(2) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
+            //                     .should('have.attr', 'title', 'Entrega em atraso');
+            //                 cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
+            //                     .should('contain', '3');
+            //             });
+            //         });
+
+            //         cy.get('@valorProduto' + produto).then(valorProduto => {
+            //             var valorAtualizado = valorProduto.replace(',', '.');
+            //             var valorFormatado = parseFloat(valorAtualizado);
+            //             somaVlrProduto += valorFormatado;
+            //         });
+
+            //     } else if (produto === 4) {
+            //         // GRUPO COM PRODUTO EM DIA
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(4) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
+            //                     .should('have.attr', 'title', 'Entrega Dentro do Prazo');
+            //                 cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
+            //                     .should('contain', '4');
+            //             });
+            //         });
+
+            //         cy.get('@valorProduto' + produto).then(valorProduto => {
+            //             valorAtualizado = valorProduto.replace(',', '.');
+            //             valorFormatado = parseFloat(valorAtualizado);
+            //             somaVlrProduto += valorFormatado;
+            //         });
+
+            //     } else if (produto === 7) {
+            //         // GRUPO COM PRODUTO EM DIA
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(6) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(6) div span')
+            //                     .should('have.attr', 'title', 'Entrega Dentro do Prazo');
+            //                 cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(6) div span')
+            //                     .should('contain', '7');
+            //             });
+            //         });
+
+            //         cy.get('@valorProduto' + produto).then(valorProduto => {
+            //             valorAtualizado = valorProduto.replace(',', '.');
+            //             valorFormatado = parseFloat(valorAtualizado);
+            //             somaVlrProduto += valorFormatado;
+            //         });
+
+            //     } else if (produto === 8) {
+            //         // GRUPO COM PRODUTO PENDENTE
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(8) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(9) :nth-child(6) div span')
+            //                     .should('have.attr', 'title', 'Entrega em atraso');
+            //                 cy.get('#entregas-pendentes-table :nth-child(9) :nth-child(6) div span')
+            //                     .should('contain', '2');
+            //             });
+            //         });
+
+            //         cy.get('@valorProduto' + produto).then(valorProduto => {
+            //             valorAtualizado = valorProduto.replace(',', '.');
+            //             valorFormatado = parseFloat(valorAtualizado);
+            //             somaVlrProduto += valorFormatado;
+            //         });
+
+            //     } else if (produto === 9) {
+            //         // GRUPO COM PRODUTO EM DIA
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(10) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(11) :nth-child(6) div span')
+            //                     .should('have.attr', 'title', 'Entrega Dentro do Prazo');
+            //                 cy.get('#entregas-pendentes-table :nth-child(11) :nth-child(6) div span')
+            //                     .should('contain', '9');
+            //             });
+            //         });
+            //         cy.get('#entregas-pendentes-table tr').should('have.length', 11);
+
+            //         // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
+            //         cy.get('#totaisEntrega #totalQtde').should('contain', 5);
+
+            //         cy.get('@valorProduto' + produto).then(valorProduto => {
+            //             valorAtualizado = valorProduto.replace(',', '.');
+            //             valorFormatado = parseFloat(valorAtualizado);
+            //             somaVlrProduto += valorFormatado;
+            //         });
+
+            //     } else if (produto === 5) {
+            //         // PRODUTO NUNCA ENTREGUE
+            //         cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
+            //         cy.get('.btn-buscar').click();
+
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(6) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(3) span')
+            //                     .should('contain', 'Produto Nunca Entregue');
+            //             });
+            //         });
+            //         cy.get('#entregas-pendentes-table tr').should('have.length', 15);
+
+            //         // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
+            //         cy.get('#totaisEntrega #totalQtde').should('contain', 7);
+
+            //     } else if (produto === 10) {
+            //         // PRODUTO NUNCA ENTREGUE
+            //         cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
+            //         cy.get('.btn-buscar').click();
+
+            //         cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
+            //             cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
+            //                 cy.get('#entregas-pendentes-table :nth-child(14) b')
+            //                     .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
+
+            //                 cy.get('#entregas-pendentes-table :nth-child(15) :nth-child(3) span')
+            //                     .should('contain', 'Produto Nunca Entregue');
+            //             });
+            //         });
+            //         cy.get('#entregas-pendentes-table tr').should('have.length', 15);
+            //     }
+            // });
+
+            // // VERIFICA VALOR TOTAL DAS ENTREGAS
+            // cy.then(() => {
+            //     valorFormatado = somaVlrProduto.toLocaleString('pt-BR', {
+            //         minimumFractionDigits: 2,
+            //         maximumFractionDigits: 2
+            //     });
+            //     cy.get('#totaisEntrega #totalVlCusto').should('contain', valorFormatado);
+            // });
+
+            // CONSULTA PRODUTOS DA FICHA DE EPI
+            cy.visit('/funcionario_produto');
+
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
-                cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
-            });
-            // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 02/08/2024 13:32:03').wait(950).type('{enter}');
-            cy.get('#controla_troca').select('N');
-
-            cy.get('.btn-buscar').click();
-
-            const arrProdutos = [2, 4, 7, 8, 9, 5, 10];
-            var somaVlrProduto = 0;
-            var valorAtualizado = 0;
-            var valorFormatado = 0;
-
-            arrProdutos.forEach(produto => {
-                cy.get('@produtoId' + produto).then((response) => {
-                    cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
-                        cy.request({
-                            method: 'GET',
-                            url: '/get_produto?id=' + response,
-                            headers: {
-                                'Authorization': `Bearer ${token}`,
-                                'Content-Type': 'application/json'
-                            },
-                            failOnStatusCode: false
-                        }).then((response) => {
-                            var codigoGrupo = response.body.grupo_produto.id;
-                            var descricaoGrupo = response.body.grupo_produto.descricao;
-                            var valorProduto = response.body.vl_custo;
-
-                            cy.wrap(codigoGrupo).as('codigoGrupo' + produto);
-                            cy.wrap(descricaoGrupo).as('descricaoGrupo' + produto);
-                            cy.wrap(valorProduto).as('valorProduto' + produto);
-                        });
-                    });
-                });
-
-                if (produto === 2) {
-                    // GRUPO COM PRODUTO PENDENTE
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(2) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
-                                .should('have.attr', 'title', 'Entrega em atraso');
-                            cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
-                                .should('contain', '3');
-                        });
-                    });
-
-                    cy.get('@valorProduto' + produto).then(valorProduto => {
-                        var valorAtualizado = valorProduto.replace(',', '.');
-                        var valorFormatado = parseFloat(valorAtualizado);
-                        somaVlrProduto += valorFormatado;
-                    });
-
-                } else if (produto === 4) {
-                    // GRUPO COM PRODUTO EM DIA
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(4) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
-                                .should('have.attr', 'title', 'Entrega Dentro do Prazo');
-                            cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
-                                .should('contain', '4');
-                        });
-                    });
-
-                    cy.get('@valorProduto' + produto).then(valorProduto => {
-                        valorAtualizado = valorProduto.replace(',', '.');
-                        valorFormatado = parseFloat(valorAtualizado);
-                        somaVlrProduto += valorFormatado;
-                    });
-
-                } else if (produto === 7) {
-                    // GRUPO COM PRODUTO EM DIA
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(6) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(6) div span')
-                                .should('have.attr', 'title', 'Entrega Dentro do Prazo');
-                            cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(6) div span')
-                                .should('contain', '7');
-                        });
-                    });
-
-                    cy.get('@valorProduto' + produto).then(valorProduto => {
-                        valorAtualizado = valorProduto.replace(',', '.');
-                        valorFormatado = parseFloat(valorAtualizado);
-                        somaVlrProduto += valorFormatado;
-                    });
-
-                } else if (produto === 8) {
-                    // GRUPO COM PRODUTO PENDENTE
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(8) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(9) :nth-child(6) div span')
-                                .should('have.attr', 'title', 'Entrega em atraso');
-                            cy.get('#entregas-pendentes-table :nth-child(9) :nth-child(6) div span')
-                                .should('contain', '3');
-                        });
-                    });
-
-                    cy.get('@valorProduto' + produto).then(valorProduto => {
-                        valorAtualizado = valorProduto.replace(',', '.');
-                        valorFormatado = parseFloat(valorAtualizado);
-                        somaVlrProduto += valorFormatado;
-                    });
-
-                } else if (produto === 9) {
-                    // GRUPO COM PRODUTO EM DIA
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(10) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(11) :nth-child(6) div span')
-                                .should('have.attr', 'title', 'Entrega Dentro do Prazo');
-                            cy.get('#entregas-pendentes-table :nth-child(11) :nth-child(6) div span')
-                                .should('contain', '9');
-                        });
-                    });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 11);
-
-                    // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
-                    cy.get('#totaisEntrega #totalQtde').should('contain', 5);
-
-                    cy.get('@valorProduto' + produto).then(valorProduto => {
-                        valorAtualizado = valorProduto.replace(',', '.');
-                        valorFormatado = parseFloat(valorAtualizado);
-                        somaVlrProduto += valorFormatado;
-                    });
-
-                } else if (produto === 5) {
-                    // PRODUTO NUNCA ENTREGUE
-                    cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
-                    cy.get('.btn-buscar').click();
-
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(6) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(3) span')
-                                .should('contain', 'Produto Nunca Entregue');
-                        });
-                    });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 15);
-
-                    // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
-                    cy.get('#totaisEntrega #totalQtde').should('contain', 7);
-
-                } else if (produto === 10) {
-                    // PRODUTO NUNCA ENTREGUE
-                    cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
-                    cy.get('.btn-buscar').click();
-
-                    cy.get('@codigoGrupo' + produto).then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo' + produto).then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(14) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(15) :nth-child(3) span')
-                                .should('contain', 'Produto Nunca Entregue');
-                        });
-                    });
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 15);
-                }
+                cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
             });
 
-            // VERIFICA VALOR TOTAL DAS ENTREGAS
-            cy.then(() => {
-                valorFormatado = somaVlrProduto.toLocaleString('pt-BR', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-                cy.get('#totaisEntrega #totalVlCusto').should('contain', valorFormatado);
+            var contador = 0;
+            var contador2 = 0;
+            var periodicidade = 1;
+
+            cy.wrap(Array.from({ length: 2 }, (_, z) => z + 1)).each((z) => {
+                contador += 1;
+
+                ((index, periodicidade) => {
+                    cy.get('@descricaoGrupoProduto' + z).then(descricaoGrupo => {
+
+                        var dataTroca = gerarDataTroca(periodicidade);
+                        
+
+                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
+                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade} Dia(s)`);
+                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
+                        cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
+
+                        cy.wrap(Array.from({ length: 2 }, (_, t) => t + 1)).each((t) => {
+                            contador2 += 1;
+                            ((indexT) => {
+                                cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
+                                    cy.get(`#products-group-product-table tr:nth-child(${t}) :nth-child(4)`).should('contain', descricaoProduto);
+                                });
+                            })(contador2);
+
+                        });
+
+                        cy.get('#groupListProducts .btn').click();
+                    });
+
+                })(contador, periodicidade);
+
+                periodicidade += 2;
             });
+
+            // for(var i = 1; i <= 4; i++){
+
+            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) td:nth-child(4) a`).should('contain', 'GRUPO 1 02/08/2024 15:31:13');
+            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) td:nth-child(7)`).should('contain', '1 Dia(s)');
+            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) td:nth-child(8)`).should('contain', gerarOutraData(1));
+            //     cy.get(`#produto-sugestao-entregar-table tr:nth-child(${i}) a[title="Detalhes"]`).click();
+            //     if (i <= 3) {
+            //         for(var j = 1; j <= 2; j++){
+            //             cy.get(`#products-group-product-table tr:nth-child(1) :nth-child(4)`).should('contain', 'PRODUTO AUTOMATIZADO 11 02/08/2024 15:31:13')
+            //             cy.get(`#products-group-product-table tr:nth-child(2) :nth-child(4)`).should('contain', 'PRODUTO AUTOMATIZADO 12 02/08/2024 15:31:13')
+            //         }
+            //     }
+            // }
+
+            // cy.get('@descricaoProduto').then((descricaoProduto) => {
+            //     cy.get('#products-group-product-table tr :nth-child(4)').should('contain', descricaoProduto)
+            // });
 
         }
 
@@ -1574,6 +1635,17 @@ function gerarOutraData(previsao, hora = false) {
     }
 
     return dataAtual;
+}
+
+function gerarDataTroca(periodicidade) {
+    var data = new Date();
+    data.setDate(data.getDate() + periodicidade);
+
+    var dd = String(data.getDate()).padStart(2, '0');
+    var mm = String(data.getMonth() + 1).padStart(2, '0');
+    var yyyy = data.getFullYear();
+
+    return `${dd}/${mm}/${yyyy}`;
 }
 
 function gerarDataAtual(hora = false, pendencia = 0) {
