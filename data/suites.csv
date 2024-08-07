@@ -1,24 +1,6 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Jul 31 17:27:23 UTC 2024","Wed Jul 31 17:29:47 UTC 2024","143963","","End 2 End - Funcionário / Produto / Liberação / Entrega","","","","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","
-            Teste Automático para o fluxo e2e principal de entrega de produto.
-            
-            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
-            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
-            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
-            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
-            >> Entregar o produto criado e libarado para o funcionário criado.
-
-            Resultado esperado:
-            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
-            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
-            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
-            4) Validar se o cálculo da previsão da próxima entrega está correto.
-        "
-"passed","Wed Jul 31 17:31:50 UTC 2024","Wed Jul 31 17:32:15 UTC 2024","24827","","Funcionário","","","","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE",""
-"passed","Wed Jul 31 17:32:56 UTC 2024","Wed Jul 31 17:33:03 UTC 2024","7138","","Login","","","","Login - FAZER LOGIN COM SUCESSO NO SISTEMA",""
-"passed","Wed Jul 31 17:32:23 UTC 2024","Wed Jul 31 17:32:32 UTC 2024","8452","","Funcionário","","","","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE",""
-"passed","Wed Jul 31 17:32:15 UTC 2024","Wed Jul 31 17:32:23 UTC 2024","8652","","Funcionário","","","","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO",""
-"passed","Wed Jul 31 17:30:11 UTC 2024","Wed Jul 31 17:31:35 UTC 2024","84029","","Produto","","","","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","6823","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Wed Aug 07 20:54:32 UTC 2024","passed","Wed Aug 07 20:54:39 UTC 2024","","Login","",""
+"
             Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
 
             >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
@@ -37,5 +19,23 @@
             1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
             2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
             3) Validar se o cálculo da previsão da próxima entrega está correto.
-        "
-"passed","Wed Jul 31 17:32:32 UTC 2024","Wed Jul 31 17:32:45 UTC 2024","12661","","Funcionário","","","","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO",""
+        ","17207","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Wed Aug 07 20:54:26 UTC 2024","failed","Wed Aug 07 20:54:44 UTC 2024","","Produto","",""
+"
+            Teste Automático para o fluxo e2e principal de entrega de produto.
+            
+            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
+            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
+            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
+            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
+            >> Entregar o produto criado e libarado para o funcionário criado.
+
+            Resultado esperado:
+            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
+            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            4) Validar se o cálculo da previsão da próxima entrega está correto.
+        ","8823","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Wed Aug 07 20:54:22 UTC 2024","failed","Wed Aug 07 20:54:31 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
+"","8378","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Wed Aug 07 20:54:56 UTC 2024","failed","Wed Aug 07 20:55:05 UTC 2024","","Funcionário","",""
+"","10192","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Wed Aug 07 20:54:27 UTC 2024","failed","Wed Aug 07 20:54:37 UTC 2024","","Funcionário","",""
+"","9746","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Wed Aug 07 20:54:37 UTC 2024","passed","Wed Aug 07 20:54:47 UTC 2024","","Funcionário","",""
+"","9291","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Wed Aug 07 20:54:47 UTC 2024","passed","Wed Aug 07 20:54:56 UTC 2024","","Funcionário","",""
