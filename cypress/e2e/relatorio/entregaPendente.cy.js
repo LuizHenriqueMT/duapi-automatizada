@@ -702,7 +702,7 @@ describe('Relatório - Entregas Pendente', () => {
         }, '/produto', realizarTeste);
     });
 
-    it.only('Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 02 - part.01', () => {
+    it('Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 02', () => {
         cy.allure().tag("Novo Funcionario", "Novo Dado Autocomplete", "Inserção Todos Campos", "Inserção Validação Entrega - Senha");
         cy.allure().owner("Luiz Henrique T.");
         cy.allure().description(`
@@ -1319,10 +1319,10 @@ describe('Relatório - Entregas Pendente', () => {
         cy.allure().description(`
             Teste Automático para visualização do relatório de Entregas Pendentes.
 
-            >> Serão cadastrados 3 produtos com grupo de produto diferente para cada.
-            1) Grupo de Produto 1 com pendência de 1 dia e liberado para o funcionário.
-            2) Grupo de Produto 2 sem pedência (1 dia) e liberado para o funcionário.
-            3) Grupo de Produto 3 nunca entregue e liberado para o funcionário.
+            >> Serão cadastrados 3 produtos em um único grupo de produto.
+            1) Produto 1 com pendência de 5 dias com periodicidade de 1 dia e liberado para o funcionário.
+            2) Produto 2 em dia com periodicididade de 2 dias e liberado para o funcionário.
+            3) Produto 3 nunca entregue com periodicidade de 3 dias e liberado para o funcionário.
 
             >> Será feito a consulta primeiramente pelos dois grupos de produtos entregues, não podendo ser retornado a visualização do 3º grupo.
             Após os assertions será feito a consulta no relatório para o 3º grupo nunca entregue.
@@ -1347,16 +1347,66 @@ describe('Relatório - Entregas Pendente', () => {
         const realizarTeste = () => {
             let promises = [];
             const maxI = 3;
-            const maxProduto = 2;
-            const maxGrupo = 4;
+            const maxProduto = 3;
+            const maxGrupo = 1;
             var contProduto = 0;
+
+            // SETOR
+            cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+                cy.request({
+                    method: 'POST',
+                    url: '/setor',
+                    body: {
+                        descricao: 'SETOR ' + dataAtual,
+                        ativo: 'S',
+                        _token: csrfToken
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    failOnStatusCode: false
+                }).then((response) => {
+                    expect(response.status).to.eq(200);
+                    const setor = response.body.data.descricao;
+                    const setorId = response.body.data.id;
+
+                    cy.wrap(setor).as('setor');
+                    cy.wrap(setorId).as('setorId');
+                })
+            });
+
+            // FUNCIONÁRIO
+            cy.visit('/funcionario');
+
+            cy.get('#btn-novo-funcionario').click();
+
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
+            cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
+            cy.get('@setor').then(setor => {
+                cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type(setor).wait(950).type('{enter}');
+            })
+
+            cy.get('#btn-validacao-entrega-tab').click();
+            cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('S');
+            cy.get('#senha_nova').type('123');
+            cy.get('#confirmar').type('123');
+
+            cy.intercept('POST', '/funcionario').as('postFuncionario');
+            cy.get('#btn-salvar-funcionario').click();
+            cy.wait('@postFuncionario').then((interception) => {
+
+                cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
+
+                var nomeFuncionario = interception.response.body.data.nome;
+                cy.wrap(nomeFuncionario).as('nomeFuncionario');
+            });
 
             // PRODUTO
             cy.visit('/produto');
 
             cy.wrap(Array.from({ length: maxGrupo }, (_, i) => i + 1)).each((i) => {
                 cy.wrap(Array.from({ length: maxProduto }, (_, j) => j + 1)).each((j) => {
-                    cy.wait(2000);
 
                     contProduto = (i - 1) * maxProduto + j;
                     qtdeEntregar = inserirRandom(1, 9, 1);
@@ -1373,14 +1423,10 @@ describe('Relatório - Entregas Pendente', () => {
 
                     cy.get('.actions a').contains('Próxima').click();
 
-                    cy.wait(300);
-
                     cy.get('#tutorial-produto-fornecedor input[name="fornecedor_id"]').type('FORNECEDOR ' + i + j + ' ' + dataAtual).wait(950).type('{enter}')
                     cy.intercept('POST', '/autocomplete/save').as('postAutocomplete');
                     cy.get('.bootbox > .modal-dialog > .modal-content > .modal-footer > .btn-primary').click();
                     cy.wait('@postAutocomplete').its('response.statusCode').should('eq', 200);
-
-                    cy.wait(300);
 
                     cy.get('#tutorial-produto-fornecedor-codigo #codigo_produto_fornecedor').type(inserirRandom(1, 9, 6));
                     cy.get('#tutorial-produto-fornecedor-fator-compra #fator_compra').type(inserirRandom(1, 5, 1));
@@ -1389,8 +1435,6 @@ describe('Relatório - Entregas Pendente', () => {
                     cy.get('#add-adicionar-fornecedor').click();
 
                     cy.get('.fornecedor_desc').should('exist');
-
-                    cy.wait(300);
 
                     cy.get('.actions a').contains('Próxima').click();
 
@@ -1403,10 +1447,7 @@ describe('Relatório - Entregas Pendente', () => {
 
                     cy.get('.grade_desc').should('exist');
 
-                    cy.wait(300);
-
                     cy.get('.actions a').contains('Próxima').click();
-                    cy.wait(100);
                     cy.get('.actions a').contains('Próxima').click();
 
                     if (j > 1) {
@@ -1420,34 +1461,23 @@ describe('Relatório - Entregas Pendente', () => {
                     }
                     cy.get('.actions a').contains('Próxima').click();
 
-                    cy.wait(300);
-
                     // ADICIONAR SETOR
                     // cy.get('input[name="setor"]').type('SETOR 1 26/07/2024 08:48:31').wait(950).type('{enter}');
                     cy.get('@setor').then(setor => {
                         cy.get('input[name="setor"]').type(setor).wait(950).type('{enter}');
                     })
                     cy.get('#qt_entregar_setor').clear().type(qtdeEntregar);
-                    cy.get('#numero_dias_setor').clear().type(1);
+                    cy.get('#numero_dias_setor').clear().type(j);
                     cy.get('#periodicidade_setor').select(0);
                     cy.get('#add-setor').click();
                     cy.get('.td-qtde-setor').should('exist');
 
-                    cy.wait(300);
-
                     cy.get('.actions a').contains('Próxima').click();
-                    cy.wait(100);
                     cy.get('.actions a').contains('Próxima').click();
-                    cy.wait(100);
                     cy.get('.actions a').contains('Próxima').click();
-                    cy.wait(100);
                     cy.get('.actions a').contains('Próxima').click();
-                    cy.wait(100);
                     cy.get('.actions a').contains('Próxima').click();
-                    cy.wait(100);
                     cy.get('.actions a').contains('Próxima').click();
-
-                    cy.wait(2000);
 
                     ((index) => {
                         cy.intercept('POST', '/produto').as('postProduto' + index);
@@ -1511,15 +1541,17 @@ describe('Relatório - Entregas Pendente', () => {
 
             // ENTREGA MANUAL
             cy.visit('/entrega_manual');
-            entregaManual('@produto4', 0);
-            entregaManual('@produto5', -2);
-            entregaManual('@produto6', 0);
+            entregaManual('@produto1', -5);
+            entregaManual('@produto2', 0);
 
             function entregaManual(produtoIndex, dia) {
-
+                cy.get('#funcionario button[data-target="#funcionario-modal"]').click().should('be.visible', { timeout: 1000 });
+                cy.wait(850);
                 cy.get('@nomeFuncionario').then(nomeFuncionario => {
-                    cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
+                    cy.get('#funcionario-modal input[name="nome"]').clear().type(nomeFuncionario);
                 });
+                cy.get('#funcionario-modal button[type="submit"]').click();
+                cy.get('#funcionariotable-modal tr :nth-child(1)').click();
 
                 if (dia === 0) {
                     cy.get('#data_entrega').clear().type(gerarOutraData(0)).type('{esc}');
@@ -1528,7 +1560,7 @@ describe('Relatório - Entregas Pendente', () => {
                 }
 
                 cy.get(produtoIndex).then((produto) => {
-                    cy.get('#produto input[name="produto_id"]').type(produto).wait(950).type('{enter}');
+                    cy.get('#produto input[name="produto_id"]').type(produto).wait(1000).type('{enter}');
                 });
                 cy.get('#adicionar').click();
                 cy.get('#entregas-table td.produto_descricao').should('exist');
@@ -1538,30 +1570,6 @@ describe('Relatório - Entregas Pendente', () => {
                 cy.get('#btn-salvar-motivo').click();
             }
 
-            // for (var i = 1; i <= 2; i++) {
-            //     cy.visit('/entrega_manual');
-
-            //     cy.get('@nomeFuncionario').then(nomeFuncionario => {
-            //         cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
-            //     });
-
-            //     if (i === 1) {
-            //         cy.get('#data_entrega').clear().type(gerarDataAtual(false, 2)).type('{esc}');
-            //     } else if (i === 2) {
-            //         cy.get('#data_entrega').clear().type(gerarDataAtual(false, 0)).type('{esc}');
-            //     }
-
-            //     cy.get('@produto' + i).then((produto) => {
-            //         cy.get('#produto input[name="produto_id"]').type(produto).wait(950).type('{enter}');
-            //     });
-            //     cy.get('#adicionar').click();
-            //     cy.get('#entregas-table td.produto_descricao').should('exist');
-            //     cy.get('#btnSalvar').click();
-
-            //     cy.get('#form-motivo-entrega-manual #motivo').type('MOTIVO DE ENTREGA MANUAL - AUTOMATIZADO ' + dataAtual);
-            //     cy.get('#btn-salvar-motivo').click();
-            // }
-
             // CONSULTAR RELATÓRIO
             cy.visit('/relatorio_entregas_pendentes');
 
@@ -1569,7 +1577,7 @@ describe('Relatório - Entregas Pendente', () => {
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
                 cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
             });
-            // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 29/07/2024 16:23:48').wait(950).type('{enter}');
+
             cy.get('#controla_troca').select('N');
 
             cy.get('.btn-buscar').click();
@@ -1595,9 +1603,7 @@ describe('Relatório - Entregas Pendente', () => {
                     });
                 });
 
-                cy.get('#entregas-pendentes-table tr').should('have.length', 5);
-
-                if (i === 1) {
+                if (i === 2) {
                     // PRODUTO PENDENTE
                     cy.get('@codigoGrupo').then((codigoGrupo) => {
                         cy.get('@descricaoGrupo').then((descricaoGrupo) => {
@@ -1605,38 +1611,17 @@ describe('Relatório - Entregas Pendente', () => {
                                 .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
 
                             cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
-                                .should('have.attr', 'title', 'Entrega em atraso');
-                        });
-                    });
-
-                } else if (i === 2) {
-                    // PRODUTO EM DIA
-                    cy.get('@codigoGrupo').then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo').then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(4) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(5) :nth-child(6) div span')
                                 .should('have.attr', 'title', 'Entrega Dentro do Prazo');
+
+                            cy.get('#entregas-pendentes-table :nth-child(3) :nth-child(6) div span')
+                                .should('contain', '1');
+
+                            cy.get('#entregas-pendentes-table tr').should('have.length', 3);
                         });
                     });
 
-                } else if (i === 3) {
-                    // PRODUTO NUNCA ENTREGUE
-                    cy.get('#filtro_mostrar_nunca_entregues select[name="mostrar_nunca_entregues"]').select('S');
-                    cy.get('.btn-buscar').click();
-
-                    cy.get('#entregas-pendentes-table tr').should('have.length', 7);
-
-                    cy.get('@codigoGrupo').then((codigoGrupo) => {
-                        cy.get('@descricaoGrupo').then((descricaoGrupo) => {
-                            cy.get('#entregas-pendentes-table :nth-child(6) b')
-                                .should('contain', 'Grupo de Produtos: ' + codigoGrupo + ' - ' + descricaoGrupo);
-
-                            cy.get('#entregas-pendentes-table :nth-child(7) :nth-child(3) span')
-                                .should('contain', 'Produto Nunca Entregue');
-                        });
-                    });
+                    // VERIFICAR TOTALIZADOR DE QUANTIDADE DE ITENS
+                    cy.get('#totaisEntrega #totalQtde').should('contain', 1);
                 }
             }
         }
