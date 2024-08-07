@@ -1202,74 +1202,91 @@ describe('Relatório - Entregas Pendente', () => {
             //     cy.get('#totaisEntrega #totalVlCusto').should('contain', valorFormatado);
             // });
 
-            // CONSULTA PRODUTOS DA FICHA DE EPI
+            // CONSULTA PRODUTOS LIBERADOS
             cy.visit('/funcionario_produto');
 
-            // TESTE AUTOMATIZADO 06/08/2024 16:54:13
+            // // TESTE AUTOMATIZADO 06/08/2024 17:55:52
+            // cy.get('#funcionario input[name="funcionario_id"]').type('TESTE AUTOMATIZADO 06/08/2024 17:55:52').wait(850).type('{enter}');
+
             cy.get('@nomeFuncionario').then(nomeFuncionario => {
                 cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(850).type('{enter}');
             });
 
-            var contador = 0;
-            var contador2 = 0;
-            var periodicidade = 1;
+            // var contador = 0;
+            // var contador2 = 0;
+            // var periodicidade = 1;
 
-            cy.wrap(Array.from({ length: 7 }, (_, z) => z + 1)).each((z) => {
-                contador += 1;
+            // cy.wrap(Array.from({ length: 7 }, (_, z) => z + 1)).each((z) => {
+            //     contador += 1;
 
-                ((index, periodicidade) => {
-                    cy.get('@descricaoGrupoProduto' + z).then(descricaoGrupo => {
+            //     ((index, periodicidade) => {
+            //         cy.get('@descricaoGrupoProduto' + z).then(descricaoGrupo => {
 
-                        if (index <= 4) {
-                            var dataTroca = gerarDataTroca(periodicidade);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade} Dia(s)`);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
+            //             if (index <= 4) {
+            //                 var dataTroca = gerarDataTroca(periodicidade);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade} Dia(s)`);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
 
-                        } else {
-                            var dataTroca = gerarDataTroca(periodicidade - 1);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade - 1} Dia(s)`);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
-                            cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
-                        }
+            //             } else {
+            //                 var dataTroca = gerarDataTroca(periodicidade - 1);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(4) a`).should('contain', descricaoGrupo);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(7)`).should('contain', `${periodicidade - 1} Dia(s)`);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) td:nth-child(8)`).should('contain', dataTroca);
+            //                 cy.get(`#produto-sugestao-entregar-table tr:nth-child(${index}) a[title="Detalhes"]`).click();
+            //             }
 
-                        if (index <= 3) {
-                            cy.wrap(Array.from({ length: 2 }, (_, t) => t + 1)).each((t) => {
-                                contador2 += 1;
-                                ((indexT) => {
-                                    cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
-                                        cy.get(`#products-group-product-table tr:nth-child(${t}) :nth-child(4)`).should('contain', descricaoProduto);
-                                    });
-                                })(contador2);
-                            });
-                        } else {
+            //             if (index <= 3) {
+            //                 cy.wrap(Array.from({ length: 2 }, (_, t) => t + 1)).each((t) => {
+            //                     contador2 += 1;
+            //                     ((indexT) => {
+            //                         cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
+            //                             cy.get(`#products-group-product-table tr:nth-child(${t}) :nth-child(4)`).should('contain', descricaoProduto);
+            //                         });
+            //                     })(contador2);
+            //                 });
+            //             } else {
 
-                            cy.wrap(Array.from({ length: 1 }, (_, t) => t + 1)).each((t) => {
-                                contador2 += 1;
-                                ((indexT) => {
-                                    cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
-                                        cy.get(`#products-group-product-table tr:nth-child(1) :nth-child(4)`).should('contain', descricaoProduto);
-                                    });
-                                })(contador2);
-                            });
-                        }
+            //                 cy.wrap(Array.from({ length: 1 }, (_, t) => t + 1)).each((t) => {
+            //                     contador2 += 1;
+            //                     ((indexT) => {
+            //                         cy.get('@descricaoProduto' + indexT).then(descricaoProduto => {
+            //                             cy.get(`#products-group-product-table tr:nth-child(1) :nth-child(4)`).should('contain', descricaoProduto);
+            //                         });
+            //                     })(contador2);
+            //                 });
+            //             }
 
-                        cy.get('#groupListProducts .btn').click();
-                    });
+            //             cy.get('#groupListProducts .btn').click();
+            //         });
 
-                })(contador, periodicidade);
+            //     })(contador, periodicidade);
 
-                if (contador <= 4) {
-                    periodicidade += 2;
+            //     if (contador <= 4) {
+            //         periodicidade += 2;
 
-                } else {
-                    periodicidade += 1;
-                }
-            });
+            //     } else {
+            //         periodicidade += 1;
+            //     }
+            // });
 
-
+            // PRODUTOS EM POSSE DO FUNCIONÁRIO
+            cy.get(`#produto-devolvidos-table tr:nth-child(1) td:nth-child(4) a`).should('contain', 'PRODUTO AUTOMATIZADO 12 ' + dataAtual);
+            cy.get(`#produto-devolvidos-table tr:nth-child(1) td:nth-child(9)`).should('contain', '2 Dia(s)');
+            cy.get(`#produto-devolvidos-table tr:nth-child(1) td:nth-child(11)`).should('contain', gerarDataTroca(-5, 2));
+            cy.get(`#produto-devolvidos-table tr:nth-child(2) td:nth-child(4) a`).should('contain', 'PRODUTO AUTOMATIZADO 5 ' + dataAtual);
+            cy.get(`#produto-devolvidos-table tr:nth-child(2) td:nth-child(9)`).should('contain', '8 Dia(s)');
+            cy.get(`#produto-devolvidos-table tr:nth-child(2) td:nth-child(11)`).should('contain', gerarDataTroca(-10, 8));
+            cy.get(`#produto-devolvidos-table tr:nth-child(3) td:nth-child(4) a`).should('contain', 'PRODUTO AUTOMATIZADO 22 ' + dataAtual);
+            cy.get(`#produto-devolvidos-table tr:nth-child(3) td:nth-child(9)`).should('contain', '4 Dia(s)');
+            cy.get(`#produto-devolvidos-table tr:nth-child(3) td:nth-child(11)`).should('contain', gerarDataTroca(0, 4));
+            cy.get(`#produto-devolvidos-table tr:nth-child(4) td:nth-child(4) a`).should('contain', 'PRODUTO AUTOMATIZADO 4 ' + dataAtual);
+            cy.get(`#produto-devolvidos-table tr:nth-child(4) td:nth-child(9)`).should('contain', '7 Dia(s)');
+            cy.get(`#produto-devolvidos-table tr:nth-child(4) td:nth-child(11)`).should('contain', gerarDataTroca(0, 7));
+            cy.get(`#produto-devolvidos-table tr:nth-child(5) td:nth-child(4) a`).should('contain', 'PRODUTO AUTOMATIZADO 6 ' + dataAtual);
+            cy.get(`#produto-devolvidos-table tr:nth-child(5) td:nth-child(9)`).should('contain', '9 Dia(s)');
+            cy.get(`#produto-devolvidos-table tr:nth-child(5) td:nth-child(11)`).should('contain', gerarDataTroca(0, 9));
         }
 
         configurarParametros('config.json', {
@@ -1644,13 +1661,23 @@ function gerarOutraData(previsao, hora = false) {
     return dataAtual;
 }
 
-function gerarDataTroca(periodicidade) {
-    var data = new Date();
-    data.setDate(data.getDate() + periodicidade);
+function gerarDataTroca(periodicidade, dataInicial = false) {
 
-    var dd = String(data.getDate()).padStart(2, '0');
-    var mm = String(data.getMonth() + 1).padStart(2, '0');
-    var yyyy = data.getFullYear();
+    if (dataInicial === false) {
+        var data = new Date();
+        data.setDate(data.getDate() + periodicidade);
+
+        var dd = String(data.getDate()).padStart(2, '0');
+        var mm = String(data.getMonth() + 1).padStart(2, '0');
+        var yyyy = data.getFullYear();
+
+    } else {
+        var data = new Date();
+        data.setDate(data.getDate() + (dataInicial) + (periodicidade));
+        dd = String(data.getDate()).padStart(2, '0');
+        mm = String(data.getMonth() + 1).padStart(2, '0');
+        yyyy = data.getFullYear();
+    }
 
     return `${dd}/${mm}/${yyyy}`;
 }
