@@ -1,0 +1,41 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","10009","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Thu Aug 08 18:18:51 UTC 2024","passed","Thu Aug 08 18:19:01 UTC 2024","","Funcionário","",""
+"","7577","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Thu Aug 08 18:18:34 UTC 2024","passed","Thu Aug 08 18:18:41 UTC 2024","","Login","",""
+"","10156","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Thu Aug 08 18:18:41 UTC 2024","passed","Thu Aug 08 18:18:51 UTC 2024","","Funcionário","",""
+"
+            Teste Automático para o fluxo e2e principal de entrega de produto.
+            
+            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
+            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
+            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
+            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
+            >> Entregar o produto criado e libarado para o funcionário criado.
+
+            Resultado esperado:
+            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
+            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            4) Validar se o cálculo da previsão da próxima entrega está correto.
+        ","33235","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Thu Aug 08 18:17:53 UTC 2024","failed","Thu Aug 08 18:18:26 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
+"
+            Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
+
+            >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
+            >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
+            >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
+            >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionário.
+
+            Regras:
+            1) Quando realizado mais de uma liberação do mesmo produto para o mesmo funcionário, irá permanecer aquela com menor periodidicidade.
+            2) Na Entrega de Produtos será exibido o produto com menor periodicidade.
+            3) Na Entrega de Produtos aparece o grupo de produto caso o produto esteja vinculado à um grupo.
+            4) Na Ficha Técnica aparece o grupo de produto caso o produto esteja vinculado à um grupo, exceto na seção 
+            ""Produtos em Posse do Funcionário"".
+            
+            Resultado esperado:
+            1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            3) Validar se o cálculo da previsão da próxima entrega está correto.
+        ","26457","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Thu Aug 08 18:18:12 UTC 2024","failed","Thu Aug 08 18:18:38 UTC 2024","","Produto","",""
+"","9674","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Thu Aug 08 18:19:01 UTC 2024","failed","Thu Aug 08 18:19:11 UTC 2024","","Funcionário","",""
+"","8657","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Thu Aug 08 18:18:32 UTC 2024","failed","Thu Aug 08 18:18:41 UTC 2024","","Funcionário","",""
