@@ -15,6 +15,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Write the cypress.env.json file
+        run: |
+          echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+
       - name: Install Microsoft Edge
         run: |
           sudo apt update
@@ -27,7 +31,7 @@ jobs:
       - name: Run Cypress tests on Edge
         run: npx cypress run --browser edge
         env:
-          URL_TESTE: 'http://localhost:3000'
+          URL_TESTE_LOCALHOST: 'http://localhost:3000'
           CYPRESS_MEMORY_LIMIT: '4096'
 
       - name: Configure Allure
@@ -35,10 +39,6 @@ jobs:
 
       - name: Download plugin Allure
         run: npm install --save-dev @shelex/cypress-allure-plugin
-
-      - name: Write the cypress.env.json file
-        run: |
-          echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
 
       - name: Run initial Cypress tests        
         uses: cypress-io/github-action@v6

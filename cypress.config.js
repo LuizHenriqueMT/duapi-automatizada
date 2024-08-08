@@ -226,7 +226,7 @@ module.exports = defineConfig({
       return config;
     },
 
-    baseUrl: process.env.URL_TESTE || 'http://localhost:3000',
+    baseUrl: process.env.URL_TESTE_LOCALHOST || 'http://localhost:3000',
     env: {
       allure: true,
       CYPRESS_MEMORY_LIMIT: process.env.CYPRESS_MEMORY_LIMIT || 4096
