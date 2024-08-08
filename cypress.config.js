@@ -227,6 +227,7 @@ module.exports = defineConfig({
     },
 
     baseUrl: env.URL_TESTE,
+    envFile: 'cypress.env.json',
     env: {
       allure: true,
       CYPRESS_MEMORY_LIMIT: 4096
