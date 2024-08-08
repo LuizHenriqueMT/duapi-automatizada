@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: [1, 2, 3, 4]
+        container: [1]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -97,31 +97,29 @@ jobs:
           name: allure-results-1
           path: allure-reports/allure-results-1
 
-      - name: Download Allure Results Artifact 2
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results-2
-          path: allure-reports/allure-results-2
+      # - name: Download Allure Results Artifact 2
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-results-2
+      #     path: allure-reports/allure-results-2
 
-      - name: Download Allure Results Artifact 3
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results-3
-          path: allure-reports/allure-results-3
+      # - name: Download Allure Results Artifact 3
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-results-3
+      #     path: allure-reports/allure-results-3
 
-      - name: Download Allure Results Artifact 4
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-results-4
-          path: allure-reports/allure-results-4
+      # - name: Download Allure Results Artifact 4
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: allure-results-4
+      #     path: allure-reports/allure-results-4
 
       - name: Merge Allure Results
         run: |
           mkdir -p merged-allure-results
           cp -r allure-reports/allure-results-1/* merged-allure-results/
-          cp -r allure-reports/allure-results-2/* merged-allure-results/
-          cp -r allure-reports/allure-results-3/* merged-allure-results/
-          cp -r allure-reports/allure-results-4/* merged-allure-results/
+      
   
       - name: Preserve Allure History
         run: |
