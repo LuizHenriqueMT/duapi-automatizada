@@ -5,6 +5,7 @@
   "scripts": {
     "cy:open": "cypress open",
     "cy:mobile": "cypress run --config viewportHeight=1000,viewportWidth=600",
+    "cy:run:edge": "cypress run --browser edge",
     "cy:reportHomologacao": "cypress run --env allure=true --spec \"cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)\"",
     "cy:reportSpec": "cypress run --env allure=true --spec cypress/e2e/login.cy.js",
     "allure:open": "allure open allure-report",
