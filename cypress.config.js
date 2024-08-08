@@ -226,11 +226,10 @@ module.exports = defineConfig({
       return config;
     },
 
-    baseUrl: env.URL_TESTE,
-    envFile: 'cypress.env.json',
+    baseUrl: process.env.URL_TESTE || 'http://localhost:3000',
     env: {
       allure: true,
-      CYPRESS_MEMORY_LIMIT: 4096
+      CYPRESS_MEMORY_LIMIT: process.env.CYPRESS_MEMORY_LIMIT || 4096
     },
     chromeWebSecurity: false,
     viewportWidth: 1280,
