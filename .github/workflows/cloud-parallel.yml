@@ -30,9 +30,6 @@ jobs:
 
       - name: Run Cypress tests on Edge
         run: npx cypress run --browser edge
-        env:
-          URL_TESTE_LOCALHOST: 'http://localhost:3000'
-          CYPRESS_MEMORY_LIMIT: '4096'
 
       - name: Configure Allure
         run: npm install -g allure-commandline --save-dev
