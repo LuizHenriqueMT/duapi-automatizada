@@ -69,7 +69,7 @@ describe('Login 5 Tentativas', () => {
         cy.get('#mensagem-retorno .alert').should('contain.text', 'Muitas tentativas de login. Tente novamente em 10 minutos.');
     });
 
-    it('Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS', () => {
+    it.only('Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS', () => {
         cy.allure().tag("Login", "Autenticação", "5 Tentativas senha incorreta", "Depois de 10 minutos conecta senha correta");
         cy.allure().owner("Luiz Henrique T.");
         cy.allure().description(`
