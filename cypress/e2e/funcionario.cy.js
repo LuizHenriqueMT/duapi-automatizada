@@ -193,7 +193,7 @@ describe('Funcionário', () => {
                 cy.get('#btn-salvar-funcionario').click();
                 cy.wait('@postFuncionario').its('response.statusCode').should('eq', 200);
 
-                cy.get('.modal-footer > .btn-danger').click();
+                cy.get('.bootbox.modal .modal-footer > .btn-danger').click();
             }
         }
 

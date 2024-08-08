@@ -271,14 +271,18 @@ describe('Relatório - Entregas Pendente', () => {
             for (var i = 1; i <= 2; i++) {
                 cy.visit('/entrega_manual');
 
+                cy.get('#funcionario button[data-target="#funcionario-modal"]').click().should('be.visible', { timeout: 1000 });
+                cy.wait(850);
                 cy.get('@nomeFuncionario').then(nomeFuncionario => {
-                    cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
+                    cy.get('#funcionario-modal input[name="nome"]').clear().type(nomeFuncionario);
                 });
+                cy.get('#funcionario-modal button[type="submit"]').click();
+                cy.get('#funcionariotable-modal tr :nth-child(1)').click();
 
                 if (i === 1) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, 2)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(-2)).type('{esc}');
                 } else if (i === 2) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, 0)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(0)).type('{esc}');
                 }
 
                 cy.get('@produto' + i).then((produto) => {
@@ -595,14 +599,18 @@ describe('Relatório - Entregas Pendente', () => {
             for (var i = 1; i <= 2; i++) {
                 cy.visit('/entrega_manual');
 
+                cy.get('#funcionario button[data-target="#funcionario-modal"]').click().should('be.visible', { timeout: 1000 });
+                cy.wait(850);
                 cy.get('@nomeFuncionario').then(nomeFuncionario => {
-                    cy.get('#funcionario input[name="funcionario_id"]').type(nomeFuncionario).wait(950).type('{enter}');
+                    cy.get('#funcionario-modal input[name="nome"]').clear().type(nomeFuncionario);
                 });
+                cy.get('#funcionario-modal button[type="submit"]').click();
+                cy.get('#funcionariotable-modal tr :nth-child(1)').click();
 
                 if (i === 1) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, 2)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(-2)).type('{esc}');
                 } else if (i === 2) {
-                    cy.get('#data_entrega').clear().type(gerarDataAtual(false, 0)).type('{esc}');
+                    cy.get('#data_entrega').clear().type(gerarOutraData(0)).type('{esc}');
                 }
 
                 cy.get('@produto' + i).then((produto) => {
