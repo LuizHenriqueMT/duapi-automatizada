@@ -1,7 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","8840","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Fri Aug 09 12:11:36 UTC 2024","passed","Fri Aug 09 12:11:45 UTC 2024","","Funcionário","",""
-"","15825","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Fri Aug 09 12:11:45 UTC 2024","passed","Fri Aug 09 12:12:01 UTC 2024","","Funcionário","",""
-"","9778","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Fri Aug 09 12:11:26 UTC 2024","passed","Fri Aug 09 12:11:36 UTC 2024","","Funcionário","",""
 "
             Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
 
@@ -21,9 +18,8 @@
             1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
             2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
             3) Validar se o cálculo da previsão da próxima entrega está correto.
-        ","96449","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Fri Aug 09 12:09:06 UTC 2024","passed","Fri Aug 09 12:10:43 UTC 2024","","Produto","",""
-"","7658","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Fri Aug 09 12:12:13 UTC 2024","passed","Fri Aug 09 12:12:21 UTC 2024","","Login","",""
-"","5","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS","","Thu Aug 08 20:15:31 UTC 2024","failed","Thu Aug 08 20:15:31 UTC 2024","","Login 5 Tentativas","",""
+        ","90929","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Fri Aug 09 12:18:48 UTC 2024","passed","Fri Aug 09 12:20:19 UTC 2024","","Produto","",""
+"","12697","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Fri Aug 09 12:21:19 UTC 2024","passed","Fri Aug 09 12:21:32 UTC 2024","","Funcionário","",""
 "
             Teste Automático para o fluxo e2e principal de entrega de produto.
             
@@ -38,5 +34,9 @@
             2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
             3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
             4) Validar se o cálculo da previsão da próxima entrega está correto.
-        ","236030","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Fri Aug 09 12:04:37 UTC 2024","passed","Fri Aug 09 12:08:33 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
-"","27172","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Fri Aug 09 12:10:59 UTC 2024","passed","Fri Aug 09 12:11:26 UTC 2024","","Funcionário","",""
+        ","231507","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Fri Aug 09 12:14:24 UTC 2024","passed","Fri Aug 09 12:18:15 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
+"","25369","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Fri Aug 09 12:20:34 UTC 2024","passed","Fri Aug 09 12:21:00 UTC 2024","","Funcionário","",""
+"","5","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS","","Thu Aug 08 20:15:31 UTC 2024","failed","Thu Aug 08 20:15:31 UTC 2024","","Login 5 Tentativas","",""
+"","10823","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Fri Aug 09 12:21:00 UTC 2024","passed","Fri Aug 09 12:21:10 UTC 2024","","Funcionário","",""
+"","8985","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Fri Aug 09 12:21:10 UTC 2024","passed","Fri Aug 09 12:21:19 UTC 2024","","Funcionário","",""
+"","6404","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Fri Aug 09 12:21:43 UTC 2024","passed","Fri Aug 09 12:21:50 UTC 2024","","Login","",""
