@@ -1,5 +1,47 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","1163","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Mon Aug 19 17:48:04 UTC 2024","failed","Mon Aug 19 17:48:05 UTC 2024","","Funcionário","",""
+"","886","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Mon Aug 19 18:57:30 UTC 2024","failed","Mon Aug 19 18:57:31 UTC 2024","","Funcionário","",""
+"","3230","Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS","","Mon Aug 19 18:57:48 UTC 2024","failed","Mon Aug 19 18:57:51 UTC 2024","","Entrega de Produto","",""
+"
+            Teste Automático para visualização do relatório de Entregas Pendentes.
+
+            >> Serão cadastrados 3 produtos com grupo de produto diferente para cada.
+            1) Grupo de Produto 1 com pendência de 1 dia e liberado para o funcionário.
+            2) Grupo de Produto 2 sem pedência (1 dia) e liberado para o funcionário.
+            3) Grupo de Produto 3 nunca entregue e liberado para o funcionário.
+
+            >> Será feito a consulta primeiramente pelos dois grupos de produtos entregues, não podendo ser retornado a visualização do 3º grupo.
+            Após os assertions será feito a consulta no relatório para o 3º grupo nunca entregue.
+
+            Regras:
+            1) Na Entrega Manual é recuperado a quantidade de entrega e periodicidade do cadastro do produto e não da liberação
+            do funcionário caso houver.
+            2) No relatório de Entregas Pendentes somente será exibido o produto como pendente caso esteja liberado para o funcionário.
+            3) No relatório de Entregas Pendentes irá aparecer o Grupo de Produto, porém a data referente ao atraso ou a próxima entrega é
+            referente ao produto entregue pela última vez do grupo de produtos.
+                
+            Resultado esperado:
+            1) No relatório de Entrega Pendentes deve visualizar 2 grupos de produtos liberados para o funcionário, 1º grupo com pendência
+            e 2º em dia. Será feito assertions validando se são os mesmos produtos do grupo entregues e com pendencia ou em dia.
+            2) No relatório de Entregas Pendentes deve visualizar agora 3 grupos de produtos liberados para o funcionário, os dois anteriores
+            e o 3º nunca entregue.
+        ","889","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 01","","Mon Aug 19 18:57:40 UTC 2024","failed","Mon Aug 19 18:57:41 UTC 2024","","Relatório - Entregas Pendente","",""
+"","2395","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Mon Aug 19 18:57:28 UTC 2024","failed","Mon Aug 19 18:57:30 UTC 2024","","Funcionário","",""
+"","868","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Mon Aug 19 18:57:31 UTC 2024","failed","Mon Aug 19 18:57:32 UTC 2024","","Funcionário","",""
+"
+            Teste Automático para o fluxo e2e principal de entrega de produto.
+            
+            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
+            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
+            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
+            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
+            >> Entregar o produto criado e libarado para o funcionário criado.
+
+            Resultado esperado:
+            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
+            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            4) Validar se o cálculo da previsão da próxima entrega está correto.
+        ","3483","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Mon Aug 19 18:57:20 UTC 2024","failed","Mon Aug 19 18:57:24 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
 "
             Teste Automático para visualização do relatório de Entregas Pendentes.
 
@@ -21,8 +63,8 @@
             e 2º em dia. Será feito assertions validando se são os mesmos produtos entregues e com pendencia ou em dia.
             2) No relatório de Entregas Pendentes deve visualizar agora 3 produtos liberados para o funcionário, os dois anteriores
             e o 3º nunca entregue.
-        ","2909","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE PRODUTOS","","Mon Aug 19 17:48:10 UTC 2024","failed","Mon Aug 19 17:48:13 UTC 2024","","Relatório - Entregas Pendente","",""
-"","1203","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Mon Aug 19 17:48:01 UTC 2024","failed","Mon Aug 19 17:48:03 UTC 2024","","Funcionário","",""
+        ","2586","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE PRODUTOS","","Mon Aug 19 18:57:38 UTC 2024","failed","Mon Aug 19 18:57:40 UTC 2024","","Relatório - Entregas Pendente","",""
+"","1080","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Mon Aug 19 18:57:32 UTC 2024","failed","Mon Aug 19 18:57:33 UTC 2024","","Funcionário","",""
 "
             Teste Automático para visualização e validação do relatório de Entregas Pendentes e da Ficha Técnica.
 
@@ -60,32 +102,7 @@
             e 2º em dia. Será feito assertions validando se são os mesmos produtos do grupo entregues e com pendencia ou em dia.
             2) No relatório de Entregas Pendentes deve visualizar agora 3 grupos de produtos liberados para o funcionário, os dois anteriores
             e o 3º nunca entregue.
-        ","1403","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 02","","Mon Aug 19 17:48:14 UTC 2024","failed","Mon Aug 19 17:48:16 UTC 2024","","Relatório - Entregas Pendente","",""
-"
-            Teste Automático para visualização do relatório de Entregas Pendentes.
-
-            >> Serão cadastrados 3 produtos com grupo de produto diferente para cada.
-            1) Grupo de Produto 1 com pendência de 1 dia e liberado para o funcionário.
-            2) Grupo de Produto 2 sem pedência (1 dia) e liberado para o funcionário.
-            3) Grupo de Produto 3 nunca entregue e liberado para o funcionário.
-
-            >> Será feito a consulta primeiramente pelos dois grupos de produtos entregues, não podendo ser retornado a visualização do 3º grupo.
-            Após os assertions será feito a consulta no relatório para o 3º grupo nunca entregue.
-
-            Regras:
-            1) Na Entrega Manual é recuperado a quantidade de entrega e periodicidade do cadastro do produto e não da liberação
-            do funcionário caso houver.
-            2) No relatório de Entregas Pendentes somente será exibido o produto como pendente caso esteja liberado para o funcionário.
-            3) No relatório de Entregas Pendentes irá aparecer o Grupo de Produto, porém a data referente ao atraso ou a próxima entrega é
-            referente ao produto entregue pela última vez do grupo de produtos.
-                
-            Resultado esperado:
-            1) No relatório de Entrega Pendentes deve visualizar 2 grupos de produtos liberados para o funcionário, 1º grupo com pendência
-            e 2º em dia. Será feito assertions validando se são os mesmos produtos do grupo entregues e com pendencia ou em dia.
-            2) No relatório de Entregas Pendentes deve visualizar agora 3 grupos de produtos liberados para o funcionário, os dois anteriores
-            e o 3º nunca entregue.
-        ","1127","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 01","","Mon Aug 19 17:48:13 UTC 2024","failed","Mon Aug 19 17:48:14 UTC 2024","","Relatório - Entregas Pendente","",""
-"","2649","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Mon Aug 19 17:47:59 UTC 2024","failed","Mon Aug 19 17:48:01 UTC 2024","","Funcionário","",""
+        ","1094","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 02","","Mon Aug 19 18:57:41 UTC 2024","failed","Mon Aug 19 18:57:42 UTC 2024","","Relatório - Entregas Pendente","",""
 "
             Teste Automático para visualização do relatório de Entregas Pendentes.
 
@@ -109,25 +126,4 @@
             e 2º em dia. Será feito assertions validando se são os mesmos produtos do grupo entregues e com pendencia ou em dia.
             2) No relatório de Entregas Pendentes deve visualizar agora 3 grupos de produtos liberados para o funcionário, os dois anteriores
             e o 3º nunca entregue.
-        ","1164","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 03","","Mon Aug 19 17:48:16 UTC 2024","failed","Mon Aug 19 17:48:17 UTC 2024","","Relatório - Entregas Pendente","",""
-"","1193","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Mon Aug 19 17:48:03 UTC 2024","failed","Mon Aug 19 17:48:04 UTC 2024","","Funcionário","",""
-"
-            Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
-
-            >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
-            >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
-            >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
-            >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionário.
-
-            Regras:
-            1) Quando realizado mais de uma liberação do mesmo produto para o mesmo funcionário, irá permanecer aquela com menor periodidicidade.
-            2) Na Entrega de Produtos será exibido o produto com menor periodicidade.
-            3) Na Entrega de Produtos aparece o grupo de produto caso o produto esteja vinculado à um grupo.
-            4) Na Ficha Técnica aparece o grupo de produto caso o produto esteja vinculado à um grupo, exceto na seção 
-            ""Produtos em Posse do Funcionário"".
-            
-            Resultado esperado:
-            1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
-            2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
-            3) Validar se o cálculo da previsão da próxima entrega está correto.
-        ","3186","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Mon Aug 19 17:47:52 UTC 2024","failed","Mon Aug 19 17:47:55 UTC 2024","","Produto","",""
+        ","877","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 03","","Mon Aug 19 18:57:42 UTC 2024","failed","Mon Aug 19 18:57:43 UTC 2024","","Relatório - Entregas Pendente","",""
