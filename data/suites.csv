@@ -1,28 +1,21 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","6898","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Tue Sep 03 21:11:13 UTC 2024","failed","Tue Sep 03 21:11:20 UTC 2024","","Funcionário","",""
+"","19803","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Tue Sep 03 21:10:33 UTC 2024","failed","Tue Sep 03 21:10:52 UTC 2024","","Funcionário","",""
+"","8812","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Tue Sep 03 21:11:04 UTC 2024","passed","Tue Sep 03 21:11:13 UTC 2024","","Funcionário","",""
 "
-            Teste Automático para liberação de produto dentro do Cadastro de Produto.
+            Teste Automático para o fluxo e2e principal de entrega de produto.
+            
+            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
+            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
+            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
+            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
+            >> Entregar o produto criado e libarado para o funcionário criado.
 
-            >> Será cadastrado 1 produto.
-            >> Será cadastrado 3 registros para cada relação. Setor, Cargo, Centro de Custo, Risco, GHE.
-            >> Será habilitado o parâmetro ""Utiliza Liberação de Produto por Empresa"" e feito a replicação da 
-            empresa matriz para empresa filial.
-
-            1) Será feito a liberação de todas relações para o produto dentro do Cadastro de Produto na empresa matriz.
-            2) Será feito a validação no histórico da inserção da empresa filial, verificando se foi feito a liberação nas empresas matriz e filial.
-            3) Será feito a alteração de quantidade e periodicidade de todas relações cadastradas.
-            4) Será feito a validação no histórico de alteração da empresa matriz, verificando se foi feito a alteração 
-            da liberação na empresa matriz e filial.
-            5) Será cadastrado mais uma liberação para cada relação e será salvo o cadastro do produto.
-            6) Será feito a exclusão pelo botão vermelho Remover da primeira liberação de cada relação.
-            7) Será feito a validação no histórico de exclusão da primeira liberação.
-            8) Será feito a inserção da terceira liberação para cada relação e será salvo o cadastro de produto.
-            9) Será feito a exclusão pelo botão de ação da segunda liberação de cada relação.
-
-            Regras:
-            1) O parâmetro ""Utiliza Liberação de Produto por Empresa"" quando habilitado ""Não"", replica todas liberações para todas empresas, 
-            inclusive empresas inativas.
-                
             Resultado esperado:
-            1) É esperado que seja validado que todas liberações realizadas em uma empresa sejam replicadas para todas as demais.
-            Isso conta com verificação no histórico e no cadastro de produto verificando se as liberações foram realizadas corretamente.
-        ","68083","Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS","","Tue Sep 03 13:31:24 UTC 2024","failed","Tue Sep 03 13:32:33 UTC 2024","","Entrega de Produto","",""
+            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
+            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            4) Validar se o cálculo da previsão da próxima entrega está correto.
+        ","32698","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Tue Sep 03 21:11:30 UTC 2024","failed","Tue Sep 03 21:12:03 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
+"","11491","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Tue Sep 03 21:10:53 UTC 2024","passed","Tue Sep 03 21:11:04 UTC 2024","","Funcionário","",""
+"","7490","Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS","","Tue Sep 03 21:12:25 UTC 2024","failed","Tue Sep 03 21:12:33 UTC 2024","","Entrega de Produto","",""
