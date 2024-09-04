@@ -1,7 +1,24 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","26255","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Wed Sep 04 16:54:49 UTC 2024","passed","Wed Sep 04 16:55:16 UTC 2024","","Funcionário","",""
-"","7740","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Wed Sep 04 16:55:58 UTC 2024","passed","Wed Sep 04 16:56:06 UTC 2024","","Login","",""
-"","9282","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Wed Sep 04 16:55:16 UTC 2024","passed","Wed Sep 04 16:55:25 UTC 2024","","Funcionário","",""
+"
+            Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
+
+            >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
+            >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
+            >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
+            >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionário.
+
+            Regras:
+            1) Quando realizado mais de uma liberação do mesmo produto para o mesmo funcionário, irá permanecer aquela com menor periodidicidade.
+            2) Na Entrega de Produtos será exibido o produto com menor periodicidade.
+            3) Na Entrega de Produtos aparece o grupo de produto caso o produto esteja vinculado à um grupo.
+            4) Na Ficha Técnica aparece o grupo de produto caso o produto esteja vinculado à um grupo, exceto na seção 
+            ""Produtos em Posse do Funcionário"".
+            
+            Resultado esperado:
+            1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
+            2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
+            3) Validar se o cálculo da previsão da próxima entrega está correto.
+        ","102187","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Wed Sep 04 17:11:00 UTC 2024","passed","Wed Sep 04 17:12:42 UTC 2024","","Produto","",""
 "
             Teste Automático para visualização e validação do relatório de Entregas Pendentes e da Ficha Técnica.
 
@@ -39,41 +56,36 @@
             e 2º em dia. Será feito assertions validando se são os mesmos produtos do grupo entregues e com pendencia ou em dia.
             2) No relatório de Entregas Pendentes deve visualizar agora 3 grupos de produtos liberados para o funcionário, os dois anteriores
             e o 3º nunca entregue.
-        ","176973","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 02","","Wed Sep 04 16:46:46 UTC 2024","passed","Wed Sep 04 16:49:43 UTC 2024","","Relatório - Entregas Pendente","",""
-"","12698","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Wed Sep 04 16:55:34 UTC 2024","passed","Wed Sep 04 16:55:47 UTC 2024","","Funcionário","",""
-"","9255","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Wed Sep 04 16:55:25 UTC 2024","passed","Wed Sep 04 16:55:34 UTC 2024","","Funcionário","",""
+        ","12315","Entregas Pendentes - VERIFICAR SE ESTÁ APARECENDO AS ENTREGAS PENDENTES DE GRUPO DE PRODUTOS - teste 02","","Wed Sep 04 16:43:20 UTC 2024","failed","Wed Sep 04 16:43:32 UTC 2024","","Relatório - Entregas Pendente","",""
+"","12348","Cadastro de Funcionário - CADASTRAR PARA AUTOINCREMENTO O FUNCIONÁRIO EM MASSA COM SUCESSO","","Wed Sep 04 17:13:51 UTC 2024","passed","Wed Sep 04 17:14:03 UTC 2024","","Funcionário","",""
+"","13043","Cadastro de Funcionário - IMPEDIR CADASTRO DE CPF INVÁLIDO","","Wed Sep 04 17:13:28 UTC 2024","passed","Wed Sep 04 17:13:41 UTC 2024","","Funcionário","",""
+"","9635","Cadastro de Funcionário - IMPEDIR CADASTRO DE FUNCIONÁRIO COM ""REGISTRO"" EXISTENTE","","Wed Sep 04 17:13:41 UTC 2024","passed","Wed Sep 04 17:13:51 UTC 2024","","Funcionário","",""
+"","9128","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Wed Sep 04 17:14:16 UTC 2024","passed","Wed Sep 04 17:14:25 UTC 2024","","Login","",""
 "
-            Teste Automático para o fluxo e2e principal de entrega de produto.
-            
-            >> Cadastrar um funcionário completo inserindo uma validação de entrega.
-            >> Cadastrar um produto completo inserindo campos com novos valores e sem liberação pro funcionário no produto.
-            >> Liberar o produto cadastrado na tela de liberação de produto para o funcionário cadastrado por Relação.
-            >> Validar se a liberação foi realizada com sucesso, pegando a menor periodicidade liberada para o funcionário.
-            >> Entregar o produto criado e libarado para o funcionário criado.
+            Teste Automático para liberação de produto dentro do Cadastro de Produto.
 
-            Resultado esperado:
-            1) Na Entrega de Produtos deve aparecer a liberação realizada por SETOR que possui menor periodicidade.
-            2) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
-            3) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
-            4) Validar se o cálculo da previsão da próxima entrega está correto.
-        ","141835","E2E - CRIAÇÃO DE FUNCIONARIO E PRODUTO, LIBERAÇÃO E ENTREGA DE PRODUTOS","","Wed Sep 04 16:50:11 UTC 2024","passed","Wed Sep 04 16:52:33 UTC 2024","","End 2 End - Funcionário / Produto / Liberação / Entrega","",""
-"
-            Teste Automático para cadastro de um novo produto e liberação para relações dentro do cadastro do produto.
+            >> Será cadastrado 1 produto.
+            >> Será cadastrado 3 registros para cada relação. Setor, Cargo, Centro de Custo, Risco, GHE.
+            >> Será habilitado o parâmetro ""Utiliza Liberação de Produto por Empresa"" e feito a replicação da 
+            empresa matriz para empresa filial.
 
-            >> Cadastrar um novo funcionário que será utilizado para visualizar a Ficha Técnica e validar se foi realizado as liberações.
-            >> Cadastrar um novo produto inserindo dados em todos os campos da modal do Cadastro de Produto.
-            >> Fazer a liberação do produto por Setor, Cargo, Centro de Custo, Risco e GHE diretamente no cadastro do produto.
-            >> Acessar a ficha técnica e validar se a liberação com periodicidade mais recente foi liberada para o funcionário.
+            1) Será feito a liberação de todas relações para o produto dentro do Cadastro de Produto na empresa matriz.
+            2) Será feito a validação no histórico da inserção da empresa filial, verificando se foi feito a liberação nas empresas matriz e filial.
+            3) Será feito a alteração de quantidade e periodicidade de todas relações cadastradas.
+            4) Será feito a validação no histórico de alteração da empresa matriz, verificando se foi feito a alteração 
+            da liberação na empresa matriz e filial.
+            5) Será cadastrado mais uma liberação para cada relação e será salvo o cadastro do produto.
+            6) Será feito a exclusão pelo botão vermelho Remover da primeira liberação de cada relação.
+            7) Será feito a validação no histórico de exclusão da primeira liberação.
+            8) Será feito a inserção da terceira liberação para cada relação e será salvo o cadastro de produto.
+            9) Será feito a exclusão pelo botão de ação da segunda liberação de cada relação.
 
             Regras:
-            1) Quando realizado mais de uma liberação do mesmo produto para o mesmo funcionário, irá permanecer aquela com menor periodidicidade.
-            2) Na Entrega de Produtos será exibido o produto com menor periodicidade.
-            3) Na Entrega de Produtos aparece o grupo de produto caso o produto esteja vinculado à um grupo.
-            4) Na Ficha Técnica aparece o grupo de produto caso o produto esteja vinculado à um grupo, exceto na seção 
-            ""Produtos em Posse do Funcionário"".
-            
+            1) O parâmetro ""Utiliza Liberação de Produto por Empresa"" quando habilitado ""Não"", replica todas liberações para todas empresas, 
+            inclusive empresas inativas.
+                
             Resultado esperado:
-            1) Validar se na Ficha Técnica está mostrando o Grupo de Produto liberado para o funcionário.
-            2) Validar se na Ficha Técnica está mostrando a menor periodicidade liberada para o funcionário .
-            3) Validar se o cálculo da previsão da próxima entrega está correto.
-        ","93794","Cadastro de Produto - CADASTRAR PRODUTO COM SUCESSO E COM NOVOS DADOS NO AUTOCOMPLETE E LIBERAÇÃO PARA TODAS RELAÇÕES","","Wed Sep 04 16:52:55 UTC 2024","passed","Wed Sep 04 16:54:29 UTC 2024","","Produto","",""
+            1) É esperado que seja validado que todas liberações realizadas em uma empresa sejam replicadas para todas as demais.
+            Isso conta com verificação no histórico e no cadastro de produto verificando se as liberações foram realizadas corretamente.
+        ","496849","Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS","","Wed Sep 04 17:01:20 UTC 2024","passed","Wed Sep 04 17:09:37 UTC 2024","","Entrega de Produto","",""
+"","27574","Cadastro de Funcionário - CADASTRAR FUNCIONÁRIO COM SUCESSO E COM DADOS EXISTENTES NO AUTOCOMPLETE","","Wed Sep 04 17:13:00 UTC 2024","passed","Wed Sep 04 17:13:28 UTC 2024","","Funcionário","",""
