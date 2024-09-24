@@ -46,7 +46,7 @@ describe('Entrega de Produto', () => {
         });
     };
 
-    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO SEM INFORMAR A QUANTIDADE NO MOMENTO DA ENTREGA', () => {
+    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS', () => {
         cy.allure().tag("Entrega de Produto", "Produto", "Funcionario", "Entrega normal", "Validação");
         cy.allure().owner("Luiz Henrique T.");
 
@@ -275,12 +275,12 @@ describe('Entrega de Produto', () => {
                                     expect(text).to.include(`Funcionário:${nomeFuncionario}`);
                                     expect(text).to.include(`Setor:${setor}`);
 
-                                    // const textoEsperado2 = `
-                                    //    Esse documento foi assinado dia ${dataAtualRelatorio} pelo funcionário 
-                                    //    ${nomeFuncionario} através de sua Senha
-                                    // `.replace(/\s+/g, ' ').trim();
+                                    const textoEsperado2 = `
+                                       Esse documento foi assinado dia ${dataAtualRelatorio} pelo funcionário 
+                                       ${nomeFuncionario} através de sua Senha
+                                    `.replace(/\s+/g, ' ').trim();
 
-                                    // expect(textoCorrigido).to.include(textoEsperado2);
+                                    expect(textoCorrigido).to.include(textoEsperado2);
                                 });
                             })
                         });
@@ -297,7 +297,7 @@ describe('Entrega de Produto', () => {
         }, '/entrega_produtos', realizarTeste);
     });
 
-    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO INFORMANDO A QUANTIDADE NO MOMENTO DA ENTREGA', () => {
+    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO ESCOLHENDO A QUANTIDADE NO MOMENTO DA ENTREGA', () => {
         cy.allure().tag("Entrega de Produto", "Produto", "Funcionario", "Entrega normal", "Validação");
         cy.allure().owner("Luiz Henrique T.");
 
@@ -332,8 +332,8 @@ describe('Entrega de Produto', () => {
             });
 
             // TIPO DE PRODUTO 
-            // - PERMITE INFORMAR QUANTIDADE NA ENTREGA
-            // - NÃO CONTROLA DEVOLUÇÃO MANUALMENTE
+            // - NÃO PERMITE INFORMAR QUANTIDADE NA ENTREGA
+            // - CONTROLA DEVOLUÇÃO MANUALMENTE
             cy.visit('/tipo_produto');
 
             cy.get('button[data-target="#tipoProdutoModal"]').click();
@@ -490,7 +490,10 @@ describe('Entrega de Produto', () => {
 
             cy.intercept('GET', '/entrega_individual/imprimir_entregas*').as('getPDF');
 
-            cy.get('#form-validar-senha button[type="submit"]').click();
+            cy.get('#form-validar-senha button[type="submit"]').click().then(() => {
+                var dataAtualRelatorio = gerarDataRelatorio();
+                cy.wrap(dataAtualRelatorio).as('dataAtualRelatorio');
+            });
 
             cy.wait('@getPDF').then((interception) => {
                 var dataEntrega = gerarDataAtual(false, 0);
@@ -505,36 +508,36 @@ describe('Entrega de Produto', () => {
                     cy.writeFile(filePath, response.body, 'binary');
 
                     cy.task('readPdf', { filePath }).then((text) => {
-                        // const textoCorrigido = text.replace(/\s+/g, ' ').trim();
+                        const textoCorrigido = text.replace(/\s+/g, ' ').trim();
 
-                        // const textoEsperado = `
-                        //     Dt. EntregaQtde.UnidadeCódigoDescriçãoGradeCA
-                        //     ${dataEntrega}2
-                        //     P AUTO ${apenasDataAtual}
-                        //     ${apenasHoraAtual}
-                        //     PRODUTO AUTOMATIZADO ${dataAtual}
-                        //     GRADE
-                        //     ${epoch}
-                        //     ${ca}
-                        // `.replace(/\s+/g, ' ').trim();
+                        const textoEsperado = `
+                            Dt. EntregaQtde.UnidadeCódigoDescriçãoGradeCA
+                            ${dataEntrega}2
+                            P AUTO ${apenasDataAtual}
+                            ${apenasHoraAtual}
+                            PRODUTO AUTOMATIZADO ${dataAtual}
+                            GRADE
+                            ${epoch}
+                            ${ca}
+                        `.replace(/\s+/g, ' ').trim();
 
-                        // expect(textoCorrigido).to.include(textoEsperado);
+                        expect(textoCorrigido).to.include(textoEsperado);
 
-                        // cy.get('@nomeFuncionario').then(nomeFuncionario => {
-                        //     cy.get('@setorAC').then(setor => {
-                        //         cy.get('@dataAtualRelatorio').then(dataAtualRelatorio => {
-                        //             expect(text).to.include(`Funcionário:${nomeFuncionario}`);
-                        //             expect(text).to.include(`Setor:${setor}`);
+                        cy.get('@nomeFuncionario').then(nomeFuncionario => {
+                            cy.get('@setorAC').then(setor => {
+                                cy.get('@dataAtualRelatorio').then(dataAtualRelatorio => {
+                                    expect(text).to.include(`Funcionário:${nomeFuncionario}`);
+                                    expect(text).to.include(`Setor:${setor}`);
 
-                        //             const textoEsperado2 = `
-                        //                Esse documento foi assinado dia ${dataAtualRelatorio} pelo funcionário 
-                        //                ${nomeFuncionario} através de sua Senha
-                        //             `.replace(/\s+/g, ' ').trim();
+                                    const textoEsperado2 = `
+                                       Esse documento foi assinado dia ${dataAtualRelatorio} pelo funcionário 
+                                       ${nomeFuncionario} através de sua Senha
+                                    `.replace(/\s+/g, ' ').trim();
 
-                        //             expect(textoCorrigido).to.include(textoEsperado2);
-                        //         });
-                        //     })
-                        // });
+                                    expect(textoCorrigido).to.include(textoEsperado2);
+                                });
+                            })
+                        });
 
                         expect(text).to.include(`Total Qtde.:3Total de Itens:2`);
                         expect(text).to.include(`ENTREGA INDEVIDA`);
@@ -543,32 +546,6 @@ describe('Entrega de Produto', () => {
                     });
                 });
             });
-
-            cy.searchFuncionario('@nomeFuncionario');
-
-            cy.get('@descricaoProduto').then(descricaoProduto => {
-                cy.get('@descricaoGrade').then(descricaoGrade => {
-                    
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(4) a').should('contain', descricaoProduto);
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(5)').should('contain', descricaoGrade);
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(6)').should('contain', ca);
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(7) div').should('contain', '2');
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(9)').should('contain', '2 Semana(s)');
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(10)').should('contain', gerarApenasDataAtual());
-                    cy.get('#produto-devolvidos-table tr:nth-child(1)').find('td:nth-child(11)').should('contain', gerarOutraData(14));
-                    
-                    // INDEVIDA
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(4) a').should('contain', descricaoProduto);
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(5)').should('contain', descricaoGrade);
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(6)').should('contain', ca);
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(7) div').should('contain', '1');
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(9)').should('contain', '2 Semana(s)');
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(10)').should('contain', gerarApenasDataAtual());
-                    cy.get('#produto-devolvidos-table tr:nth-child(2)').find('td:nth-child(11)').should('contain', gerarOutraData(14));
-
-                });
-            });
-
         }
 
         configurarParametros('config.json', {
