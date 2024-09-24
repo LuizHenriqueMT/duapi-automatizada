@@ -249,7 +249,6 @@ describe('Devolução de Produto', () => {
 
             cy.wait('@getPDF');
 
-
             cy.searchFuncionario('@nomeFuncionario');
 
             cy.get('@descricaoProduto').then(descricaoProduto => {

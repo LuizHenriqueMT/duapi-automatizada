@@ -87,7 +87,7 @@ jobs:
           # spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js|entregaProduto.cy.js)"
           # spec: "cypress/e2e/**/*.cy.js,!cypress/e2e/relatorio/entregaPendente.cy.js,!cypress/e2e/loginTentativa.cy.js,!cypress/e2e/novoWorkspace.cy.js"
           # spec: "cypress/e2e/(entregaProduto.cy.js|login.cy.js)"
-          spec: "cypress/e2e/(devolucaoProduto.cy.js|login.cy.js)"
+          spec: "cypress/e2e/(entregaProduto.cy.js|login.cy.js)"
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

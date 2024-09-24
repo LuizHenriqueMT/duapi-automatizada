@@ -235,7 +235,7 @@ module.exports = defineConfig({
     pageLoadTimeout: 80000,
     requestTimeout: 15000,
     responseTimeout: 80000,
-    numTestsKeptInMemory: 0,
+    // numTestsKeptInMemory: 0,
     experimentalMemoryManagement: true
   },
 });
