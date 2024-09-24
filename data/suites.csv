@@ -1,4 +1,5 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","9110","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Tue Sep 24 17:29:02 UTC 2024","passed","Tue Sep 24 17:29:11 UTC 2024","","Login","",""
 "
             Teste Automático para Logar no sistema.
 
@@ -14,9 +15,8 @@
             1) Após 4 tentativas falhas de login e o sucesso na 5ª vez, deve permitir entrar no sistema normalmente.
             2) Após 4 tentativas falhas de login e o sucesso na 5ª vez, quando realizado o logout e inserido a credencial inválida novamente deve 
             resetar o contador de bloqueio, permitindo tentar mais 5 vezes.              
-        ","29046","Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA","","Tue Sep 24 16:40:18 UTC 2024","passed","Tue Sep 24 16:40:47 UTC 2024","","Login 5 Tentativas","",""
-"","8316","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Tue Sep 24 16:58:43 UTC 2024","passed","Tue Sep 24 16:58:51 UTC 2024","","Login","",""
-"","42554","Devolução de Produto - REALIZAR ENTREGA DE PRODUTO E FAZER A DEVOLUÇÃO DE FORMA MANUAL DO PRODUTO","","Tue Sep 24 16:57:49 UTC 2024","failed","Tue Sep 24 16:58:32 UTC 2024","","Devolução de Produto","",""
+        ","29551","Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA","","Tue Sep 24 17:25:37 UTC 2024","passed","Tue Sep 24 17:26:07 UTC 2024","","Login 5 Tentativas","",""
+"","167068","Devolução de Produto - REALIZAR ENTREGA DE PRODUTO E FAZER A DEVOLUÇÃO DE FORMA MANUAL DO PRODUTO","","Tue Sep 24 17:25:43 UTC 2024","passed","Tue Sep 24 17:28:30 UTC 2024","","Devolução de Produto","",""
 "
             Teste Automático para Logar no sistema após 10 minutos de bloqueio.
 
@@ -30,4 +30,4 @@
             1) Realizar 5 tentativas de login incorreta fazendo com que na 5ª vez seja bloqueado e iniciado o contador.
             2) Após 5 minutos de bloqueio será feito uma validação para verificar se ainda está bloqueado e não permite acesso.
             3) Após 10 minutos de bloqueio será feito o login com credenciais válidas.
-            ","617690","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS","","Tue Sep 24 16:40:47 UTC 2024","passed","Tue Sep 24 16:51:05 UTC 2024","","Login 5 Tentativas","",""
+            ","617824","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS","","Tue Sep 24 17:26:07 UTC 2024","passed","Tue Sep 24 17:36:25 UTC 2024","","Login 5 Tentativas","",""
