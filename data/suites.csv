@@ -1,5 +1,4 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","9364","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Tue Sep 24 16:34:57 UTC 2024","passed","Tue Sep 24 16:35:07 UTC 2024","","Login","",""
 "
             Teste Automático para Logar no sistema.
 
@@ -15,8 +14,8 @@
             1) Após 4 tentativas falhas de login e o sucesso na 5ª vez, deve permitir entrar no sistema normalmente.
             2) Após 4 tentativas falhas de login e o sucesso na 5ª vez, quando realizado o logout e inserido a credencial inválida novamente deve 
             resetar o contador de bloqueio, permitindo tentar mais 5 vezes.              
-        ","29209","Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA","","Tue Sep 24 16:34:55 UTC 2024","passed","Tue Sep 24 16:35:24 UTC 2024","","Login 5 Tentativas","",""
-"","113259","Devolução de Produto - REALIZAR ENTREGA DE PRODUTO E FAZER A DEVOLUÇÃO DE FORMA MANUAL DO PRODUTO","","Tue Sep 24 16:30:59 UTC 2024","passed","Tue Sep 24 16:32:52 UTC 2024","","Devolução de Produto","",""
+        ","31210","Login - 4 TENTATIVAS DE LOGIN FALHADAS E NA 5ª TENTATIVA LOGA COM SENHA CORRETA","","Tue Sep 24 16:39:11 UTC 2024","passed","Tue Sep 24 16:39:42 UTC 2024","","Login 5 Tentativas","",""
+"","11154","Login - FAZER LOGIN COM SUCESSO NO SISTEMA","","Tue Sep 24 16:38:46 UTC 2024","passed","Tue Sep 24 16:38:57 UTC 2024","","Login","",""
 "
             Teste Automático para Logar no sistema após 10 minutos de bloqueio.
 
@@ -30,4 +29,4 @@
             1) Realizar 5 tentativas de login incorreta fazendo com que na 5ª vez seja bloqueado e iniciado o contador.
             2) Após 5 minutos de bloqueio será feito uma validação para verificar se ainda está bloqueado e não permite acesso.
             3) Após 10 minutos de bloqueio será feito o login com credenciais válidas.
-            ","617445","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS","","Tue Sep 24 16:35:24 UTC 2024","passed","Tue Sep 24 16:45:42 UTC 2024","","Login 5 Tentativas","",""
+            ","619716","Login - 5 TENTATIVAS DE LOGIN FALHADAS RETORNANDO BLOQUEIO POR 10 MINUTOS","","Tue Sep 24 16:39:42 UTC 2024","passed","Tue Sep 24 16:50:02 UTC 2024","","Login 5 Tentativas","",""
