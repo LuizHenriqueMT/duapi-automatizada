@@ -236,9 +236,19 @@ describe('Devolução de Produto', () => {
 
             cy.get('#validacao_senha').type('123');
 
-            cy.intercept('GET', '/entrega_individual/imprimir_entregas*').as('getPDF');
+            // FECHA O PRINT PREVIEW DO NAVEGADOR
+            cy.intercept('GET', '/entrega_individual/imprimir_entregas*', (req) => {
+                req.reply({
+                    statusCode: 200,
+                    body: 'PDF generation intercepted',
+                    headers: { 'content-type': 'application/pdf' }
+                });
+            }).as('getPDF');
 
             cy.get('#form-validar-senha button[type="submit"]').click();
+
+            cy.wait('@getPDF');
+
 
             cy.searchFuncionario('@nomeFuncionario');
 
@@ -354,79 +364,79 @@ describe('Devolução de Produto', () => {
             cy.wait(1200);
 
             cy.get('#consulta_devolucao-table tbody tr').should('have.length', 3);
-            
+
             cy.get('@descricaoProduto').then(descricaoProduto => {
-               cy.get('@nomeFuncionario').then(nomeFuncionario => {
+                cy.get('@nomeFuncionario').then(nomeFuncionario => {
 
-                cy.get('#consulta_devolucao-table tbody tr:nth-child(1)').find('td:nth-child(6) .btn-detalhes').click();
+                    cy.get('#consulta_devolucao-table tbody tr:nth-child(1)').find('td:nth-child(6) .btn-detalhes').click();
 
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO ' + dataAtual + ' - ' + descricaoProduto);
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO ' + dataAtual + ' - ' + nomeFuncionario);
-                // cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO 24/09/2024 10:52:13 - PRODUTO AUTOMATIZADO 24/09/2024 10:52:13');
-                // cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO 24/09/2024 10:52:13 - TESTE AUTOMATIZADO 24/09/2024 10:52:13');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(4) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(5) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(6) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(7) div').should('contain', '0');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(8)').should('contain', '2 Semana(s)');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(9)').should('contain', gerarApenasDataAtual());
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(10)').should('contain', gerarOutraData(14));
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(11)').should('include.text', gerarApenasDataAtual());
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(12) div').should('contain', '25,36');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO ' + dataAtual + ' - ' + descricaoProduto);
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO ' + dataAtual + ' - ' + nomeFuncionario);
+                    // cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO 24/09/2024 10:52:13 - PRODUTO AUTOMATIZADO 24/09/2024 10:52:13');
+                    // cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO 24/09/2024 10:52:13 - TESTE AUTOMATIZADO 24/09/2024 10:52:13');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(4) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(5) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(6) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(7) div').should('contain', '0');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(8)').should('contain', '2 Semana(s)');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(9)').should('contain', gerarApenasDataAtual());
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(10)').should('contain', gerarOutraData(14));
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(11)').should('include.text', gerarApenasDataAtual());
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(12) div').should('contain', '25,36');
 
-                cy.get('#entregaModal tr').find('#quantidade_total').should('contain', '1');
-                cy.get('#entregaModal tr').find('#quantidade_devolvido').should('contain', '1');
-                cy.get('#entregaModal tr').find('#quantidade_devolvido_total').should('contain', '1');
-                cy.get('#entregaModal tr').find('#quantidade_restante').should('contain', '0');
-                cy.get('#entregaModal tr').find('#total').should('contain', '25,36');
+                    cy.get('#entregaModal tr').find('#quantidade_total').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#quantidade_devolvido').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#quantidade_devolvido_total').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#quantidade_restante').should('contain', '0');
+                    cy.get('#entregaModal tr').find('#total').should('contain', '25,36');
 
-                cy.get('#entregaModal .modal-footer button[data-dismiss="modal"]').click();
-                cy.get('#consulta_devolucao-table tbody tr:nth-child(2)').find('td:nth-child(6) .btn-detalhes').click();
+                    cy.get('#entregaModal .modal-footer button[data-dismiss="modal"]').click();
+                    cy.get('#consulta_devolucao-table tbody tr:nth-child(2)').find('td:nth-child(6) .btn-detalhes').click();
 
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO ' + dataAtual + ' - ' + descricaoProduto);
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO ' + dataAtual + ' - ' + nomeFuncionario);
-                // cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO 24/09/2024 10:52:13 - PRODUTO AUTOMATIZADO 24/09/2024 10:52:13');
-                // cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO 24/09/2024 10:52:13 - TESTE AUTOMATIZADO 24/09/2024 10:52:13');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(4) div').should('contain', '2');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(5) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(6) div').should('contain', '2');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(7) div').should('contain', '0');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(8)').should('contain', '2 Semana(s)');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(9)').should('contain', gerarApenasDataAtual());
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(10)').should('contain', gerarOutraData(14));
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(11)').should('include.text', gerarApenasDataAtual());
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(12) div').should('contain', '50,72');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO ' + dataAtual + ' - ' + descricaoProduto);
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO ' + dataAtual + ' - ' + nomeFuncionario);
+                    // cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO 24/09/2024 10:52:13 - PRODUTO AUTOMATIZADO 24/09/2024 10:52:13');
+                    // cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO 24/09/2024 10:52:13 - TESTE AUTOMATIZADO 24/09/2024 10:52:13');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(4) div').should('contain', '2');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(5) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(6) div').should('contain', '2');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(7) div').should('contain', '0');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(8)').should('contain', '2 Semana(s)');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(9)').should('contain', gerarApenasDataAtual());
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(10)').should('contain', gerarOutraData(14));
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(11)').should('include.text', gerarApenasDataAtual());
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(12) div').should('contain', '50,72');
 
-                cy.get('#entregaModal tr').find('#quantidade_total').should('contain', '2');
-                cy.get('#entregaModal tr').find('#quantidade_devolvido').should('contain', '1');
-                cy.get('#entregaModal tr').find('#quantidade_devolvido_total').should('contain', '2');
-                cy.get('#entregaModal tr').find('#quantidade_restante').should('contain', '0');
-                cy.get('#entregaModal tr').find('#total').should('contain', '50,72');
-                
-                cy.get('#entregaModal .modal-footer button[data-dismiss="modal"]').click();
-                cy.get('#consulta_devolucao-table tbody tr:nth-child(3)').find('td:nth-child(6) .btn-detalhes').click();
+                    cy.get('#entregaModal tr').find('#quantidade_total').should('contain', '2');
+                    cy.get('#entregaModal tr').find('#quantidade_devolvido').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#quantidade_devolvido_total').should('contain', '2');
+                    cy.get('#entregaModal tr').find('#quantidade_restante').should('contain', '0');
+                    cy.get('#entregaModal tr').find('#total').should('contain', '50,72');
 
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO ' + dataAtual + ' - ' + descricaoProduto);
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO ' + dataAtual + ' - ' + nomeFuncionario);
-                // cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO 24/09/2024 10:52:13 - PRODUTO AUTOMATIZADO 24/09/2024 10:52:13');
-                // cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO 24/09/2024 10:52:13 - TESTE AUTOMATIZADO 24/09/2024 10:52:13');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(4) div').should('contain', '2');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(5) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(6) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(7) div').should('contain', '1');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(8)').should('contain', '2 Semana(s)');
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(9)').should('contain', gerarApenasDataAtual());
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(10)').should('contain', gerarOutraData(14));
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(11)').should('include.text', gerarApenasDataAtual());
-                cy.get('#entrega-detalhes-table tr').find('td:nth-child(12) div').should('contain', '50,72');
+                    cy.get('#entregaModal .modal-footer button[data-dismiss="modal"]').click();
+                    cy.get('#consulta_devolucao-table tbody tr:nth-child(3)').find('td:nth-child(6) .btn-detalhes').click();
 
-                cy.get('#entregaModal tr').find('#quantidade_total').should('contain', '2');
-                cy.get('#entregaModal tr').find('#quantidade_devolvido').should('contain', '1');
-                cy.get('#entregaModal tr').find('#quantidade_devolvido_total').should('contain', '1');
-                cy.get('#entregaModal tr').find('#quantidade_restante').should('contain', '1');
-                cy.get('#entregaModal tr').find('#total').should('contain', '50,72');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO ' + dataAtual + ' - ' + descricaoProduto);
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO ' + dataAtual + ' - ' + nomeFuncionario);
+                    // cy.get('#entrega-detalhes-table tr').find('td:nth-child(2)').should('contain', 'P AUTO 24/09/2024 10:52:13 - PRODUTO AUTOMATIZADO 24/09/2024 10:52:13');
+                    // cy.get('#entrega-detalhes-table tr').find('td:nth-child(3)').should('contain', 'AUTO 24/09/2024 10:52:13 - TESTE AUTOMATIZADO 24/09/2024 10:52:13');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(4) div').should('contain', '2');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(5) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(6) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(7) div').should('contain', '1');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(8)').should('contain', '2 Semana(s)');
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(9)').should('contain', gerarApenasDataAtual());
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(10)').should('contain', gerarOutraData(14));
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(11)').should('include.text', gerarApenasDataAtual());
+                    cy.get('#entrega-detalhes-table tr').find('td:nth-child(12) div').should('contain', '50,72');
 
-               }); 
+                    cy.get('#entregaModal tr').find('#quantidade_total').should('contain', '2');
+                    cy.get('#entregaModal tr').find('#quantidade_devolvido').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#quantidade_devolvido_total').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#quantidade_restante').should('contain', '1');
+                    cy.get('#entregaModal tr').find('#total').should('contain', '50,72');
+
+                });
             });
         }
 
