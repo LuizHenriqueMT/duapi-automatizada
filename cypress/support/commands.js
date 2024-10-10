@@ -375,7 +375,7 @@ Cypress.Commands.add('insertNewRiscoAPI', (token, dataAtual, numero = false) => 
             expect(response.status).to.eq(200);
             var risco = response.body.data.descricao;
 
-            if(numero) {
+            if (numero) {
                 cy.wrap(risco).as('risco' + numero);
             } else {
                 cy.wrap(risco).as('risco');
@@ -458,6 +458,15 @@ Cypress.Commands.add('insertNewGHEAC', () => {
         const ghe = interception.response.body.data.descricao;
         cy.wrap(ghe).as('gheAC');
     });
+});
+
+Cypress.Commands.add('addDevolucaoProduto', (qtde = false) => {
+    if (qtde) {
+        cy.get('#produto-devolvidos-table tr').first().find('input[type="text"]').clear().type(qtde - 1);
+    }
+
+    cy.get('#produto-devolvidos-table tr').first().find('.btn-devolucao-entrega.btn-plus').click();
+    cy.get('#btn-salvar-devolucao').click();
 });
 
 function gerarDataAtual(hora = false, pendencia = 0) {
