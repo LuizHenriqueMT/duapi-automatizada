@@ -83,9 +83,9 @@ jobs:
           group: "Initial Tests"
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
           headed: true
-          # spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js|entregaProduto.cy.js)"
+          spec: "cypress/e2e/!(loginTentativa.cy.js|novoWorkspace.cy.js)"
           # spec: "cypress/e2e/(entregaProduto.cy.js|login.cy.js)"
-          spec: "cypress/e2e/**/*.cy.js,!cypress/e2e/loginTentativa.cy.js"
+          # spec: "cypress/e2e/**/*.cy.js,!cypress/e2e/loginTentativa.cy.js"
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
