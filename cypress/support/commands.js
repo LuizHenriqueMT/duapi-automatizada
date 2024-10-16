@@ -208,6 +208,102 @@ Cypress.Commands.add('insertNewValidacaoEntregaSenha', () => {
     cy.get('#confirmar').type('123');
 });
 
+Cypress.Commands.add('insertValidacaoEntregaAssinaturaEletronica', () => {
+    cy.wait(1200);
+    cy.get('#btnAssinar').click();
+
+    cy.get('#can').then($canvas => {
+        const canvasPosition = $canvas[0].getBoundingClientRect();
+    
+        // Função auxiliar para desenhar uma linha no canvas com pequenos delays
+        const drawLine = (startX, startY, endX, endY) => {
+            cy.wrap($canvas)
+                .trigger('mousedown', { clientX: canvasPosition.left + startX, clientY: canvasPosition.top + startY, button: 0, force: true })
+                .wait(100) // Pequeno delay para garantir que o evento seja processado
+                .trigger('mousemove', { clientX: canvasPosition.left + endX, clientY: canvasPosition.top + endY, button: 0, force: true })
+                .wait(100)
+                .trigger('mouseup', { force: true });
+        };
+    
+        // Desenhar a letra "A"
+        drawLine(50, 150, 70, 100); // Perna esquerda
+        drawLine(70, 100, 90, 150); // Perna direita
+        drawLine(60, 125, 80, 125); // Barra horizontal
+    
+        // Desenhar a letra "U"
+        drawLine(110, 100, 110, 150); // Perna esquerda
+        drawLine(110, 150, 130, 150); // Base
+        drawLine(130, 150, 130, 100); // Perna direita
+    
+        // Desenhar a letra "T"
+        drawLine(150, 100, 170, 100); // Topo
+        drawLine(160, 100, 160, 150); // Linha vertical
+    
+        // Desenhar a letra "O"
+        cy.wrap($canvas)
+            .trigger('mousedown', { clientX: canvasPosition.left + 190, clientY: canvasPosition.top + 125, button: 0, force: true })
+            .wait(100)
+            .trigger('mousemove', { clientX: canvasPosition.left + 180, clientY: canvasPosition.top + 110, button: 0, force: true }) // Parte superior esquerda
+            .trigger('mousemove', { clientX: canvasPosition.left + 200, clientY: canvasPosition.top + 110, button: 0, force: true }) // Parte superior direita
+            .trigger('mousemove', { clientX: canvasPosition.left + 210, clientY: canvasPosition.top + 125, button: 0, force: true }) // Lado direito
+            .trigger('mousemove', { clientX: canvasPosition.left + 200, clientY: canvasPosition.top + 140, button: 0, force: true }) // Parte inferior direita
+            .trigger('mousemove', { clientX: canvasPosition.left + 180, clientY: canvasPosition.top + 140, button: 0, force: true }) // Parte inferior esquerda
+            .trigger('mousemove', { clientX: canvasPosition.left + 170, clientY: canvasPosition.top + 125, button: 0, force: true }) // Lado esquerdo
+            .trigger('mouseup', { force: true });
+    
+        // Desenhar a letra "M"
+        drawLine(230, 150, 230, 100); // Perna esquerda
+        drawLine(230, 100, 240, 125); // Diagonal esquerda
+        drawLine(240, 125, 250, 100); // Diagonal direita
+        drawLine(250, 100, 250, 150); // Perna direita
+    
+        // Desenhar a letra "A"
+        drawLine(270, 150, 290, 100); // Perna esquerda
+        drawLine(290, 100, 310, 150); // Perna direita
+        drawLine(280, 125, 300, 125); // Barra horizontal
+    
+        // Desenhar a letra "T"
+        drawLine(330, 100, 350, 100); // Topo
+        drawLine(340, 100, 340, 150); // Linha vertical
+    
+        // Desenhar a letra "I"
+        drawLine(370, 100, 370, 150); // Linha vertical
+    
+        // Desenhar a letra "Z"
+        drawLine(390, 100, 410, 100); // Linha superior
+        drawLine(410, 100, 390, 150); // Diagonal
+        drawLine(390, 150, 410, 150); // Linha inferior
+    
+        // Desenhar a letra "A"
+        drawLine(430, 150, 450, 100); // Perna esquerda
+        drawLine(450, 100, 470, 150); // Perna direita
+        drawLine(440, 125, 460, 125); // Barra horizontal
+    
+        // Desenhar a letra "D"
+        cy.wrap($canvas)
+            .trigger('mousedown', { clientX: canvasPosition.left + 490, clientY: canvasPosition.top + 100, button: 0, force: true })
+            .wait(100)
+            .trigger('mousemove', { clientX: canvasPosition.left + 490, clientY: canvasPosition.top + 150, button: 0, force: true }) // Linha esquerda
+            .trigger('mousemove', { clientX: canvasPosition.left + 510, clientY: canvasPosition.top + 140, button: 0, force: true }) // Curva inferior
+            .trigger('mousemove', { clientX: canvasPosition.left + 510, clientY: canvasPosition.top + 110, button: 0, force: true }) // Curva superior
+            .trigger('mousemove', { clientX: canvasPosition.left + 490, clientY: canvasPosition.top + 100, button: 0, force: true }) // Fechar
+            .trigger('mouseup', { force: true });
+    
+        // Desenhar a letra "O"
+        cy.wrap($canvas)
+            .trigger('mousedown', { clientX: canvasPosition.left + 530, clientY: canvasPosition.top + 125, button: 0, force: true })
+            .wait(100)
+            .trigger('mousemove', { clientX: canvasPosition.left + 520, clientY: canvasPosition.top + 110, button: 0, force: true }) // Parte superior esquerda
+            .trigger('mousemove', { clientX: canvasPosition.left + 540, clientY: canvasPosition.top + 110, button: 0, force: true }) // Parte superior direita
+            .trigger('mousemove', { clientX: canvasPosition.left + 550, clientY: canvasPosition.top + 125, button: 0, force: true }) // Lado direito
+            .trigger('mousemove', { clientX: canvasPosition.left + 540, clientY: canvasPosition.top + 140, button: 0, force: true }) // Parte inferior direita
+            .trigger('mousemove', { clientX: canvasPosition.left + 520, clientY: canvasPosition.top + 140, button: 0, force: true }) // Parte inferior esquerda
+            .trigger('mousemove', { clientX: canvasPosition.left + 510, clientY: canvasPosition.top + 125, button: 0, force: true }) // Lado esquerdo
+            .trigger('mouseup', { force: true });
+    });
+    
+});
+
 Cypress.Commands.add('insertNewValidacaoEntregaAssinaturaEletronica', () => {
     cy.get('#btn-validacao-entrega-tab').click();
     cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('A');
@@ -302,8 +398,6 @@ Cypress.Commands.add('insertNewValidacaoEntregaAssinaturaEletronica', () => {
             .trigger('mousemove', { clientX: canvasPosition.left + 510, clientY: canvasPosition.top + 125, button: 0, force: true }) // Lado esquerdo
             .trigger('mouseup', { force: true });
     });
-    
-    cy.get('#btn-salvar-funcionario').click();
     
 });
 
