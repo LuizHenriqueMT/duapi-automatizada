@@ -76,12 +76,12 @@ describe('Entrega Pendente de Assinatura', () => {
                 cy.visit('/funcionario');
 
                 cy.then(() => mailslurp.createInbox())
-                .then((inbox) => {
-                    const emailAddress = inbox.emailAddress;
-                    const inboxId = inbox.id;
-                    cy.wrap(emailAddress).as('emailAddress');
-                    cy.wrap(inboxId).as('inboxId');
-                });
+                    .then((inbox) => {
+                        const emailAddress = inbox.emailAddress;
+                        const inboxId = inbox.id;
+                        cy.wrap(emailAddress).as('emailAddress');
+                        cy.wrap(inboxId).as('inboxId');
+                    });
                 cy.then(function () {
                     // FUNCIONÁRIO
                     cy.get('#btn-novo-funcionario').click();
@@ -224,9 +224,9 @@ describe('Entrega Pendente de Assinatura', () => {
                     return mailslurp.waitForLatestEmail(this.inboxId, 240000).then(email => {
                         expect(email.subject).to.include('Assinatura de ficha de epi');
                         const confirmationLink = extractConfirmationLink(email.body);
-                        
-                        
-                        if (confirmationLink) {    
+
+
+                        if (confirmationLink) {
                             cy.wrap(confirmationLink).as('confirmationLink');
                             return confirmationLink;
                         } else {
@@ -258,6 +258,50 @@ describe('Entrega Pendente de Assinatura', () => {
             permite_atender_requisicao_sem_validacao: 'S'
         }, '/funcionario', realizarTeste);
     });
+
+    it.only('Entrega Pendente de Assinatura - ASSINANDO COM ASSINATURA ELETRÔNICA', () => {
+
+        cy.allure().tag("Novo Funcionario", "Insere E-mail", "Requisita Produto");
+        cy.allure().owner("Luiz Henrique T.");
+        cy.allure().description(`
+
+        `);
+
+        var dataAtual = gerarDataAtual(true, false);
+        var epoch = inserirEpoch();
+        var ca = inserirRandom(1, 9, 5);
+
+        const realizarTeste = () => {
+            // FUNCIONÁRIO
+            cy.get('#btn-novo-funcionario').click();
+
+            cy.get('#tutorial-funcionario-nome #nome').type('TESTE AUTOMATIZADO ' + dataAtual);
+            cy.get('#tutorial-funcionario-registro #registro').type('AUTO ' + dataAtual);
+            // cy.get('#tutorial-funcionario-email #email').type(this.emailAddress);
+
+            cy.get('#tutorial-funcionario-setor input[name="setor_id"]').type('SETOR ' + dataAtual).wait(1200).type('{enter}');
+            cy.insertNewSetorAC();
+
+            cy.insertNewValidacaoEntregaAssinaturaEletronica();
+            // cy.get('#tutorial-guiado-recebe-email #recebe_email_ass_pendente').select('S');
+
+            // cy.intercept('POST', '/funcionario').as('postFuncionario');
+            // cy.get('#btn-salvar-funcionario').click();
+            // cy.wait('@postFuncionario').then((interception) => {
+            //     cy.get('@postFuncionario').its('response.statusCode').should('eq', 200);
+
+            //     var nomeFuncionario = interception.response.body.data.nome;
+            //     cy.wrap(nomeFuncionario).as('nomeFuncionario');
+            // });
+        }
+
+        configurarParametros('config.json', {
+            permite_liberacao_funcionario: 'S',
+            permite_atender_requisicao_sem_validacao: 'S',
+            tipo_assinatura_eletronica: 'A'
+        }, '/funcionario', realizarTeste);
+    });
+
 });
 
 function extractConfirmationLink(emailBody) {
