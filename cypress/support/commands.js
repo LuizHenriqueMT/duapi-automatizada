@@ -423,6 +423,35 @@ Cypress.Commands.add('selectValidacaoEntregaSenha', () => {
     cy.get('#tutorial-guiado-validacao-entrega #tipo_uso_validacao_entrega').select('S');
 });
 
+Cypress.Commands.add('insertNewDepositoAPI', (token, dataAtual, empresaId = 1, movimentoNegativo = 'N') => {
+    cy.get('input[name="_token"]').invoke('val').then((csrfToken) => {
+        cy.request({
+            method: 'POST',
+            url: '/depositos',
+            body: {
+                descricao: 'DEPÓSITO AUTOMATIZADO ' + dataAtual,
+                empresa_id: empresaId,
+                bloqueio_movimento_negativo: movimentoNegativo,
+                ativo: 'S',
+                _token: csrfToken
+            },
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            failOnStatusCode: false
+        }).then((response) => {
+            expect(response.status).to.eq(200);
+            console.log(response);
+            // const setor = response.body.data.descricao;
+            // const setorId = response.body.data.id;
+
+            // cy.wrap(setor).as('setor');
+            // cy.wrap(setorId).as('setorId');
+        })
+    });
+});
+
 Cypress.Commands.add('insertNewSetorAPI', (token, dataAtual, numero = false) => {
     if (numero) {
         var descricao = 'SETOR ' + numero + ' ';
