@@ -46,7 +46,7 @@ describe('Devolução de Produto', () => {
         });
     };
 
-    it('Gestão de Estoqu', () => {
+    it('Gestão de Estoque', () => {
         cy.allure().tag("");
         cy.allure().owner("Luiz Henrique T.");
 
