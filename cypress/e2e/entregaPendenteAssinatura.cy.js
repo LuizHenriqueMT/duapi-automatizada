@@ -221,7 +221,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#btn-atender-requisicao-item-com-pendencia-assinatura').click().wait(2000);
                 })
                 cy.then(function () {
-                    return mailslurp.waitForLatestEmail(this.inboxId, 340000).then(email => {
+                    return mailslurp.waitForLatestEmail(this.inboxId, 640000).then(email => {
                         expect(email.subject).to.include('Assinatura de ficha de epi');
                         const confirmationLink = extractConfirmationLink(email.body);
 
@@ -419,7 +419,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#btn-atender-requisicao-item-com-pendencia-assinatura').click().wait(2000);
                 })
                 cy.then(function () {
-                    return mailslurp.waitForLatestEmail(this.inboxId, 240000).then(email => {
+                    return mailslurp.waitForLatestEmail(this.inboxId, 640000).then(email => {
                         expect(email.subject).to.include('Assinatura de ficha de epi');
                         const confirmationLink = extractConfirmationLink(email.body);
 
@@ -617,7 +617,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#btn-atender-requisicao-item-com-pendencia-assinatura').click().wait(2000);
                 })
                 cy.then(function () {
-                    return mailslurp.waitForLatestEmail(this.inboxId, 240000).then(email => {
+                    return mailslurp.waitForLatestEmail(this.inboxId, 640000).then(email => {
                         expect(email.subject).to.include('Assinatura de ficha de epi');
                         const confirmationLink = extractConfirmationLink(email.body);
 
@@ -825,7 +825,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#btn-atender-requisicao-item-com-pendencia-assinatura').click().wait(2000);
                 })
                 cy.then(function () {
-                    return mailslurp.waitForLatestEmail(this.inboxId, 240000).then(email => {
+                    return mailslurp.waitForLatestEmail(this.inboxId, 640000).then(email => {
                         expect(email.subject).to.include('Assinatura de ficha de epi');
                         const confirmationLink = extractConfirmationLink(email.body);
 
