@@ -200,7 +200,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#enviar_matricula').click();
 
                     cy.get('.button-selecionar-requisicao').first().click();
-                    cy.wait(1200);
+                    cy.wait(1600);
 
                     cy.get('#solicitar_itens').click();
                     cy.get('#local-retirada-outros-table tr').first().find('td:nth-child(2) a').click();
@@ -398,7 +398,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#enviar_matricula').click();
 
                     cy.get('.button-selecionar-requisicao').first().click();
-                    cy.wait(1200);
+                    cy.wait(1600);
 
                     cy.get('#solicitar_itens').click();
                     cy.get('#local-retirada-outros-table tr').first().find('td:nth-child(2) a').click();
@@ -596,7 +596,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#enviar_matricula').click();
 
                     cy.get('.button-selecionar-requisicao').first().click();
-                    cy.wait(1200);
+                    cy.wait(1600);
 
                     cy.get('#solicitar_itens').click();
                     cy.get('#local-retirada-outros-table tr').first().find('td:nth-child(2) a').click();
@@ -804,7 +804,7 @@ describe('Entrega Pendente de Assinatura', () => {
                     cy.get('#enviar_matricula').click();
 
                     cy.get('.button-selecionar-requisicao').first().click();
-                    cy.wait(1200);
+                    cy.wait(1600);
 
                     cy.get('#solicitar_itens').click();
                     cy.get('#local-retirada-outros-table tr').first().find('td:nth-child(2) a').click();

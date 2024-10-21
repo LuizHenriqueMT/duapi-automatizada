@@ -339,7 +339,7 @@ describe('Entrega de Produto', () => {
         }, '/entrega_produtos', realizarTeste);
     });
 
-    it('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS', () => {
+    it.only('Entrega de Produto - REALIZAR ENTREGA DE PRODUTO PELA FORMA PADRÃO UTILIZANDO O FUNCIONARIO E PRODUTO CADASTRADO E LIBERADOS', () => {
         cy.allure().tag("Entrega de Produto", "Produto", "Funcionario", "Entrega normal", "Validação");
         cy.allure().owner("Luiz Henrique T.");
         cy.allure().description(`

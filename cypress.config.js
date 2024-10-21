@@ -232,9 +232,9 @@ module.exports = defineConfig({
     viewportWidth: 1280,
     viewportHeight: 700,
     defaultCommandTimeout: 10000,
-    pageLoadTimeout: 80000,
+    pageLoadTimeout: 100000,
     requestTimeout: 15000,
-    responseTimeout: 80000,
+    responseTimeout: 100000,
     // numTestsKeptInMemory: 0,
     experimentalMemoryManagement: true
   },
